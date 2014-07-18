@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <id>Dianoga</id>
-        <version>1.0.0-beta01</version>
-        <title>Dianoga</title>
+        <id>$id$</id>
+        <version>$version$</version>
+        <title>$title$</title>
         <authors>Kam Figy</authors>
         <owners>Kam Figy, ISITE Design</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
