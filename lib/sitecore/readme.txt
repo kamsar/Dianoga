@@ -1,0 +1,1 @@
+Place Sitecore.Kernel.dll here to build the project.

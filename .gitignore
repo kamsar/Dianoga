@@ -13,6 +13,7 @@ Thumbs.db
 src/*/bin
 src/*/obj
 lib/sitecore/*
+!lib/sitecore/readme.txt
 
 # Ignore user-scoped solution and project settings
 *.user
