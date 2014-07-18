@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>Dianoga</id>
+        <version>1.0.0-beta01</version>
+        <title>Dianoga</title>
+        <authors>Kam Figy</authors>
+        <owners>Kam Figy, ISITE Design</owners>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>http://github.com/kamsar/Dianoga</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Automatic media library image file optimization for Sitecore</description>
+        <releaseNotes>Initial release</releaseNotes>
+        <copyright>Copyright 2014</copyright>
+        <tags>sitecore optimization</tags>
+    </metadata> 
+    <files>
+        <file src="Dianoga.config" target="content\App_Config\Include" />
+        <file src="Dianoga Tools\*" target="content\Dianoga Tools" />
+    </files>
+</package>
