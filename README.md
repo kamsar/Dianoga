@@ -31,3 +31,10 @@ To perform a manual installation:
 * Copy the Dianoga Tools folder to the root of your website
 * Copy Dianoga.config to App_Config\Include
 * Reference Dianoga.dll or the source project in your web project
+
+## Troubleshooting
+
+If you're not seeing optimization take place, there are a couple of possibilities:
+
+* The image might already be in the media cache (by default, `/App_Data/MediaCache`). Sitecore does not reprocess images in cache until needed, so Dianoga may never be called. Delete this folder, clear your browser cache or use ctrl-F5, and try again.
+* An error is occurring. The Sitecore logs catch all errors that occur when generating a media stream, so look there first. If an error occurs, the result of the pipeline is thrown away and the unmodified stream returned so you may not see broken images if this occurs, just oddly sized - if resizing - or unoptimized ones.
