@@ -9,6 +9,18 @@ namespace Dianoga.Jpeg
 	// Squish JPEGs (strip exif, optimize coding) using jpegtran: http://jpegclub.org/jpegtran/
 	public class JpegOptimizer : ExtensionBasedImageOptimizer
 	{
+		private string _pathToExe;
+
+		public string ExePath
+		{
+			get { return _pathToExe; }
+			set
+			{
+				if (value.StartsWith("~") || value.StartsWith("/")) _pathToExe = HostingEnvironment.MapPath(value);
+				else _pathToExe = value;
+			}
+		}
+
 		//jpegtran -optimize -progressive -copy none -outfile "<filename>" "<filename>"
 		protected override string[] SupportedExtensions
 		{
@@ -28,7 +40,7 @@ namespace Dianoga.Jpeg
 
 			result.SizeBefore = (int)new FileInfo(tempFilePath).Length;
 
-			var jpegtran = Process.Start(ToolPath, "-optimize -copy none -progressive -outfile \"{0}\" \"{0}\"".FormatWith(tempFilePath));
+			var jpegtran = Process.Start(ExePath, "-optimize -copy none -progressive -outfile \"{0}\" \"{0}\"".FormatWith(tempFilePath));
 			if (jpegtran != null && jpegtran.WaitForExit(ToolTimeout))
 			{
 				if (jpegtran.ExitCode != 0)
@@ -62,7 +74,6 @@ namespace Dianoga.Jpeg
 			return Path.GetTempFileName();
 		}
 
-		protected virtual string ToolPath { get { return HostingEnvironment.MapPath(@"~/Dianoga Tools/libjpeg/jpegtran.exe"); }}
-		protected virtual int ToolTimeout { get { return 4000; } }
+		protected virtual int ToolTimeout { get { return 10000; } }
 	}
 }
