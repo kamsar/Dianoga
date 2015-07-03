@@ -1,15 +1,24 @@
-﻿using System;
-using System.Diagnostics;
-using Dianoga.Jpeg;
-using Dianoga.Png;
-using Sitecore.Diagnostics;
+﻿using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
-using Sitecore.StringExtensions;
 
 namespace Dianoga
 {
 	public class OptimizeImage
 	{
+		private readonly MediaOptimizer _optimizer;
+
+		public OptimizeImage() : this(new MediaOptimizer())
+		{
+			
+		}
+
+		public OptimizeImage(MediaOptimizer optimizer)
+		{
+			Assert.ArgumentNotNull(optimizer, "optimizer");
+
+			_optimizer = optimizer;
+		}
+
 		public void Process(GetMediaStreamPipelineArgs args)
 		{
 			Assert.ArgumentNotNull(args, "args");
@@ -25,43 +34,16 @@ namespace Dianoga
 				return;
 			}
 
-			string mimeType = args.MediaData.MimeType;
-			if (!mimeType.StartsWith("image/", StringComparison.Ordinal)) return;
-
-			string extension = args.MediaData.Extension;
-
-			IImageOptimizer optimizer = null;
-
-			if (extension.Equals("png"))
+			if (_optimizer.CanOptimize(outputStream))
 			{
-				optimizer = new PngOptimizer(outputStream.Stream);
-			}
+				MediaStream optimizedOutputStream = _optimizer.Process(outputStream, args.Options);
 
-			if (extension.Equals("jpg") || extension.Equals("jpeg"))
-			{
-				optimizer = new JpegOptimizer(outputStream.Stream);
-			}
+				if (optimizedOutputStream != null)
+				{
+					outputStream.Stream.Close();
 
-			if (optimizer == null) return;
-
-			var sw = new Stopwatch();
-			sw.Start();
-
-			var result = optimizer.Optimize();
-
-			sw.Stop();
-
-			if (result.Success)
-			{
-				outputStream.Stream.Close();
-
-				Log.Info("Dianoga: optimized {0}.{1} ({2} bytes) - saved {3} bytes / {4:p}. Optimized in {5}ms.".FormatWith(args.OutputStream.MediaItem.MediaPath, args.OutputStream.MediaItem.Extension, result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter/(float) result.SizeBefore)), sw.ElapsedMilliseconds), this);
-
-				args.OutputStream = new MediaStream(result.CreateResultStream(), outputStream.Extension, outputStream.MediaItem);
-			}
-			else
-			{
-				Log.Error("Dianoga: unable to optimize {0} because {1}".FormatWith(args.OutputStream.MediaItem.Name, result.ErrorMessage), this);
+					args.OutputStream = optimizedOutputStream;
+				}
 			}
 		}
 	}

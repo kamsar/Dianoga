@@ -1,24 +1,23 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Sitecore.Resources.Media;
 
 namespace Dianoga.Png
 {
 	// uses PngOptimizer to crunch PNGs - this is the fastest optimizer by far, and quite effective: http://psydk.org/pngoptimizer
-	public class PngOptimizer : IImageOptimizer
+	public class PngOptimizer : ExtensionBasedImageOptimizer
 	{
-		private readonly Stream _pngStream;
-
-		public PngOptimizer(Stream pngStream)
+		protected override string[] SupportedExtensions
 		{
-			_pngStream = pngStream;
+			get { return new[] { "png" }; }
 		}
 
-		public IOptimizerResult Optimize()
+		public override IOptimizerResult Optimize(MediaStream stream)
 		{
 			using (var memoryStream = new MemoryStream())
 			{
-				_pngStream.CopyTo(memoryStream);
+				stream.Stream.CopyTo(memoryStream);
 				byte[] imageBytes = memoryStream.ToArray();
 				byte[] resultBytes = new byte[imageBytes.Length + 400000];
 				int resultSize;

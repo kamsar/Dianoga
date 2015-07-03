@@ -1,28 +1,27 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Web.Hosting;
+using Sitecore.Resources.Media;
 using Sitecore.StringExtensions;
 
 namespace Dianoga.Jpeg
 {
 	// Squish JPEGs (strip exif, optimize coding) using jpegtran: http://jpegclub.org/jpegtran/
-	public class JpegOptimizer : IImageOptimizer
+	public class JpegOptimizer : ExtensionBasedImageOptimizer
 	{
-		private readonly Stream _jpegStream;
-
-		public JpegOptimizer(Stream jpegStream)
+		//jpegtran -optimize -progressive -copy none -outfile "<filename>" "<filename>"
+		protected override string[] SupportedExtensions
 		{
-			_jpegStream = jpegStream;
+			get { return new[] {"jpg", "jpeg", "jfif", "jpe"}; }
 		}
 
-		//jpegtran -optimize -progressive -copy none -outfile "<filename>" "<filename>"
-		public IOptimizerResult Optimize()
+		public override IOptimizerResult Optimize(MediaStream stream)
 		{
 			var tempFilePath = GetTempFilePath();
 
 			using (var fileStream = File.OpenWrite(tempFilePath))
 			{
-				_jpegStream.CopyTo(fileStream);
+				stream.Stream.CopyTo(fileStream);
 			}
 			
 			var result = new JpegOptimizerResult();

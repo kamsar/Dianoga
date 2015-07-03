@@ -1,7 +1,10 @@
-﻿namespace Dianoga
+﻿using Sitecore.Resources.Media;
+
+namespace Dianoga
 {
 	public interface IImageOptimizer
 	{
-		IOptimizerResult Optimize();
+		bool CanOptimize(MediaStream stream);
+		IOptimizerResult Optimize(MediaStream stream);
 	}
 }

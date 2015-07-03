@@ -34,14 +34,18 @@
       <HintPath>..\..\lib\sitecore\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionBasedImageOptimizer.cs" />
     <Compile Include="IImageOptimizer.cs" />
     <Compile Include="IOptimizerResult.cs" />
     <Compile Include="Jpeg\JpegOptimizer.cs" />
     <Compile Include="Jpeg\JpegOptimizerResult.cs" />
+    <Compile Include="MediaOptimizer.cs" />
     <Compile Include="OptimizeImage.cs" />
     <Compile Include="Png\PngOptimizer.cs" />
     <Compile Include="Png\PngOptimizerResult.cs" />
@@ -56,7 +60,9 @@
     <Content Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dianoga.config" />
+    <None Include="Dianoga.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.lib" />
     <None Include="Dianoga.nuspec" />
   </ItemGroup>
