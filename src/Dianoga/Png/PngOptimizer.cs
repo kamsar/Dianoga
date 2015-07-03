@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Web.Hosting;
 using Sitecore.Resources.Media;
 
 namespace Dianoga.Png
@@ -8,6 +10,18 @@ namespace Dianoga.Png
 	// uses PngOptimizer to crunch PNGs - this is the fastest optimizer by far, and quite effective: http://psydk.org/pngoptimizer
 	public class PngOptimizer : ExtensionBasedImageOptimizer
 	{
+		private string _pathToDll;
+
+		public string DllPath
+		{
+			get { return _pathToDll; }
+			set
+			{
+				if (value.StartsWith("~") || value.StartsWith("/")) _pathToDll = HostingEnvironment.MapPath(value);
+				else _pathToDll = value;
+			}
+		}
+
 		protected override string[] SupportedExtensions
 		{
 			get { return new[] { "png" }; }
@@ -15,32 +29,79 @@ namespace Dianoga.Png
 
 		public override IOptimizerResult Optimize(MediaStream stream)
 		{
-			using (var memoryStream = new MemoryStream())
+			IntPtr pngOptimizer = IntPtr.Zero;
+			try
 			{
-				stream.Stream.CopyTo(memoryStream);
-				byte[] imageBytes = memoryStream.ToArray();
-				byte[] resultBytes = new byte[imageBytes.Length + 400000];
-				int resultSize;
+				pngOptimizer = NativeMethods.LoadLibrary(_pathToDll);
 
-				bool success = OptimizeBytes(imageBytes, imageBytes.Length, resultBytes, resultBytes.Length, out resultSize);
+				if(pngOptimizer == IntPtr.Zero) throw new Exception("Unable to load PNGOptimizer from " + _pathToDll);
 
-				var result = new PngOptimizerResult();
-				result.Success = success;
-				result.SizeBefore = imageBytes.Length;
-				result.SizeAfter = resultSize;
-				result.OptimizedBytes = resultBytes.Take(resultSize).ToArray();
+				using (var memoryStream = new MemoryStream())
+				{
+					stream.Stream.CopyTo(memoryStream);
+					byte[] imageBytes = memoryStream.ToArray();
+					byte[] resultBytes = new byte[imageBytes.Length + 400000];
+					int resultSize;
 
-				if (!result.Success) result.ErrorMessage = GetLastErrorString();
+					IntPtr addressOfOptimize = NativeMethods.GetProcAddress(pngOptimizer, "PO_OptimizeFileMem");
 
-				return result;
+					if(addressOfOptimize == IntPtr.Zero) throw new Exception("Can't find optimize funtion in PngOptimizerDll.dll!");
+
+					OptimizeBytes optimizeMethod = (OptimizeBytes) Marshal.GetDelegateForFunctionPointer(addressOfOptimize, typeof (OptimizeBytes));
+
+					bool success = optimizeMethod(imageBytes, imageBytes.Length, resultBytes, resultBytes.Length, out resultSize);
+
+					var result = new PngOptimizerResult();
+					result.Success = success;
+					result.SizeBefore = imageBytes.Length;
+					result.SizeAfter = resultSize;
+					result.OptimizedBytes = resultBytes.Take(resultSize).ToArray();
+
+					if (!result.Success)
+					{
+						IntPtr addressOfGetError = NativeMethods.GetProcAddress(pngOptimizer, "PO_GetLastErrorString");
+
+						if (addressOfGetError == IntPtr.Zero) throw new Exception("Can't find get last error funtion in PngOptimizerDll.dll!");
+
+						GetLastErrorString errorMethod = (GetLastErrorString) Marshal.GetDelegateForFunctionPointer(addressOfGetError, typeof (GetLastErrorString));
+
+						result.ErrorMessage = errorMethod();
+					}
+
+					return result;
+				}
+			}
+			finally
+			{
+				if (pngOptimizer != IntPtr.Zero) NativeMethods.FreeLibrary(pngOptimizer);
 			}
 		}
 
-		[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_OptimizeFileMem")]
-		private static extern bool OptimizeBytes(byte[] image, int imageSize, [Out] byte[] result, int resultCapacity, out int resultSize);
+		//[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_OptimizeFileMem")]
+		//private static extern bool OptimizeBytes(byte[] image, int imageSize, [Out] byte[] result, int resultCapacity, out int resultSize);
 
-		[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_GetLastErrorString")]
+		//[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_GetLastErrorString")]
+		//[return: MarshalAs(UnmanagedType.LPWStr)]
+		//private static extern string GetLastErrorString();
+
+		static class NativeMethods
+		{
+			[DllImport("kernel32.dll")]
+			public static extern IntPtr LoadLibrary(string dllToLoad);
+
+			[DllImport("kernel32.dll")]
+			public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
+
+
+			[DllImport("kernel32.dll")]
+			public static extern bool FreeLibrary(IntPtr hModule);
+		}
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		private delegate bool OptimizeBytes(byte[] image, int imageSize, [Out] byte[] result, int resultCapacity, out int resultSize);
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
-		private static extern string GetLastErrorString();
+		private delegate string GetLastErrorString();
 	}
 }
