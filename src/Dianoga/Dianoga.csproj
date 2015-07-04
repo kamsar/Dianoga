@@ -30,12 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nQuant.Core">
+      <HintPath>..\..\packages\nQuant.1.0.3\Lib\net40\nQuant.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\..\lib\sitecore\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -47,8 +51,10 @@
     <Compile Include="Jpeg\JpegOptimizerResult.cs" />
     <Compile Include="MediaOptimizer.cs" />
     <Compile Include="OptimizeImage.cs" />
+    <Compile Include="Png\PngQuantOptimizerResult.cs" />
     <Compile Include="Png\PngOptimizer.cs" />
     <Compile Include="Png\PngOptimizerResult.cs" />
+    <Compile Include="Png\PngQuantOptimizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +71,7 @@
     </None>
     <None Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.lib" />
     <None Include="Dianoga.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
