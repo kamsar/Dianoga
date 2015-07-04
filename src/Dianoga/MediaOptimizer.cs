@@ -23,6 +23,9 @@ namespace Dianoga
 				.ToArray();
 		}
 
+		/// <summary>
+		/// Optimizes a media stream and returns the optimized result. The original stream is closed if processing is successful.
+		/// </summary>
 		public virtual MediaStream Process(MediaStream stream, MediaOptions options)
 		{
 			Assert.ArgumentNotNull(stream, "stream");

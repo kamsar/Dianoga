@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using Sitecore;
 using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
@@ -51,62 +53,88 @@ namespace Dianoga
 			var currentSite = Context.Site;
 
 			cacheRecord.PersistAsync((() => OnAfterPersist(cacheRecord, currentSite)));
-			
+
 			return true;
 		}
 
 		protected virtual void OnAfterPersist(MediaCacheRecord record, SiteContext originalSiteContext)
 		{
-			RemoveFromActiveList(record);
-
-			// Housekeeping: since we call AddStream() to insert the optimized version, we have to keep AddStream() from calling OnAfterPersist() from that call, causing an optimization loop
-			var id = record.Media.MediaData.MediaId;
-
-			if (StreamsInOptimization.Contains(id))
+			try
 			{
+				RemoveFromActiveList(record);
+
+				// Housekeeping: since we call AddStream() to insert the optimized version, we have to keep AddStream() from calling OnAfterPersist() from that call, causing an optimization loop
+				var id = record.Media.MediaData.MediaId;
+
+				if (StreamsInOptimization.Contains(id))
+				{
+					lock (OptimizeLock)
+					{
+						if (StreamsInOptimization.Contains(id))
+						{
+							StreamsInOptimization.Remove(id);
+							return;
+						}
+					}
+				}
+
 				lock (OptimizeLock)
 				{
-					if (StreamsInOptimization.Contains(id))
+					StreamsInOptimization.Add(id);
+				}
+
+				// grab the stream from cache and optimize it
+				if (!record.HasStream) return;
+
+				var stream = record.GetStream();
+
+				if (!_optimizer.CanOptimize(stream)) return;
+
+				var optimizedStream = _optimizer.Process(stream, record.Options);
+
+				if (optimizedStream == null)
+				{
+					Log.Info("Dianoga: async optimazation result was null, not doing any optimizing for {0}".FormatWith(optimizedStream.MediaItem.MediaPath), this);
+					return;
+				}
+
+				// we have to switch the site context because we're on a background thread, and Sitecore.Context is lost (so the site is always null)
+				// if the site is null the media cache ignores all added entries
+				using (new SiteContextSwitcher(originalSiteContext))
+				{
+					for (int i = 0; i < 5; i++)
 					{
-						StreamsInOptimization.Remove(id);
-						return;
+						try
+						{
+							// only here to satisfy out param
+							MediaStream dgafStream;
+
+							bool success = AddStream(record.Media, record.Options, optimizedStream, out dgafStream);
+							if (dgafStream != null) dgafStream.Dispose();
+
+							if (!success)
+								Log.Warn("Dianoga: The media cache rejected adding {0}. This is unexpected!".FormatWith(optimizedStream.MediaItem.MediaPath), this);
+						}
+						catch (Exception ex)
+						{
+							Log.Error("Dianoga: Error occurred adding stream to media cache. Will retry in 10 sec.", ex, this);
+							Thread.Sleep(10000);
+							continue;
+						}
+
+						break;
 					}
 				}
 			}
-
-			lock (OptimizeLock)
+			catch (Exception ex)
 			{
-				StreamsInOptimization.Add(id);
+				// this runs in a background thread, and an exception here would cause IIS to terminate the app pool. Bad! So we catch/log, just in case.
+				Log.Error("Dianoga: Exception occurred on the background thread", ex, this);
 			}
-
-			if (!record.HasStream) return;
-
-			var stream = record.GetStream();
-
-			if (!_optimizer.CanOptimize(stream)) return;
-
-			var optimizedStream = _optimizer.Process(stream, record.Options);
-
-			if (optimizedStream == null)
-			{
-				Log.Info("Dianoga: async optimazation result was null, not doing any optimizing for {0}".FormatWith(optimizedStream.MediaItem.MediaPath), this);
-				return;
-			}
-
-			using (new SiteContextSwitcher(originalSiteContext))
-			{
-				// only here to satisfy out param
-				MediaStream dgafStream;
-
-				bool success = AddStream(record.Media, record.Options, optimizedStream, out dgafStream);
-				if(dgafStream != null) dgafStream.Dispose();
-
-				if (!success)
-					 Log.Warn("Dianoga: The media cache rejected adding {0}. This is unexpected!".FormatWith(optimizedStream.MediaItem.MediaPath), this);
-			}
-
 		}
 
+		// the 'active list' is an internal construct that lets Sitecore stream media to the client at the same time as it's being written to cache
+		// unfortunately though the rest of MediaCache is virtual, these methods are inexplicably not
 		protected virtual void AddToActiveList(MediaCacheRecord record)
 		{
 			var baseMethod = typeof(MediaCache).GetMethod("AddToActiveList", BindingFlags.Instance | BindingFlags.NonPublic);

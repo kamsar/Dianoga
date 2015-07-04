@@ -1,12 +1,12 @@
 # Dianoga
 
-An automatic image optimizer for the Sitecore media library.
+An automatic image optimizer for the Sitecore media library. Reduce the size of your images served from Sitecore by 8-40%, completely automatically.
 
-When media images are requested, Dianoga automatically runs [jpegtran](http://jpegclub.org/jpegtran/) or [PNGOptimizer](http://psydk.org/pngoptimizer) on the media image immediately after it is placed in the Sitecore media cache. This makes sure your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features (for example with [Adaptive Images](https://marketplace.sitecore.net/en/Modules/Sitecore_Adaptive_Images.aspx)) which result in multiple versions of the image in the cache - and the resized ones are not fully optimized even if the original was.
+When media images are requested, Dianoga automatically runs [jpegtran](http://jpegclub.org/jpegtran/) or [PNGOptimizer](http://psydk.org/pngoptimizer) on the image data immediately after it is placed in the Sitecore media cache. 
 
-Dianoga is also great for situations where content editors may not be image editing experts and upload images that contain gobs of EXIF data and other nonessentials - these are removed automatically before being shown to visitors. All of the optimizations done are lossless (no quantizing, etc) so you lose no image quality.
+Dianoga ensures that your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features (for example with [Adaptive Images](https://marketplace.sitecore.net/en/Modules/Sitecore_Adaptive_Images.aspx)). Even if you have already optimized every image uploaded into the media library, after Sitecore performs image processing the result is _not_ optimized (an unfortunate limitation of most other image optimization libraries for Sitecore is that they only apply to the original image).
 
-In some basic testing, Dianoga was able to losslessly reduce the size of media images served anywhere from 4-88% (usually more like 8-20%). The largest gains are usually with PNGs.
+Dianoga is also great for situations where content editors may not be image editing experts and upload images that contain gobs of EXIF data and other nonessential metadata - these are removed automatically before being shown to visitors. All of the optimizations done are lossless (no quantizing, etc) so you lose no image quality.
 
 ## Performance
 
@@ -44,5 +44,9 @@ If you're not seeing optimization take place, there are a couple of possibilitie
 
 * The image might already be in the media cache (by default, `/App_Data/MediaCache`). Sitecore does not reprocess images in cache until needed, so Dianoga may never be called. Delete this folder, clear your browser cache or use ctrl-F5, and try again.
 * An error is occurring. The Sitecore logs catch all errors that occur when generating a media stream, so look there first. If an error occurs, the result of the pipeline is thrown away and the unmodified stream returned so you may not see broken images if this occurs, just oddly sized - if resizing - or unoptimized ones.
+
+## Extending Dianoga
+
+You can define your own optimizers for additional media types if you wish, in `App_Config/Include/Dianoga.config`
 
 This software is based in part on the work of the Independent JPEG Group
