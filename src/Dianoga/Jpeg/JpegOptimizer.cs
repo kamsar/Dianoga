@@ -38,7 +38,7 @@ namespace Dianoga.Jpeg
 			
 			var result = new JpegOptimizerResult();
 
-			result.SizeBefore = (int)new FileInfo(tempFilePath).Length;
+			result.SizeBefore = (int)stream.Length;
 
 			var jpegtran = Process.Start(ExePath, "-optimize -copy none -progressive -outfile \"{0}\" \"{0}\"".FormatWith(tempFilePath));
 			if (jpegtran != null && jpegtran.WaitForExit(ToolTimeout))
@@ -58,7 +58,10 @@ namespace Dianoga.Jpeg
 				{
 					result.ResultStream = new MemoryStream();
 					fileStream.CopyTo(result.ResultStream);
+					result.ResultStream.Seek(0, SeekOrigin.Begin);
 				}
+
+				File.Delete(tempFilePath);
 
 				return result;
 			}
@@ -74,6 +77,6 @@ namespace Dianoga.Jpeg
 			return Path.GetTempFileName();
 		}
 
-		protected virtual int ToolTimeout { get { return 10000; } }
+		protected virtual int ToolTimeout { get { return 60000; } }
 	}
 }

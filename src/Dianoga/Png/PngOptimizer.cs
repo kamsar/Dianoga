@@ -77,13 +77,6 @@ namespace Dianoga.Png
 			}
 		}
 
-		//[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_OptimizeFileMem")]
-		//private static extern bool OptimizeBytes(byte[] image, int imageSize, [Out] byte[] result, int resultCapacity, out int resultSize);
-
-		//[DllImport(@"../Dianoga Tools/PNGOptimizer/PngOptimizerDll.dll", EntryPoint = "PO_GetLastErrorString")]
-		//[return: MarshalAs(UnmanagedType.LPWStr)]
-		//private static extern string GetLastErrorString();
-
 		static class NativeMethods
 		{
 			[DllImport("kernel32.dll")]

@@ -4,6 +4,9 @@ using Sitecore.Resources.Media;
 
 namespace Dianoga
 {
+	/// <summary>
+	/// An optimizer that determines if it can optimize based on file extension
+	/// </summary>
 	public abstract class ExtensionBasedImageOptimizer : IImageOptimizer
 	{
 		protected abstract string[] SupportedExtensions { get; }

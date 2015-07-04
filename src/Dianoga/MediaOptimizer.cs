@@ -34,8 +34,6 @@ namespace Dianoga
 				return null;
 			}
 
-			if (!IsValidMimeType(stream)) return null;
-
 			var optimizer = CreateOptimizer(stream);
 
 			if (optimizer == null) return null;
@@ -51,7 +49,7 @@ namespace Dianoga
 			{
 				stream.Stream.Close();
 
-				Log.Info("Dianoga: optimized {0}.{1} ({2} bytes) - saved {3} bytes / {4:p}. Optimized in {5}ms.".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter / (float)result.SizeBefore)), sw.ElapsedMilliseconds), this);
+				Log.Info("Dianoga: optimized {0}.{1} (final size: {2} bytes) - saved {3} bytes / {4:p}. Optimized in {5}ms.".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter / (float)result.SizeBefore)), sw.ElapsedMilliseconds), this);
 
 				return new MediaStream(result.CreateResultStream(), stream.Extension, stream.MediaItem);
 			}
@@ -69,12 +67,6 @@ namespace Dianoga
 		protected virtual IImageOptimizer CreateOptimizer(MediaStream stream)
 		{
 			return Optimizers.FirstOrDefault(optimizer => optimizer.CanOptimize(stream));
-		}
-
-		protected virtual bool IsValidMimeType(MediaStream stream)
-		{
-			string mimeType = stream.MimeType;
-			return mimeType.StartsWith("image/", StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }
