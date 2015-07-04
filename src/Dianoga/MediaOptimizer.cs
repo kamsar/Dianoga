@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using Sitecore.Configuration;
@@ -49,7 +48,7 @@ namespace Dianoga
 			{
 				stream.Stream.Close();
 
-				Log.Info("Dianoga: optimized {0}.{1} (final size: {2} bytes) - saved {3} bytes / {4:p}. Optimized in {5}ms.".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter / (float)result.SizeBefore)), sw.ElapsedMilliseconds), this);
+				Log.Info("Dianoga: optimized {0}.{1} [{2}] (final size: {3} bytes) - saved {4} bytes / {5:p}. Optimized in {6}ms.".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, GetDimensions(options), result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter / (float)result.SizeBefore)), sw.ElapsedMilliseconds), this);
 
 				return new MediaStream(result.CreateResultStream(), stream.Extension, stream.MediaItem);
 			}
@@ -67,6 +66,28 @@ namespace Dianoga
 		protected virtual IImageOptimizer CreateOptimizer(MediaStream stream)
 		{
 			return Optimizers.FirstOrDefault(optimizer => optimizer.CanOptimize(stream));
+		}
+
+		protected virtual string GetDimensions(MediaOptions options)
+		{
+			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "original size";
+			
+			string result = string.Empty;
+
+			if (options.Width > 0) result = options.Width + "w";
+			else if (options.MaxWidth > 0) result = options.MaxWidth + "mw";
+
+			if (result.Length > 0 && (options.Height > 0 || options.MaxHeight > 0))
+			{
+				result += " x ";
+			}
+
+			if (options.Height > 0) result += options.Height + "h";
+			else if (options.MaxHeight > 0) result += options.MaxHeight + "mh";
+
+			if (options.Thumbnail) result += " (thumb)";
+
+			return result;
 		}
 	}
 }

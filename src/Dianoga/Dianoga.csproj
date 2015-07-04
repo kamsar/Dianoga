@@ -48,7 +48,6 @@
     <Compile Include="Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
     <Compile Include="OptimizingMediaCache.cs" />
-    <Compile Include="Png\PngQuantOptimizerResult.cs" />
     <Compile Include="Png\PngOptimizer.cs" />
     <Compile Include="Png\PngOptimizerResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
