@@ -1,0 +1,44 @@
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using nQuant;
+using Sitecore.Resources.Media;
+
+namespace Dianoga.Png
+{
+	// uses nQuant to quantize the PNG (reduces its color palette)
+	// this method is lossy, unlike PngOptimizer, but results in additional file size savings
+	// implementation is loosely based on Oliver Picton's fork: https://github.com/EnjoyDigital/Dianoga/commit/716eb6ad3c62bd7b1e6b672b2c22d363cbd25457
+	public class PngQuantOptimizer : ExtensionBasedImageOptimizer
+	{
+		protected override string[] SupportedExtensions
+		{
+			get { return new[] { "png" }; }
+		}
+
+		public override IOptimizerResult Optimize(MediaStream stream)
+		{
+			var quantizer = new WuQuantizer();
+
+			var memoryStream = new MemoryStream();
+
+			using (var bitmap = new Bitmap(stream.Stream))
+			{
+				using (var quantized = quantizer.QuantizeImage(bitmap))
+				{
+					quantized.Save(memoryStream, ImageFormat.Png);
+				}
+
+				var resultBytes = memoryStream.ToArray();
+
+				var result = new PngQuantOptimizerResult();
+				result.Success = true;
+				result.SizeBefore = (int)stream.Length;
+				result.SizeAfter = resultBytes.Length;
+				result.ResultStream = memoryStream;
+
+				return result;
+			}
+		}
+	}
+}
