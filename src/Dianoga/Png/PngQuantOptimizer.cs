@@ -29,12 +29,13 @@ namespace Dianoga.Png
 					quantized.Save(memoryStream, ImageFormat.Png);
 				}
 
-				var resultBytes = memoryStream.ToArray();
+				// rewind the stream
+				memoryStream.Seek(0, SeekOrigin.Begin);
 
 				var result = new PngQuantOptimizerResult();
 				result.Success = true;
 				result.SizeBefore = (int)stream.Length;
-				result.SizeAfter = resultBytes.Length;
+				result.SizeAfter = (int)memoryStream.Length;
 				result.ResultStream = memoryStream;
 
 				return result;
