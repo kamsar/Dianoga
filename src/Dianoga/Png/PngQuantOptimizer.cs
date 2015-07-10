@@ -2,7 +2,9 @@
 using System.Drawing.Imaging;
 using System.IO;
 using nQuant;
+using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
+using Sitecore.StringExtensions;
 
 namespace Dianoga.Png
 {
@@ -24,11 +26,17 @@ namespace Dianoga.Png
 
 			using (var bitmap = new Bitmap(stream.Stream))
 			{
+                var bitDepth = Image.GetPixelFormatSize(bitmap.PixelFormat);
+			    if (bitDepth != 32)
+			    {
+                    return OptimizerFailureResult("the image you are attempting to quantize does not contain a 32 bit ARGB palette. This image has a bit depth of {0} with {1} colors".FormatWith(bitDepth, bitmap.Palette.Entries.Length));
+			    }
+
 				using (var quantized = quantizer.QuantizeImage(bitmap))
 				{
 					quantized.Save(memoryStream, ImageFormat.Png);
 				}
-
+				
 				// rewind the stream
 				memoryStream.Seek(0, SeekOrigin.Begin);
 
@@ -38,8 +46,18 @@ namespace Dianoga.Png
 				result.SizeAfter = (int)memoryStream.Length;
 				result.ResultStream = memoryStream;
 
-				return result;
+				return OptimizationSuccessful(result);
 			}
 		}
+
+	    private IOptimizerResult OptimizerFailureResult(string message)
+	    {
+	        var result = new PngQuantOptimizerResult()
+	        {
+	            Success = false,
+	            ErrorMessage = message
+	        };
+	        return result;
+	    }
 	}
 }

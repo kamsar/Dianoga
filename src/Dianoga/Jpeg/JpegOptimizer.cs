@@ -63,7 +63,7 @@ namespace Dianoga.Jpeg
 
 				File.Delete(tempFilePath);
 
-				return result;
+				return OptimizationSuccessful(result);
 			}
 
 			result.Success = false;

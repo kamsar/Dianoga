@@ -4,10 +4,10 @@ namespace Dianoga
 {
 	public interface IOptimizerResult
 	{
-		bool Success { get; }
-		string ErrorMessage { get; }
-		int SizeBefore { get; }
-		int SizeAfter { get; }
+		bool Success { get; set; }
+		string ErrorMessage { get; set; }
+		int SizeBefore { get; set; }
+		int SizeAfter { get; set; }
 
 		Stream CreateResultStream();
 	}
