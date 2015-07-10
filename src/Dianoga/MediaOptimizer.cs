@@ -55,8 +55,8 @@ namespace Dianoga
 
 				return new MediaStream(result.CreateResultStream(), stream.Extension, stream.MediaItem);
 			}
-			
-			Log.Error("Dianoga: unable to optimize {0} because {1}".FormatWith(stream.MediaItem.Name, result.ErrorMessage), this);
+
+			Log.Warn("Dianoga: unable to optimize {0}.{1} because {2}".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, result.ErrorMessage), this);
 
 			return null;
 		}
