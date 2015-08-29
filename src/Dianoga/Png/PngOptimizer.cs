@@ -65,7 +65,7 @@ namespace Dianoga.Png
 					result.ErrorMessage = errorMethod();
 				}
 
-				return result;
+				return OptimizationSuccessful(result);
 			}
 		}
 
