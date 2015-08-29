@@ -29,7 +29,7 @@ namespace Dianoga.Png
 				var bitDepth = Image.GetPixelFormatSize(bitmap.PixelFormat);
 				if (bitDepth != 32)
 				{
-					return OptimizerFailureResult("The image you are attempting to quantize does not contain a 32 bit ARGB palette. This image has a bit depth of {0} with {1} colors".FormatWith(bitDepth, bitmap.Palette.Entries.Length));
+					return OptimizerFailureResult("the image you are attempting to quantize does not contain a 32 bit ARGB palette. This image has a bit depth of {0} with {1} colors".FormatWith(bitDepth, bitmap.Palette.Entries.Length));
 				}
 
 				using (var quantized = quantizer.QuantizeImage(bitmap))

@@ -23,7 +23,7 @@ namespace Dianoga
 			if (result.SizeBefore < result.SizeAfter)
 			{
 				result.Success = false;
-				result.ErrorMessage = "The optimized image resulted in a larger file size. Using the original instead.";
+				result.ErrorMessage = "the optimized image resulted in a larger file size. Using the original instead.";
 			}
 			return result;
 		}
