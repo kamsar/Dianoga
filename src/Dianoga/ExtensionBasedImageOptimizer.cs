@@ -18,14 +18,14 @@ namespace Dianoga
 
 		public abstract IOptimizerResult Optimize(MediaStream stream);
 
-	    protected IOptimizerResult OptimizationSuccessful(IOptimizerResult result)
-	    {
-            if (result.SizeBefore < result.SizeAfter)
-            {
-                result.Success = false;
-                result.ErrorMessage = "the optimized image resulted in a larger file size. Using the original instead.";
-            }
-            return result;
-        }
+		protected IOptimizerResult OptimizationSuccessful(IOptimizerResult result)
+		{
+			if (result.SizeBefore < result.SizeAfter)
+			{
+				result.Success = false;
+				result.ErrorMessage = "the optimized image resulted in a larger file size. Using the original instead.";
+			}
+			return result;
+		}
 	}
 }
