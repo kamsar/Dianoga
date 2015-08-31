@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
 using System.Reflection;
 using System.Threading;
 using Sitecore;
@@ -60,7 +59,7 @@ namespace Dianoga
 
 		protected virtual void OnAfterPersist(MediaCacheRecord record, SiteContext originalSiteContext)
 		{
-			string mediaPath = String.Empty;
+			string mediaPath = string.Empty;
 			try
 			{
 				RemoveFromActiveList(record);

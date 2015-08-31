@@ -2,7 +2,6 @@
 using System.Drawing.Imaging;
 using System.IO;
 using nQuant;
-using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
 using Sitecore.StringExtensions;
 
