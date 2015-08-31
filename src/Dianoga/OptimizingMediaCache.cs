@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Reflection;
 using System.Threading;
 using Sitecore;
@@ -59,6 +60,7 @@ namespace Dianoga
 
 		protected virtual void OnAfterPersist(MediaCacheRecord record, SiteContext originalSiteContext)
 		{
+			string mediaPath = String.Empty;
 			try
 			{
 				RemoveFromActiveList(record);
@@ -91,10 +93,11 @@ namespace Dianoga
 				if (!_optimizer.CanOptimize(stream)) return;
 
 				var optimizedStream = _optimizer.Process(stream, record.Options);
+				mediaPath = stream.MediaItem.MediaPath;
 
 				if (optimizedStream == null)
 				{
-					Log.Info("Dianoga: async optimazation result was null, not doing any optimizing for {0}".FormatWith(optimizedStream.MediaItem.MediaPath), this);
+					Log.Info("Dianoga: async optimazation result was null, not doing any optimizing for {0}".FormatWith(mediaPath), this);
 					return;
 				}
 
@@ -113,7 +116,7 @@ namespace Dianoga
 							if (dgafStream != null) dgafStream.Dispose();
 
 							if (!success)
-								Log.Warn("Dianoga: The media cache rejected adding {0}. This is unexpected!".FormatWith(optimizedStream.MediaItem.MediaPath), this);
+								Log.Warn("Dianoga: The media cache rejected adding {0}. This is unexpected!".FormatWith(mediaPath), this);
 						}
 						catch (Exception ex)
 						{
@@ -129,7 +132,7 @@ namespace Dianoga
 			catch (Exception ex)
 			{
 				// this runs in a background thread, and an exception here would cause IIS to terminate the app pool. Bad! So we catch/log, just in case.
-				Log.Error("Dianoga: Exception occurred on the background thread", ex, this);
+				Log.Error("Dianoga: Exception occurred on the background thread when optimizing: {0}".FormatWith(mediaPath), ex, this);
 			}
 		}
 

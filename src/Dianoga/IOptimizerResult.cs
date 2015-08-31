@@ -4,8 +4,8 @@ namespace Dianoga
 {
 	public interface IOptimizerResult
 	{
-		bool Success { get; }
-		string ErrorMessage { get; }
+		bool Success { get; set; }
+		string ErrorMessage { get; set; }
 		int SizeBefore { get; }
 		int SizeAfter { get; }
 
