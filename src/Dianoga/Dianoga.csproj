@@ -74,7 +74,7 @@
     <None Include="Default Config Files\Dianoga.Jpeg.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config">
+    <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config.disabled">
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Strategy.MediaCacheAsync.config">
