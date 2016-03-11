@@ -58,6 +58,7 @@
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
+    <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
     <Compile Include="Processors\ProcessorArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Svg\EventHandlers\MediaRequest\CompressedSvgEncodingSetter.cs" />
@@ -324,6 +325,9 @@
     <Content Include="Dianoga Tools\SVGO\node_modules\svgo\plugins\_transforms.js" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Default Config Files\Dianoga.ExcludePaths.config.example">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Default Config Files\Dianoga.Png.config">
       <SubType>Designer</SubType>
     </None>

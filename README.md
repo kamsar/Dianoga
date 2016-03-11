@@ -33,11 +33,17 @@ Dianoga depends on the Dianoga Tools folder that is installed by the NuGet packa
 
 ## Options
 
-In Dianoga 3, you can choose your optimization mode. Most people if serving media locally are best off with the defaults, which optimize the media as it is placed into the media cache. This results in minimal impact to the experience for front end visitors.
+### Optimization Strategies
+
+In Dianoga 3, you can choose your optimization strategy. Most people if serving media locally are best off with the defaults, which optimize the media as it is placed into the media cache. This results in minimal impact to the experience for front end visitors.
 
 However, for folks using CDNs those sources must be sent the optimized version of the media immediately. For these situations, you can enable `Dianoga.Strategy.GetMediaStreamSync.config.disabled` and disable `Dianoga.Strategy.MediaCacheAsync.config`. This will cause optimization to occur synchronously as the media is first requested, which is appropriate if the media is being sent to a CDN. This may however cause a delay for the first hit user before they start seeing images.
 
 If you want to execute the Dianoga optimization pipeline programmatically (e.g. as part of a CDN upload background process), you can use the `MediaOptimizer` class to execute optimization on any Sitecore `MediaStream` object at will.
+
+### Ignoring Paths
+
+Dianoga 3 allows for ignoring specific paths in the media library. See `Dianoga.ExcludePaths.config.example` for an example of this.
 
 ## Installation
 

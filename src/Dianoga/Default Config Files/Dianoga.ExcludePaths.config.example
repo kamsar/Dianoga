@@ -1,0 +1,20 @@
+﻿<!--
+	Example of adding path ignorance to Dianoga. This causes media items under the ignored path(s) to not be optimized.
+	Good for monstrous source images, SVGs where metadata is desirable, etc.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaOptimize>
+				<!-- make sure to keep the patch:before, because if this runs after other processors nothing will be ignored -->
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.PathExclusion, Dianoga" patch:before="*[1]">
+					<paths hint="list:AddExclusion">
+						<!-- Note: these are MEDIA paths, not full paths. So remove '/sitecore/media library' from the base path. -->
+						<path>/Files/Huge JPEGs</path>
+						<path>/My Site/Metadata SVGs</path>
+					</paths>
+				</processor>
+			</dianogaOptimize>
+		</pipelines>
+	</sitecore>
+</configuration>
