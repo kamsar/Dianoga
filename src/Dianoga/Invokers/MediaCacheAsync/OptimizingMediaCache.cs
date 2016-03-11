@@ -8,7 +8,7 @@ using Sitecore.Resources.Media;
 using Sitecore.Sites;
 using Sitecore.StringExtensions;
 
-namespace Dianoga
+namespace Dianoga.Invokers.MediaCacheAsync
 {
 	/// <summary>
 	/// This version of Sitecore's MediaCache also optimizes the images after they go into cache
@@ -89,9 +89,8 @@ namespace Dianoga
 
 				var stream = record.GetStream();
 
-				if (!_optimizer.CanOptimize(stream)) return;
-
 				var optimizedStream = _optimizer.Process(stream, record.Options);
+
 				mediaPath = stream.MediaItem.MediaPath;
 
 				if (optimizedStream == null)

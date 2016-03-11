@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dianoga", "src\Dianoga\Dianoga.csproj", "{FD53D6C4-00CC-4CD0-8B18-98D0DD97C289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dianoga.Tests", "src\Dianoga.Tests\Dianoga.Tests.csproj", "{655AA3A1-94BA-4169-A603-A71C59739528}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FD53D6C4-00CC-4CD0-8B18-98D0DD97C289}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD53D6C4-00CC-4CD0-8B18-98D0DD97C289}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD53D6C4-00CC-4CD0-8B18-98D0DD97C289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655AA3A1-94BA-4169-A603-A71C59739528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655AA3A1-94BA-4169-A603-A71C59739528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655AA3A1-94BA-4169-A603-A71C59739528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655AA3A1-94BA-4169-A603-A71C59739528}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

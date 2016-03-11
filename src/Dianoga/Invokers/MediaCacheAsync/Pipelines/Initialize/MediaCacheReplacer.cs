@@ -1,7 +1,7 @@
 ﻿using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
 
-namespace Dianoga.Pipelines.Initialize
+namespace Dianoga.Invokers.MediaCacheAsync.Pipelines.Initialize
 {
 	public class MediaCacheReplacer
 	{

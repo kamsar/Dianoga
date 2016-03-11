@@ -3,12 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Web.Hosting;
-using Sitecore.Resources.Media;
 
-namespace Dianoga.Png
+namespace Dianoga.Optimizers.Pipelines.DianogaPng
 {
 	// uses PngOptimizer to crunch PNGs - this is the fastest optimizer by far, and quite effective: http://psydk.org/pngoptimizer
-	public class PngOptimizer : ExtensionBasedImageOptimizer
+	public class PngOptimizer : OptimizerProcessor
 	{
 		private readonly object _loaderLock = new object();
 
@@ -24,20 +23,17 @@ namespace Dianoga.Png
 			}
 		}
 
-		protected override string[] SupportedExtensions
-		{
-			get { return new[] { "png" }; }
-		}
-
-		public override IOptimizerResult Optimize(MediaStream stream)
+		protected override void ProcessOptimizer(OptimizerArgs args)
 		{
 			IntPtr pngOptimizer = GetOrLoadPngOptimizer();
 
 			using (var memoryStream = new MemoryStream())
 			{
-				stream.Stream.CopyTo(memoryStream);
+				// buffer to a memory stream to operate on
+				args.Stream.CopyTo(memoryStream);
+
 				byte[] imageBytes = memoryStream.ToArray();
-				byte[] resultBytes = new byte[imageBytes.Length + 400000];
+				byte[] resultBytes = new byte[imageBytes.Length + 400000]; // + 400kb in case optimization goes south and gets LARGER
 				int resultSize;
 
 				IntPtr addressOfOptimize = NativeMethods.GetProcAddress(pngOptimizer, "PO_OptimizeFileMem");
@@ -48,13 +44,7 @@ namespace Dianoga.Png
 
 				bool success = optimizeMethod(imageBytes, imageBytes.Length, resultBytes, resultBytes.Length, out resultSize);
 
-				var result = new PngOptimizerResult();
-				result.Success = success;
-				result.SizeBefore = imageBytes.Length;
-				result.SizeAfter = resultSize;
-				result.OptimizedBytes = resultBytes.Take(resultSize).ToArray();
-
-				if (!result.Success)
+				if (!success)
 				{
 					IntPtr addressOfGetError = NativeMethods.GetProcAddress(pngOptimizer, "PO_GetLastErrorString");
 
@@ -62,10 +52,11 @@ namespace Dianoga.Png
 
 					GetLastErrorString errorMethod = (GetLastErrorString)Marshal.GetDelegateForFunctionPointer(addressOfGetError, typeof(GetLastErrorString));
 
-					result.ErrorMessage = errorMethod();
+					throw new InvalidOperationException($"PngOptimizerDll threw an error: {errorMethod()}");
 				}
 
-				return OptimizationSuccessful(result);
+				args.IsOptimized = true;
+				args.Stream = new MemoryStream(resultBytes.Take(resultSize).ToArray());
 			}
 		}
 
@@ -107,5 +98,7 @@ namespace Dianoga.Png
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		private delegate string GetLastErrorString();
+
+		
 	}
 }
