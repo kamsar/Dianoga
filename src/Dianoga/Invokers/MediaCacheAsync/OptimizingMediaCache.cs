@@ -95,7 +95,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 				if (optimizedStream == null)
 				{
-					Log.Info("Dianoga: async optimazation result was null, not doing any optimizing for {0}".FormatWith(mediaPath), this);
+					Log.Info("Dianoga: {0} is not something that can be optimized".FormatWith(mediaPath), this);
 					return;
 				}
 

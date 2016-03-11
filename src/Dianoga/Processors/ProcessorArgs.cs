@@ -8,15 +8,12 @@ namespace Dianoga.Processors
 	{
 		public MediaStream InputStream { get; }
 
-		public bool IsOptimized { get; set; }
-
 		public Stream ResultStream { get; set; }
 
 		public ProcessorArgsStatistics Statistics { get; }
 
 		public ProcessorArgs(MediaStream inputStream)
 		{
-			IsOptimized = false;
 			InputStream = inputStream;
 			Statistics = new ProcessorArgsStatistics(this);
 		}

@@ -5,11 +5,24 @@ namespace Dianoga.Optimizers
 {
 	public abstract class OptimizerProcessor
 	{
+		// NOTE: IT IS EXPECTED THAT ANY PROCESSOR WILL DISPOSE OF THE INPUT STREAM ONCE IT CONSUMES IT
+		// Throw an exception if you have a processing error.
 		public virtual void Process(OptimizerArgs args)
 		{
 			if (!ValidateInputStream(args)) return;
-
+			
 			var originalStream = new MemoryStream();
+
+			// if we cannot seek the stream, we buffer it into a memory stream so we can seek it
+			// this can occur if getting an unresized image in the getMediaStream pipeline
+			if (!args.Stream.CanSeek)
+			{
+				var bufferedStream = new MemoryStream();
+				args.Stream.CopyTo(bufferedStream);
+
+				args.Stream.Dispose();
+				args.Stream = bufferedStream;
+			}
 
 			try
 			{
@@ -41,7 +54,7 @@ namespace Dianoga.Optimizers
 
 		protected virtual bool ValidateInputStream(OptimizerArgs args)
 		{
-			return args.Stream != null && args.Stream.CanRead && args.Stream.CanSeek;
+			return args.Stream != null && args.Stream.CanRead;
 		}
 
 		protected virtual void ValidateReturnStream(OptimizerArgs args, Stream originalStream)
@@ -69,6 +82,11 @@ namespace Dianoga.Optimizers
 				{
 					originalStream.Dispose();
 				}
+			}
+			else
+			{
+				args.AddMessage($"{GetType().Name} returned a null stream. This probably means it failed. We will keep the original stream.");
+				args.Stream = originalStream;
 			}
 		}
 

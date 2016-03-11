@@ -54,10 +54,13 @@
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerArgs.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\ProcessorArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Svg\EventHandlers\MediaRequest\CompressedSvgEncodingSetter.cs" />
+    <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dianoga Tools\mozjpeg_3.1_x86\jpegtran.exe" />

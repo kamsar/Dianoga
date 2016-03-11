@@ -3,6 +3,11 @@ using Sitecore.Resources.Media;
 
 namespace Dianoga.Invokers.GetMediaStreamSync
 {
+	/// <summary>
+	/// Optimizes images as they are served, before they go into media cache
+	/// Advantage: optimized images always served
+	/// Disadvantage: user must wait for optimization to complete if they do the first hit
+	/// </summary>
 	public class OptimizeImage
 	{
 		private readonly MediaOptimizer _optimizer;

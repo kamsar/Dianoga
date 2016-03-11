@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dianoga.Optimizers;
 using Sitecore.Pipelines;
 
 namespace Dianoga.Processors.Pipelines.DianogaOptimize
 {
-	public abstract class ExtensionBasedOptimizer : DianogaOptimizeProcessor
+	public class ExtensionBasedOptimizer : DianogaOptimizeProcessor
 	{
 		private HashSet<string> _supportedExtensionsLookup;
 
@@ -15,13 +16,20 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 			set { _supportedExtensionsLookup = new HashSet<string>(value.Split(',').Select(val => val.Trim(',', '.', '*', ' ')), StringComparer.OrdinalIgnoreCase); }
 		}
 
-		public string PipelineName { get; set; }
+		public string Pipeline { get; set; }
 
 		protected override void ProcessOptimize(ProcessorArgs args)
 		{
 			if (_supportedExtensionsLookup.Contains(args.InputStream.Extension))
 			{
-				CorePipeline.Run(PipelineName, args);
+				var sourceStream = args.ResultStream ?? args.InputStream.Stream;
+
+				var optimizerArgs = new OptimizerArgs(sourceStream);
+
+				CorePipeline.Run(Pipeline, optimizerArgs);
+
+				if(optimizerArgs.IsOptimized)
+					args.ResultStream = optimizerArgs.Stream;
 			}
 		}
 	}
