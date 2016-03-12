@@ -16,6 +16,6 @@
     </metadata> 
     <files>
         <file src="Default Config Files\*" target="content\App_Config\Include\Dianoga" />
-        <file src="Dianoga Tools\*" target="content\App_Data\Dianoga Tools" />
+        <file src="Dianoga Tools\**\*" target="content\App_Data\Dianoga Tools" />
     </files>
 </package>
