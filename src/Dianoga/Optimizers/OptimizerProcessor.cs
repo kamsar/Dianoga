@@ -10,7 +10,7 @@ namespace Dianoga.Optimizers
 		public virtual void Process(OptimizerArgs args)
 		{
 			if (!ValidateInputStream(args)) return;
-			
+
 			var originalStream = new MemoryStream();
 
 			// if we cannot seek the stream, we buffer it into a memory stream so we can seek it
@@ -59,7 +59,7 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ValidateReturnStream(OptimizerArgs args, Stream originalStream)
 		{
-			if (args.Stream != null)
+			if (args.Stream != null && args.Stream.Length > 0)
 			{
 				if (args.Stream is FileStream) throw new InvalidOperationException($"{GetType().Name} returned a FileStream. This will leave orphaned files on disk after the stream is disposed. Don't do that. Return files as pre-buffered memory streams.");
 				if (!args.Stream.CanSeek) throw new InvalidOperationException($"{GetType().Name} returned a non seekable stream. This is not allowed. Try buffering it into a memory stream first.");
@@ -85,7 +85,11 @@ namespace Dianoga.Optimizers
 			}
 			else
 			{
-				args.AddMessage($"{GetType().Name} returned a null stream. This probably means it failed. We will keep the original stream.");
+				if (args.Stream == null)
+					args.AddMessage($"{GetType().Name} returned a null stream. This probably means it failed. We will keep the original stream.");
+				else
+					args.AddMessage($"{GetType().Name} returned a zero length stream. This probably means it failed. We will keep the original stream.");
+
 				args.Stream = originalStream;
 			}
 		}
