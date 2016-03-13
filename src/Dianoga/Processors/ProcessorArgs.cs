@@ -25,9 +25,10 @@ namespace Dianoga.Processors
 			internal ProcessorArgsStatistics(ProcessorArgs args)
 			{
 				_args = args;
+				SizeBefore = _args.InputStream.Length;
 			}
 
-			public long SizeBefore => _args.InputStream.Length;
+			public long SizeBefore { get; }
 			public long SizeAfter => _args.ResultStream?.Length ?? SizeBefore;
 			public float PercentageSaved => 1 - ((SizeAfter/(float) SizeBefore));
 			public long BytesSaved => SizeBefore - SizeAfter;
