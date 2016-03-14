@@ -8,10 +8,10 @@
         <owners>Kam Figy</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
         <projectUrl>http://github.com/kamsar/Dianoga</projectUrl>
+        <iconUrl>http://kamsar.net/nuget/dianoga/logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Automatic media library image file optimization for Sitecore</description>
-        <releaseNotes>Initial release</releaseNotes>
-        <copyright>Copyright 2015</copyright>
+        <copyright>Copyright 2016</copyright>
         <tags>sitecore optimization</tags>
     </metadata> 
     <files>
