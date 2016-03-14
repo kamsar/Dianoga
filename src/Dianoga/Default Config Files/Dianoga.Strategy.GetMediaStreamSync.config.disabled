@@ -11,6 +11,14 @@
 			<getMediaStream>
 				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" />
 			</getMediaStream>
+
+			<getMediaStream>
+				<!-- Remove this if you are not using SVG support -->
+				<processor type="Dianoga.Svg.Pipelines.GetMediaStream.SvgIgnorer, Dianoga">
+					<!-- allow SVGs to be optimized synchronously before the ignorer aborts the pipeline -->
+					<SynchronouslyOptimizeSvgs>true</SynchronouslyOptimizeSvgs>
+				</processor>
+			</getMediaStream>
 		</pipelines>
 	</sitecore>
 </configuration>
