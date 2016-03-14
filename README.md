@@ -47,7 +47,7 @@ Dianoga 3 allows for ignoring specific paths in the media library. See `Dianoga.
 
 ## Installation
 
-Dianoga has a NuGet package for Sitecore 7 and 8 (.NET 4.5). Just install it, __clear your App_Data/MediaCache folder__, and you're done.
+Dianoga has a NuGet package for Sitecore 7 and 8 (.NET 4.5). Just install it, __clear your App_Data/MediaCache folder__, and you're done. Note: Installing the package will take longer than most NuGet packages due to the bundled optimizers.
 
 The code should compile against Sitecore 6.x without issue.
 
