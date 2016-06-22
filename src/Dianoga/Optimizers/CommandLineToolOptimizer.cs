@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -64,7 +65,7 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ExecuteProcess(string arguments)
 		{
-			var processOutput = new List<string>();
+		    var processOutput = new ConcurrentBag<string>();
 
 			var processInfo = new ProcessStartInfo();
 			processInfo.UseShellExecute = false;
