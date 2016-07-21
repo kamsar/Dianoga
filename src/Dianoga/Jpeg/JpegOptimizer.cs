@@ -68,6 +68,15 @@ namespace Dianoga.Jpeg
 
 			result.Success = false;
 			result.ErrorMessage = "jpegtran took longer than {0} to execute, which we consider a failure.".FormatWith(ToolTimeout);
+            // kill the process and clean up the tempfile as we have discarded the optimizer
+            jpegtran.Kill();
+            try
+            {
+                File.Delete(tempFilePath);
+            } catch(IOException)
+            {
+                // Silently discard any io errors in the file deletion...
+            }
 
 			return result;
 		}
