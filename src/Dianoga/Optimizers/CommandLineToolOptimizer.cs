@@ -85,6 +85,15 @@ namespace Dianoga.Optimizers
 
 			if (!toolProcess.WaitForExit(ToolTimeout))
 			{
+				try
+				{
+					toolProcess.Kill();
+				}
+				catch
+				{
+					// do nothing if kill errors, we want the exception below
+				}
+
 				throw new InvalidOperationException($"{ExePath} took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
 			}
 
@@ -105,6 +114,15 @@ namespace Dianoga.Optimizers
 
 			if (!toolProcess.WaitForExit(ToolTimeout))
 			{
+				try
+				{
+					toolProcess.Kill();
+				}
+				catch
+				{
+					// do nothing if kill errors, we want the exception below
+				}
+
 				throw new InvalidOperationException($"{ExePath} took longer than {ToolTimeout}ms to run, which is a failure. Output not available using shell execute.");
 			}
 
