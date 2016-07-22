@@ -38,6 +38,12 @@ namespace Dianoga.Invokers.MediaCacheAsync
 			if (string.IsNullOrEmpty(media.MediaData.MediaId))
 				return false;
 
+			if (!stream.Stream.CanRead)
+			{
+				Log.Warn($"Cannot optimize {media.MediaData.MediaItem.MediaPath} because cache was passed a non readable stream.", this);
+				return false;
+			}
+
 			// buffer the stream if it's say a SQL stream
 			stream.MakeStreamSeekable();
 			stream.Stream.Seek(0, SeekOrigin.Begin);
@@ -45,13 +51,12 @@ namespace Dianoga.Invokers.MediaCacheAsync
 			// Sitecore will use this to stream the media while we persist
 			cachedStream = stream;
 
-			// make a copy of the stream for Sitecore to use temporarily while we async persist
+			// make a copy of the stream to use temporarily while we async persist
 			var copyStream = new MemoryStream();
 			stream.CopyTo(copyStream);
+			copyStream.Seek(0, SeekOrigin.Begin);
 
 			var copiedMediaStream = new MediaStream(copyStream, stream.Extension, stream.MediaItem);
-			
-			/* END STOCK */
 
 			// we store the site context because on the background thread: without the Sitecore context saved (on a worker thread), that disables the media cache
 			var currentSite = Context.Site;
@@ -62,6 +67,14 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 				try
 				{
+					// make a stream backup we can use to persist in the event of an optimization failure
+					// (which will dispose of copyStream)
+					var backupStream = new MemoryStream();
+					copyStream.CopyTo(backupStream);
+					backupStream.Seek(0, SeekOrigin.Begin);
+
+					var backupMediaStream = new MediaStream(backupStream, stream.Extension, stream.MediaItem);
+
 					// switch to the right site context (see above)
 					using (new SiteContextSwitcher(currentSite))
 					{
@@ -72,11 +85,14 @@ namespace Dianoga.Invokers.MediaCacheAsync
 						if (optimizedStream == null)
 						{
 							Log.Info($"Dianoga: {mediaPath} is not something that can be optimized, either because of its file format or because it is excluded.", this);
-							cacheRecord = CreateCacheRecord(media, options, copiedMediaStream);
+							cacheRecord = CreateCacheRecord(media, options, backupMediaStream);
 						}
 
-						if(cacheRecord == null)
+						if (cacheRecord == null)
+						{
 							cacheRecord = CreateCacheRecord(media, options, optimizedStream);
+							backupMediaStream.Dispose();
+						}
 
 						AddToActiveList(cacheRecord);
 
