@@ -44,7 +44,7 @@ namespace Dianoga.Optimizers
 					args.Stream.Dispose();
 				}
 
-				if(UseShellExecute) ExecuteShell(arguments);
+				if (UseShellExecute) ExecuteShell(arguments);
 				else ExecuteProcess(arguments);
 
 				// read the file to memory so we can nuke the temp file
@@ -65,7 +65,7 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ExecuteProcess(string arguments)
 		{
-		    var processOutput = new ConcurrentBag<string>();
+			var processOutput = new ConcurrentBag<string>();
 
 			var processInfo = new ProcessStartInfo();
 			processInfo.UseShellExecute = false;
