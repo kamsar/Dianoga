@@ -50,7 +50,7 @@ namespace Dianoga
 
 				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
 
-				stream.Stream.Close();
+				stream.Dispose();
 
 				return new MediaStream(result.ResultStream, stream.Extension, stream.MediaItem);
 			}
