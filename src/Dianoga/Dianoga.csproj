@@ -65,6 +65,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Svg\EventHandlers\MediaRequest\CompressedSvgEncodingSetter.cs" />
     <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
+    <Compile Include="Unmanaged\DynamicLinkLibrary.cs" />
+    <Compile Include="Unmanaged\NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dianoga Tools\**\*" />
