@@ -1,4 +1,6 @@
-﻿namespace Dianoga.Optimizers.Pipelines.DianogaSvg
+﻿using System.IO;
+
+namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 {
 	/// <summary>
 	/// Uses SVGO to optimize SVGs at runtime.
@@ -8,9 +10,9 @@
 	{
 		protected override string CreateToolArguments(string tempFilePath, string tempOutputPath)
 		{
-			UseShellExecute = true;
+			var rootPath = Path.GetDirectoryName(ExePath);
 
-			return $"--input=\"{tempFilePath}\" --output=\"{tempOutputPath}\"";
+			return $"\"{rootPath}\\node_modules\\svgo\\bin\\svgo\" --input=\"{tempFilePath}\" --output=\"{tempOutputPath}\"";
 		}
 	}
 }
