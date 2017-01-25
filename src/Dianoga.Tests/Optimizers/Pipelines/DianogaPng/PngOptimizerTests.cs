@@ -8,8 +8,11 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 {
 	public class PngOptimizerTests
 	{
-		[Fact]
-		public void ShouldSquishTestPng()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(@"..\..\..\Dianoga\Dianoga Tools\Temp")]
+        public void ShouldSquishTestPng(string TempFolder)
 		{
 			var inputStream = new MemoryStream();
 
@@ -20,8 +23,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 
 			var sut = new PngOptimizer();
 			sut.DllPath = @"..\..\..\Dianoga\Dianoga Tools\PNGOptimizer\PNGOptimizerDll.dll";
+		    sut.TempPath = TempFolder;
 
-			var args = new OptimizerArgs(inputStream);
+            var args = new OptimizerArgs(inputStream);
 
 			var startingSize = args.Stream.Length;
 
