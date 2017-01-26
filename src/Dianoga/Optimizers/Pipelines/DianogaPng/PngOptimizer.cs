@@ -11,9 +11,9 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 	{
 		public string DllPath { private get; set; }
 
-        public string TempPath { get; set; }
+		public string TempPath { get; set; }
 
-        protected override void ProcessOptimizer(OptimizerArgs args)
+		protected override void ProcessOptimizer(OptimizerArgs args)
 		{
 			using (var pngOptimizer = new DynamicLinkLibrary(DllPath, TempPath))
 			{
@@ -42,7 +42,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 			}
 		}
 
-	    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		private delegate bool OptimizeBytes(byte[] image, int imageSize, [Out] byte[] result, int resultCapacity, out int resultSize);
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
