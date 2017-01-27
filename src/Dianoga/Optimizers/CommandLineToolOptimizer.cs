@@ -14,6 +14,8 @@ namespace Dianoga.Optimizers
 	{
 		private string _pathToExe;
 
+		private string _additionalToolArguments;
+
 		public virtual string ExePath
 		{
 			get { return _pathToExe; }
@@ -24,6 +26,15 @@ namespace Dianoga.Optimizers
 			}
 		}
 
+		public virtual string AdditionalToolArguments
+		{
+			get { return _additionalToolArguments; }
+			set
+			{
+				if (!string.IsNullOrEmpty(value) && value.StartsWith("-"))
+					_additionalToolArguments = value;
+			}
+		}
 		/// <summary>
 		/// Shell execute uses PATH and can run non-exe files (e.g. cmd) but it cannot capture output
 		/// </summary>
@@ -35,6 +46,9 @@ namespace Dianoga.Optimizers
 			var tempOutputPath = GetTempFilePath();
 
 			var arguments = CreateToolArguments(tempFilePath, tempOutputPath);
+
+			if (!string.IsNullOrEmpty(AdditionalToolArguments))
+				arguments = AdditionalToolArguments.TrimEnd() + " " + arguments;
 
 			try
 			{

@@ -20,6 +20,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 
 			var sut = new MozJpegOptimizer();
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.1_x86\jpegtran.exe";
+			sut.AdditionalToolArguments = "-progressive";
 
 			var args = new OptimizerArgs(inputStream);
 
