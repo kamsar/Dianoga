@@ -6,29 +6,30 @@ using Xunit;
 
 namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 {
-	public class MozJpegOptimizerTests
-	{
-		[Fact]
-		public void ShouldSquishTestJpeg()
-		{
-			var inputStream = new MemoryStream();
+    public class MozJpegOptimizerTests
+    {
+        [Fact]
+        public void ShouldSquishTestJpeg()
+        {
+            var inputStream = new MemoryStream();
 
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaJpeg\test.jpg"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
+            using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaJpeg\test.jpg"))
+            {
+                testJpeg.CopyTo(inputStream);
+            }
 
-			var sut = new MozJpegOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.1_x86\jpegtran.exe";
+            var sut = new MozJpegOptimizer();
+            sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.1_x86\jpegtran.exe";
+            sut.AdditionalToolArguments = "-progressive";
 
-			var args = new OptimizerArgs(inputStream);
+            var args = new OptimizerArgs(inputStream);
 
-			var startingSize = args.Stream.Length;
+            var startingSize = args.Stream.Length;
 
-			sut.Process(args);
+            sut.Process(args);
 
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
-		}
-	}
+            args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+            args.IsOptimized.Should().BeTrue();
+        }
+    }
 }
