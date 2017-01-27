@@ -11,9 +11,11 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 	{
 		public string DllPath { private get; set; }
 
+		public string TempPath { get; set; }
+
 		protected override void ProcessOptimizer(OptimizerArgs args)
 		{
-			using (var pngOptimizer = new DynamicLinkLibrary(DllPath))
+			using (var pngOptimizer = new DynamicLinkLibrary(DllPath, TempPath))
 			{
 				using (var memoryStream = new MemoryStream())
 				{

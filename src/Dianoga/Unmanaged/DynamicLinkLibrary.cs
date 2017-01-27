@@ -2,21 +2,22 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Web.Hosting;
+using Sitecore.StringExtensions;
 
 namespace Dianoga.Unmanaged
 {
 	public class DynamicLinkLibrary : IDisposable
 	{
+		private readonly string _tempPath;
 		private readonly string _originalPathToDll;
 		private readonly object _loaderLock = new object();
 		private string _tempPathToDll;
 		private IntPtr _pointerLibrary;
 
-		public DynamicLinkLibrary(string pathToDll)
+		public DynamicLinkLibrary(string pathToDll, string tempPath)
 		{
-			_originalPathToDll = pathToDll.StartsWith("~") || pathToDll.StartsWith("/")
-				? HostingEnvironment.MapPath(pathToDll)
-				: pathToDll;
+			_tempPath = tempPath;
+			_originalPathToDll = GetFilePath(pathToDll);
 
 			_pointerLibrary = LoadModule();
 		}
@@ -32,7 +33,7 @@ namespace Dianoga.Unmanaged
 					throw new FileNotFoundException($"Unable to load DLL from {_originalPathToDll}");
 				}
 
-				_tempPathToDll = Path.GetTempFileName();
+				_tempPathToDll = GetTempPathByConfig();
 
 				CopyFile();
 
@@ -45,6 +46,24 @@ namespace Dianoga.Unmanaged
 
 				return _pointerLibrary;
 			}
+		}
+
+		private static string GetFilePath(string pathToDll)
+		{
+			return pathToDll.StartsWith("~") || pathToDll.StartsWith("/")
+				? HostingEnvironment.MapPath(pathToDll)
+				: pathToDll;
+		}
+
+		private string GetTempPathByConfig()
+		{
+			if (_tempPath.IsNullOrEmpty())
+				return Path.GetTempFileName();
+
+			var tempPathFixed = !_tempPath.EndsWith(@"\") ? _tempPath + @"\" : _tempPath;
+			tempPathFixed = GetFilePath(tempPathFixed);
+
+			return $@"{tempPathFixed}\{Path.GetRandomFileName()}";
 		}
 
 		private void CopyFile()
