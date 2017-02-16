@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Web.Hosting;
@@ -26,6 +25,9 @@ namespace Dianoga.Optimizers
 			}
 		}
 
+		/// <summary>
+		/// Additional arguments to pass to the executable beyond the required ones (e.g. optimization options)
+		/// </summary>
 		public virtual string AdditionalToolArguments
 		{
 			get { return _additionalToolArguments; }
@@ -35,6 +37,13 @@ namespace Dianoga.Optimizers
 					_additionalToolArguments = value;
 			}
 		}
+
+		/// <summary>
+		/// Determines if the optimizer optimizes the temporary file in-place (overwriting it) or writes to a separate output path
+		/// The default is to use a separate output file; override and set to false if that is not an option.
+		/// </summary>
+		protected virtual bool OptimizerUsesSeparateOutputFile => true;
+
 		/// <summary>
 		/// Shell execute uses PATH and can run non-exe files (e.g. cmd) but it cannot capture output
 		/// </summary>
@@ -43,7 +52,7 @@ namespace Dianoga.Optimizers
 		protected override void ProcessOptimizer(OptimizerArgs args)
 		{
 			var tempFilePath = GetTempFilePath();
-			var tempOutputPath = GetTempFilePath();
+			var tempOutputPath = OptimizerUsesSeparateOutputFile ? GetTempFilePath() : null;
 
 			var arguments = CreateToolArguments(tempFilePath, tempOutputPath);
 
@@ -62,7 +71,8 @@ namespace Dianoga.Optimizers
 				else ExecuteProcess(arguments);
 
 				// read the file to memory so we can nuke the temp file
-				using (var fileStream = File.OpenRead(tempOutputPath))
+				var outputPath = OptimizerUsesSeparateOutputFile ? tempOutputPath : tempFilePath;
+				using (var fileStream = File.OpenRead(outputPath))
 				{
 					args.Stream = new MemoryStream();
 					fileStream.CopyTo(args.Stream);
@@ -71,7 +81,7 @@ namespace Dianoga.Optimizers
 			finally
 			{
 				if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
-				if (File.Exists(tempOutputPath)) File.Delete(tempOutputPath);
+				if (tempOutputPath != null && File.Exists(tempOutputPath)) File.Delete(tempOutputPath);
 			}
 
 			args.IsOptimized = true;
@@ -81,12 +91,14 @@ namespace Dianoga.Optimizers
 		{
 			var processOutput = new ConcurrentBag<string>();
 
-			var processInfo = new ProcessStartInfo();
-			processInfo.UseShellExecute = false;
-			processInfo.RedirectStandardOutput = true;
-			processInfo.RedirectStandardError = true;
-			processInfo.FileName = ExePath;
-			processInfo.Arguments = arguments;
+			var processInfo = new ProcessStartInfo
+			{
+				UseShellExecute = false,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				FileName = ExePath,
+				Arguments = arguments
+			};
 
 			var toolProcess = new Process();
 			toolProcess.StartInfo = processInfo;
@@ -119,13 +131,16 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ExecuteShell(string arguments)
 		{
-			var processInfo = new ProcessStartInfo();
-			processInfo.UseShellExecute = true;
-			processInfo.FileName = ExePath;
-			processInfo.Arguments = arguments;
+			var processInfo = new ProcessStartInfo
+			{
+				UseShellExecute = true,
+				FileName = ExePath,
+				Arguments = arguments
+			};
 
 			var toolProcess = System.Diagnostics.Process.Start(processInfo);
 
+			// ReSharper disable once PossibleNullReferenceException
 			if (!toolProcess.WaitForExit(ToolTimeout))
 			{
 				try

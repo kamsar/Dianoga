@@ -21,7 +21,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 			var sut = new PngQuantOptimizer();
 
 			var sut2 = new PngOptimizer();
-			sut2.DllPath = @"..\..\..\Dianoga\Dianoga Tools\PNGOptimizer\PNGOptimizerDll.dll";
+			sut2.ExePath = @"..\..\..\Dianoga\Dianoga Tools\PNGOptimizer\PNGOptimizerCL.exe";
 
 			var args = new OptimizerArgs(inputStream);
 
