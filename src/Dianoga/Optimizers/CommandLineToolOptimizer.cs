@@ -39,6 +39,12 @@ namespace Dianoga.Optimizers
 		}
 
 		/// <summary>
+		/// If true, additional arguments are prepended to the arguments from CreateToolArguments()
+		/// If false, additional arguments are added at the end
+		/// </summary>
+		protected virtual bool PrependAdditionalArguments => true;
+
+		/// <summary>
 		/// Determines if the optimizer optimizes the temporary file in-place (overwriting it) or writes to a separate output path
 		/// The default is to use a separate output file; override and set to false if that is not an option.
 		/// </summary>
@@ -57,7 +63,11 @@ namespace Dianoga.Optimizers
 			var arguments = CreateToolArguments(tempFilePath, tempOutputPath);
 
 			if (!string.IsNullOrEmpty(AdditionalToolArguments))
-				arguments = AdditionalToolArguments.TrimEnd() + " " + arguments;
+			{
+				arguments = PrependAdditionalArguments ? 
+					$"{AdditionalToolArguments.TrimEnd()} {arguments}" : 
+					$"{arguments.TrimEnd()} {AdditionalToolArguments.TrimEnd()}";
+			}
 
 			try
 			{

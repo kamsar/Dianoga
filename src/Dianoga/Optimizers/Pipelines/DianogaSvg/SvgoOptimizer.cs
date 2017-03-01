@@ -14,5 +14,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 
 			return $"\"{rootPath}\\node_modules\\svgo\\bin\\svgo\" --input=\"{tempFilePath}\" --output=\"{tempOutputPath}\"";
 		}
+
+		protected override bool PrependAdditionalArguments => false;
 	}
 }
