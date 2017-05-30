@@ -20,7 +20,7 @@ namespace Dianoga.Optimizers
 			get { return _pathToExe; }
 			set
 			{
-				if (value.StartsWith("~") || value.StartsWith("/")) _pathToExe = HostingEnvironment.MapPath(value);
+				if (value.StartsWith("~") || value.StartsWith("/")) _pathToExe = HostingEnvironment.MapPath(value) ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value.TrimStart('/', '\\'));
 				else _pathToExe = value;
 			}
 		}
