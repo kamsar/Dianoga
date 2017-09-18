@@ -34,9 +34,9 @@
     <Reference Include="nQuant.Core">
       <HintPath>..\..\packages\nQuant.1.0.3\Lib\net40\nQuant.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Sitecore.Kernel, Version=8.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\skadden-sitecore2\lib\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,6 +53,7 @@
     <Compile Include="Invokers\MediaCacheAsync\Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
     <Compile Include="Invokers\MediaCacheAsync\OptimizingMediaCache.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\SystemDrawingJpegOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerArgs.cs" />
