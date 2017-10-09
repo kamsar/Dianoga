@@ -53,6 +53,7 @@
     <Compile Include="Invokers\MediaCacheAsync\Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
     <Compile Include="Invokers\MediaCacheAsync\OptimizingMediaCache.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantCliOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerArgs.cs" />
@@ -93,6 +94,10 @@
     </None>
     <None Include="Dianoga.nuspec" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dianoga Tools\pngquant\pngquant.exe" />
+    <None Include="Dianoga Tools\pngquant\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
