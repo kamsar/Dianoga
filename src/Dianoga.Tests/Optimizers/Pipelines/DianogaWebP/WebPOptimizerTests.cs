@@ -11,14 +11,15 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		[Fact]
 		public void ShouldSquishTestJpeg()
 		{
-			var inputStream = new MemoryStream();
+            var inputStream = new MemoryStream();
 
 			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.jpg"))
 			{
 				testJpeg.CopyTo(inputStream);
 			}
 
-			var sut = new WebPOptimizer();
+		    var sut = new WebPOptimizer();
+		    sut.BrowserSupportWebP = true;
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-0.4.1-windows-x64\bin\cwebp.exe";
 
 			var args = new OptimizerArgs(inputStream);

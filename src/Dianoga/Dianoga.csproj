@@ -58,6 +58,7 @@
     <Compile Include="Optimizers\OptimizerArgs.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
+    
     <None Include="Dianoga Tools\**\*" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +91,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Svg.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.WebP.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Dianoga.nuspec" />
