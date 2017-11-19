@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\Pipelines\GetMediaStream\ParseAcceptHeaders.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
-    
     <None Include="Dianoga Tools\**\*" />
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +99,11 @@
     <None Include="Dianoga.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\Debug\*.*" "C:\inetpub\wwwroot\Sitecore82\Website\bin\" /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
