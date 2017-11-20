@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
     <Compile Include="Invokers\MediaCacheAsync\Pipelines\GetMediaStream\ParseAcceptHeaders.cs" />
+    <Compile Include="MediaRequestHandler.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />

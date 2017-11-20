@@ -26,17 +26,17 @@ namespace Dianoga
 				Log.Error($"Dianoga: Could not resize image as it was larger than the maximum size allowed for memory processing. Media item: {stream.MediaItem.Path}", this);
 				return null;
 			}
-			var processorName = options.CustomOptions["extension"] == "webp" ? "dianogaOptimizeWebPRunner" : "dianogaOptimize";
+			var runWebPOptimization = options.CustomOptions["extension"] == "webp";
 
 			//Run optimizer based on extension
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var result = new ProcessorArgs(stream);
+			var result = new ProcessorArgs(stream, runWebPOptimization);
 
 			try
 			{
-				CorePipeline.Run(processorName, result);
+				CorePipeline.Run("dianogaOptimize", result);
 			}
 			catch (Exception exception)
 			{
@@ -55,7 +55,7 @@ namespace Dianoga
 				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
 
 				stream.Dispose();
-				var extension = (string)result.CustomData["extension"] ?? stream.Extension;
+				var extension = (string)options.CustomOptions["extension"] ?? stream.Extension;
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 
