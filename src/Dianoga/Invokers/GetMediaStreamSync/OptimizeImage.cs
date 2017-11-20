@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Web;
+﻿using System.Web;
 using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
-using System.Linq;
 
 namespace Dianoga.Invokers.GetMediaStreamSync
 {
@@ -14,7 +12,6 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 	public class OptimizeImage
 	{
 		private readonly MediaOptimizer _optimizer;
-
 
 		public OptimizeImage() : this(new MediaOptimizer())
 		{
