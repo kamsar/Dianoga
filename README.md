@@ -2,7 +2,7 @@
 
 An automatic image optimizer for the Sitecore media library. Reduce the size of your images served from Sitecore by 8-70%, completely automatically.
 
-When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [nQuant](https://nquant.codeplex.com/), or [SVGO](https://github.com/svg/svgo) on the image data immediately after it is placed in the Sitecore media cache. 
+When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [nQuant](https://nquant.codeplex.com/), [SVGO](https://github.com/svg/svgo) or [WebP](https://developers.google.com/speed/webp/) on the image data immediately after it is placed in the Sitecore media cache. 
 
 Dianoga ensures that your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features (for example with [Adaptive Images](https://marketplace.sitecore.net/en/Modules/Sitecore_Adaptive_Images.aspx)). Even if you have already optimized every image uploaded into the media library, after Sitecore performs image processing the result is _not_ optimized (an unfortunate limitation of most other image optimization libraries for Sitecore is that they only apply to the original image).
 
@@ -14,6 +14,7 @@ Dianoga supports:
 * JPEGs (via mozjpeg - lossless optimization)
 * PNGs (via PNGOptimizer - lossless, and/or nQuant - lossy)
 * SVGs (via SVGO - lossless, and automatic gzipping of SVG media responses)
+* WebP (via cwebp - lossy for JPEG and lossless for PNG)
 
 Additional format support is possible to add via new processors in the `dianogaOptimize` pipeline.
 
@@ -56,6 +57,32 @@ To perform a manual installation:
 * Copy the `Dianoga Tools` folder to the `App_Data` folder of your website
 * Copy `Default Config Files/*.config` to `App_Config\Include\Dianoga`
 * Reference `Dianoga.dll` or the source project in your web project
+
+## WebP feature
+
+WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). Google Chrome and Opera natively [support WebP on 21 of November 2017](https://caniuse.com/#feat=webp). Both Safari & Firefox are experimenting with supporting WebP images. Usage of WebP format could be a quick win when you need a speed up your website. By default WebP optimization is disabled.
+
+### How WebP optimization works:
+Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed.
+
+### How to enable WebP support:
+1. Enable `Dianoga.WebP.config.disabled` config
+2. Open web.config and change line
+`<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />` to
+`<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
+3. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
+
+```C#
+protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
+{
+	if (context?.Request.AcceptTypes != null && (context.Request.AcceptTypes).Contains("image/webp"))
+	{
+		request.Options.CustomOptions["extension"] = "webp";
+	}
+
+	return base.DoProcessRequest(context, request, media);
+}
+```
 
 ## Upgrade
 
