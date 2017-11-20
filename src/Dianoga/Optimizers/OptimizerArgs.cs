@@ -20,6 +20,6 @@ namespace Dianoga.Optimizers
 		public OptimizerArgs(Stream inputStream, bool acceptWebP) : this(inputStream)
 		{
 			AcceptWebP = acceptWebP;
-	}
+		}
 	}
 }
