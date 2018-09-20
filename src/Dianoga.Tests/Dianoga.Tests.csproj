@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Optimizers\DianogaOptimizerProcessorTests.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizerTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizerTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizationChainTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizerTests.cs" />

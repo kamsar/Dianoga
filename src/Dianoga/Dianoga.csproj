@@ -51,6 +51,7 @@
     <Compile Include="MediaRequestHandler.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />
     <Compile Include="Invokers\MediaCacheAsync\Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
@@ -80,6 +81,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Jpeg.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Jpeg.Lossy.config.disabled">
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config.disabled">
