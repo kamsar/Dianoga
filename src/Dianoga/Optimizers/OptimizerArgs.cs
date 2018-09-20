@@ -9,10 +9,17 @@ namespace Dianoga.Optimizers
 
 		public bool IsOptimized { get; set; }
 
+		public bool AcceptWebP { get; set; }
+
 		public OptimizerArgs(Stream inputStream)
 		{
 			IsOptimized = false;
 			Stream = inputStream;
+		}
+
+		public OptimizerArgs(Stream inputStream, bool acceptWebP) : this(inputStream)
+		{
+			AcceptWebP = acceptWebP;
 		}
 	}
 }

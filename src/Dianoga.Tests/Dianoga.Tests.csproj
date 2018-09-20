@@ -73,6 +73,7 @@
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizationChainTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizerTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizerTests.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizerTests.cs" />
     <Compile Include="Optimizers\TestOptimizerProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -92,7 +93,14 @@
     <Content Include="Optimizers\Pipelines\DianogaPng\test.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Optimizers\Pipelines\DianogaWebP\test.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Optimizers\Pipelines\DianogaWebP\test.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

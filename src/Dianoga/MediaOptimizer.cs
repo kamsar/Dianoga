@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Dianoga.Processors;
+using Sitecore.Collections;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
@@ -23,11 +26,13 @@ namespace Dianoga
 				Log.Error($"Dianoga: Could not resize image as it was larger than the maximum size allowed for memory processing. Media item: {stream.MediaItem.Path}", this);
 				return null;
 			}
+			var runWebPOptimization = options.CustomOptions["extension"] == "webp";
 
+			//Run optimizer based on extension
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var result = new ProcessorArgs(stream);
+			var result = new ProcessorArgs(stream, runWebPOptimization);
 
 			try
 			{
@@ -38,7 +43,6 @@ namespace Dianoga
 				Log.Error($"Dianoga: Unable to optimize {stream.MediaItem.MediaPath} due to a processing error! It will be unchanged.", exception, this);
 				return null;
 			}
-
 			sw.Stop();
 
 			if (result.ResultStream != null && result.ResultStream.CanRead)
@@ -51,8 +55,8 @@ namespace Dianoga
 				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
 
 				stream.Dispose();
-
-				return new MediaStream(result.ResultStream, stream.Extension, stream.MediaItem);
+				var extension = (string)options.CustomOptions["extension"] ?? stream.Extension;
+				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 
 			if(!string.IsNullOrWhiteSpace(result.Message))

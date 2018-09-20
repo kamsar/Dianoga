@@ -32,12 +32,15 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 
 				var sourceStream = args.ResultStream ?? args.InputStream.Stream;
 
-				var optimizerArgs = new OptimizerArgs(sourceStream);
+				var optimizerArgs = new OptimizerArgs(sourceStream, args.AcceptWebP);
 
 				CorePipeline.Run(Pipeline, optimizerArgs);
 
 				if (optimizerArgs.IsOptimized)
 					args.ResultStream = optimizerArgs.Stream;
+
+				if(optimizerArgs.Aborted)
+					args.AbortPipeline();
 			}
 		}
 	}

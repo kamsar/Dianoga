@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\Pipelines\GetMediaStream\ParseAcceptHeaders.cs" />
+    <Compile Include="MediaRequestHandler.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Optimizers\OptimizerArgs.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
@@ -91,9 +94,13 @@
     <None Include="Default Config Files\Dianoga.Svg.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Default Config Files\Dianoga.WebP.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Dianoga.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

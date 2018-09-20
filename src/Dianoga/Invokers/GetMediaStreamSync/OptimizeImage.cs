@@ -1,4 +1,5 @@
-﻿using Sitecore.Diagnostics;
+﻿using System.Web;
+using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
 
 namespace Dianoga.Invokers.GetMediaStreamSync
