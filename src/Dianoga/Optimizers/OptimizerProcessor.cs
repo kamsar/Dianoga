@@ -74,9 +74,9 @@ namespace Dianoga.Optimizers
 
 				if (args.Stream.Length > originalStream.Length)
 				{
+					args.AddMessage($"{GetType().Name}: the optimized image resulted in a larger file size ({args.Stream.Length} vs {originalStream.Length}). Using the original instead.");
 					args.Stream.Dispose();
 					args.Stream = originalStream;
-					args.AddMessage($"{GetType().Name}: the optimized image resulted in a larger file size ({args.Stream.Length} vs {originalStream.Length}). Using the original instead.");
 				}
 				else
 				{
