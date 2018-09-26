@@ -47,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\Pipelines\GetMediaStream\ParseAcceptHeaders.cs" />
+    <Compile Include="MediaRequestHandler.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />
     <Compile Include="Invokers\MediaCacheAsync\Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Optimizers\OptimizerArgs.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
@@ -80,6 +84,9 @@
     <None Include="Default Config Files\Dianoga.Jpeg.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Default Config Files\Dianoga.Jpeg.Lossy.config.disabled">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config.disabled">
       <SubType>Designer</SubType>
     </None>
@@ -90,6 +97,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Svg.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.WebP.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Dianoga.nuspec" />

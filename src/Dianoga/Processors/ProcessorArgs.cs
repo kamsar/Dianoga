@@ -12,11 +12,19 @@ namespace Dianoga.Processors
 
 		public ProcessorArgsStatistics Statistics { get; }
 
+		public bool AcceptWebP { get; set; }
+
 		public ProcessorArgs(MediaStream inputStream)
 		{
 			InputStream = inputStream;
 			Statistics = new ProcessorArgsStatistics(this);
 		}
+
+		public ProcessorArgs(MediaStream inputStream, bool acceptWebP): this(inputStream)
+		{
+			AcceptWebP = acceptWebP;
+		}
+
 
 		public class ProcessorArgsStatistics
 		{

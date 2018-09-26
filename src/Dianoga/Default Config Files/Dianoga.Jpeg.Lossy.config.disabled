@@ -1,0 +1,19 @@
+﻿<!--
+	Configures Dianoga to optimize JPEG images with jpegoptim with quality set to 90%
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+
+			<!-- jpegoptim lossy compression, quality set to 90% -->
+			<dianogaOptimizeJpeg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJpeg.MozJpegOptimizer, Dianoga">
+					<patch:attribute name="type">Dianoga.Optimizers.Pipelines.DianogaJpeg.JpegOptimOptimizer, Dianoga</patch:attribute>
+					<ExePath>/App_Data/Dianoga Tools/jpegoptim-windows/jpegoptim.exe</ExePath>
+					<AdditionalToolArguments>--strip-all --all-progressive -m90</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJpeg>
+
+		</pipelines>
+	</sitecore>
+</configuration>
