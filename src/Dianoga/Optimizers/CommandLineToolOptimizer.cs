@@ -17,7 +17,7 @@ namespace Dianoga.Optimizers
 
 		public virtual string ExePath
 		{
-			get { return _pathToExe; }
+			get => _pathToExe;
 			set
 			{
 				if (value.StartsWith("~") || value.StartsWith("/")) _pathToExe = HostingEnvironment.MapPath(value) ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, value.TrimStart('/', '\\'));
@@ -30,7 +30,7 @@ namespace Dianoga.Optimizers
 		/// </summary>
 		public virtual string AdditionalToolArguments
 		{
-			get { return _additionalToolArguments; }
+			get => _additionalToolArguments;
 			set
 			{
 				if (!string.IsNullOrEmpty(value) && value.StartsWith("-"))
@@ -64,8 +64,8 @@ namespace Dianoga.Optimizers
 
 			if (!string.IsNullOrEmpty(AdditionalToolArguments))
 			{
-				arguments = PrependAdditionalArguments ? 
-					$"{AdditionalToolArguments.TrimEnd()} {arguments}" : 
+				arguments = PrependAdditionalArguments ?
+					$"{AdditionalToolArguments.TrimEnd()} {arguments}" :
 					$"{arguments.TrimEnd()} {AdditionalToolArguments.TrimEnd()}";
 			}
 
@@ -115,9 +115,18 @@ namespace Dianoga.Optimizers
 			toolProcess.OutputDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 			toolProcess.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 
-			toolProcess.Start();
+			try
+			{
+				toolProcess.Start();
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidOperationException($"{ExePath} could not be started because an error occurred. See the inner exception for details.", ex);
+			}
+
 			toolProcess.BeginOutputReadLine();
 			toolProcess.BeginErrorReadLine();
+
 
 			if (!toolProcess.WaitForExit(ToolTimeout))
 			{
