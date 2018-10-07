@@ -71,6 +71,7 @@
     <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Default Config Files\Dianoga.WebP.config.disabled" />
     <None Include="Dianoga Tools\**\*" />
   </ItemGroup>
   <ItemGroup>
@@ -96,9 +97,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Svg.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Default Config Files\Dianoga.WebP.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Dianoga.nuspec" />
