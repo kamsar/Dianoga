@@ -184,7 +184,14 @@ namespace Dianoga.Optimizers
 
 		protected virtual string GetTempFilePath()
 		{
-			return Path.GetTempFileName();
+			try
+			{
+				return Path.GetTempFileName();
+			}
+			catch (IOException ioe)
+			{
+				throw new InvalidOperationException($"Error occurred while creating temp file to optimize. This can happen if IIS does not have write access to {Path.GetTempPath()}, or if the temp folder has 65535 files in it and is full.", ioe);
+			}
 		}
 
 		protected virtual int ToolTimeout => 60000; // in msec

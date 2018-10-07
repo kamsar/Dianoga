@@ -15,8 +15,21 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 
 		protected override string GetTempFilePath()
 		{
-			// must have a PNG extension and the default gives us .tmp
-			return Path.ChangeExtension(base.GetTempFilePath(), ".png");
+			try
+			{
+				// must have a PNG extension and GetTempFileName gives us .tmp
+				var tmpFileName = Path.GetTempFileName();
+
+				// GetTempFileName actually creates a zero length file; we want to delete that
+				// to avoid creating uncontrolled temp files (#36)
+				File.Delete(tmpFileName);
+
+				return Path.ChangeExtension(tmpFileName, ".png");
+			}
+			catch (IOException ioe)
+			{
+				throw new InvalidOperationException($"Error occurred while creating temp file to optimize. This can happen if IIS does not have write access to {Path.GetTempPath()}, or if the temp folder has 65535 files in it and is full.", ioe);
+			}
 		}
 	}
 }
