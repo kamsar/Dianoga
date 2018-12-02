@@ -42,6 +42,11 @@
 				<versionedTemplate>system/media/versioned/image</versionedTemplate>
 			</mediaType>
 		</mediaTypes>
+		<requestProtection>
+			<protectedMediaQueryParameters>
+				<parameter description="extension" name="extension"/>
+			</protectedMediaQueryParameters>
+		</requestProtection>
 	</mediaLibrary>
 	</sitecore>
 </configuration>
