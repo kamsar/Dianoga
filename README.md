@@ -88,7 +88,7 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 ```XML
 <settings>
 	<setting name="MediaResponse.VaryHeader">
-		<patch:attribute name="value">User-Agent</patch:attribute>
+		<patch:attribute name="value">Accept</patch:attribute>
 	</setting>
 </settings>
 ```
