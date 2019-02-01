@@ -62,7 +62,7 @@
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
-    <Compile Include="Processors\Pipelines\DianogaOptimize\DisableDianogeForSite.cs" />
+    <Compile Include="Processors\Pipelines\DianogaOptimize\DisableDianogaForShell.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
