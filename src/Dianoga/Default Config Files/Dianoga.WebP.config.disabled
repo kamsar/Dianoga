@@ -8,7 +8,7 @@
 			<dianogaOptimize>
 				<!-- if adding new processors make sure they have a unique desc attribute -->
 				<!-- Left dianogaOptimizeWebPWrapper>dianogaOptimizeWebP processors call stack for ability to use different webp optimizers per extension -->
-				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" patch:before="processor[1]" desc="all">
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" patch:before="processor[1]" desc="webp">
 					<Extensions>jpg, jpeg, jfif, jpe, webp, png</Extensions>
 					<Pipeline>dianogaOptimizeWebP</Pipeline>
 				</processor>

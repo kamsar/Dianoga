@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Dianoga.Processors;
-using Sitecore.Collections;
+﻿using Dianoga.Processors;
+using Dianoga.Processors.Pipelines.DianogaOptimize;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
+using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Dianoga
 {
@@ -26,7 +25,15 @@ namespace Dianoga
 				Log.Error($"Dianoga: Could not resize image as it was larger than the maximum size allowed for memory processing. Media item: {stream.MediaItem.Path}", this);
 				return null;
 			}
-			var runWebPOptimization = options.CustomOptions["extension"] == "webp";
+
+			var runWebPOptimization = false;
+			if (Sitecore.Configuration.Factory.CreateObject("pipelines/dianogaOptimize/processor[@desc='webp']", false) is ExtensionBasedOptimizer dianogaProcessor)
+			{
+				if (dianogaProcessor.Extensions.Split(',').Contains(stream.Extension, StringComparer.OrdinalIgnoreCase))
+				{
+					runWebPOptimization = options.CustomOptions["extension"] == "webp";
+				}
+			}
 
 			//Run optimizer based on extension
 			var sw = new Stopwatch();
@@ -55,11 +62,11 @@ namespace Dianoga
 				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
 
 				stream.Dispose();
-				var extension = (string)options.CustomOptions["extension"] ?? stream.Extension;
+				var extension = runWebPOptimization ? options.CustomOptions["extension"] ?? stream.Extension : stream.Extension;
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 
-			if(!string.IsNullOrWhiteSpace(result.Message))
+			if (!string.IsNullOrWhiteSpace(result.Message))
 				Log.Warn($"Dianoga: unable to optimize {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} because {result.Message}", this);
 
 			// if no message exists that implies that nothing in the dianogaOptimize pipeline acted to optimize - e.g. it's a media type we don't know how to optimize, like PDF.
@@ -70,7 +77,7 @@ namespace Dianoga
 		protected virtual string GetDimensions(MediaOptions options)
 		{
 			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "original size";
-			
+
 			string result = string.Empty;
 
 			if (options.Width > 0) result = options.Width + "w";
