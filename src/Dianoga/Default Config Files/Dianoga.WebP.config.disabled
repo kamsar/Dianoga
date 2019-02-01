@@ -48,5 +48,14 @@
 				</protectedMediaQueryParameters>
 			</requestProtection>
 		</mediaLibrary>
+
+		<!--Enable this section if you are running Dianoga under CDN. Otherwise CDN could cache webp response and return it for browsers that don't support it -->
+		<!--
+		<settings>
+			<setting name="MediaResponse.VaryHeader">
+				<patch:attribute name="value">Accept</patch:attribute>
+			</setting>
+		</settings>
+		-->
 	</sitecore>
 </configuration>

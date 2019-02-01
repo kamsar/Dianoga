@@ -83,6 +83,16 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 	return base.DoProcessRequest(context, request, media);
 }
 ```
+4. If you run Sitecore under CDN, you need to uncomment `settings` section in `Dianoga.WebP.config`:
+
+```XML
+<settings>
+	<setting name="MediaResponse.VaryHeader">
+		<patch:attribute name="value">Accept</patch:attribute>
+	</setting>
+</settings>
+```
+
 
 ## Upgrade
 
