@@ -2,7 +2,7 @@
 
 namespace Dianoga.Processors.Pipelines.DianogaOptimize
 {
-	public class DisableDianogeForSite
+	public class DisableDianogaForSite
 	{
 		public virtual void Process(ProcessorArgs args)
 		{
