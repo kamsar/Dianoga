@@ -23,7 +23,7 @@
 			-->
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
-					<ExePath>/App_Data/Dianoga Tools/libwebp-0.4.1-windows-x64/bin/cwebp.exe</ExePath>
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
 				</processor>
 			</dianogaOptimizeWebP>
 
