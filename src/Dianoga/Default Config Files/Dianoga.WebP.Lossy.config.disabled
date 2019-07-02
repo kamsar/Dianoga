@@ -5,10 +5,10 @@
 	<sitecore>
 		<pipelines>
 
-			<!-- webp lossy compression, quality set to 85% -->
+			<!-- webp lossy compression, quality set to 90% -->
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
-					<AdditionalToolArguments>-q 85 -m 6 -exact</AdditionalToolArguments>
+					<AdditionalToolArguments>-q 90 -m 6 -exact</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeWebP>
 

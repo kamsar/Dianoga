@@ -66,11 +66,12 @@ WebP is is an image format employing both lossy and lossless compression. It is 
 Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed.
 
 ### How to enable WebP support:
-1. Enable `Dianoga.WebP.config.disabled` config
-2. Open web.config and change line
+1. Enable `Dianoga.WebP.config.disabled` config for lossless compression
+2. Enable `Dianoga.WebP.Lossy.config.disabled` config for lossy compression (quality set to 90%)
+3. Open web.config and change line
 `<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />` to
 `<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
-3. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
+4. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
 
 ```C#
 protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
