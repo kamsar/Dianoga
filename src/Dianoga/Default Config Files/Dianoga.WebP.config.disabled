@@ -24,6 +24,7 @@
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
+					<AdditionalToolArguments>-q 100 -m 6 -lossless -exact</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeWebP>
 
