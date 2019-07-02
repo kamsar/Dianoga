@@ -1,0 +1,26 @@
+﻿<!--
+	Configures Dianoga to optimize GIF images using WEBP format
+	By default this uses the PNGOptimizer library, which is fairly fast.
+	You may also enable quantization, which can result in larger file size savings at the cost of being lossy
+	(usually a non-noticeable image quality reduction)
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaOptimize>
+				<!-- if adding new processors make sure they have a unique desc attribute -->
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="gif">
+					<Extensions>gif</Extensions>
+					<Pipeline>dianogaOptimizeGif</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+			<dianogaOptimizeGif>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/gif2webp.exe</ExePath>
+					<AdditionalToolArguments>-q 100 -m 6</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeGif>
+		</pipelines>
+	</sitecore>
+</configuration>

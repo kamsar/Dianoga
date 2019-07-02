@@ -72,6 +72,8 @@
     <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Default Config Files\Dianoga.WebP.Gif.config.disabled" />
+    <None Include="Default Config Files\Dianoga.WebP.Gif.Lossy.config.disabled" />
     <None Include="Default Config Files\Dianoga.WebP.Lossy.config.disabled" />
     <None Include="Default Config Files\Dianoga.WebP.config.disabled" />
     <None Include="Dianoga Tools\**\*" />

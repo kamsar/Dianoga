@@ -68,10 +68,12 @@ Browser sends request to server to get image. If browser supports WebP image for
 ### How to enable WebP support:
 1. Enable `Dianoga.WebP.config.disabled` config for lossless compression (it is configured only for PNG)
 2. Enable `Dianoga.WebP.Lossy.config.disabled` config for lossy compression (quality set to 90%) (it is configured for PNG, JPEG and WEBP; PNGs are compressed with alpha channel)
-3. Open web.config and change line
+3. Enable `Dianoga.WebP.Gif.config.disabled` config for lossless compression of GIF files
+4. Enable `Dianoga WebP.Gif.Lossy.config.disabled` config for lossy compression (quality set to 90%)
+5. Open web.config and change line
 `<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />` to
 `<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
-4. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
+6. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
 
 ```C#
 protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
@@ -84,7 +86,7 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 	return base.DoProcessRequest(context, request, media);
 }
 ```
-4. If you run Sitecore under CDN, you need to uncomment `settings` section in `Dianoga.WebP.config`:
+7. If you run Sitecore under CDN, you need to uncomment `settings` section in `Dianoga.WebP.config`:
 
 ```XML
 <settings>

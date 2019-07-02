@@ -6,12 +6,6 @@
 		<pipelines>
 
 			<dianogaOptimize>
-				<!-- 				
-					DIANOGA OPTIMIZE WebP
-					Pipeline that defines how convert images to WebP format. Multiple optimizers may run over the same file.
-					Optimizers should derive from OptimizerProcessor or CommandLineToolOptimizer.
-					
-					Optimizers are expected to close the stream they receive under any circumstances! -->
 				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="webp">
 					<Extensions>webp</Extensions>
 					<Pipeline>dianogaOptimizeWebP</Pipeline>
@@ -30,14 +24,14 @@
 			<!-- Lossy compression for JPEG, quality set to 90% -->
 			<dianogaOptimizeJpeg>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
-					<AdditionalToolArguments>-q 90 -m 6 -exact</AdditionalToolArguments>
+					<AdditionalToolArguments>-q 90 -m 6</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeJpeg>
 
 			<!-- try to optimize webp files further -->
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
-					<AdditionalToolArguments>-q 90 -m 6 -exact</AdditionalToolArguments>
+					<AdditionalToolArguments>-q 90 -m 6</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeWebP>
 
