@@ -1,11 +1,40 @@
 ﻿<!--
-	Configures Dianoga to optimize JPEG images with jpegoptim with quality set to 90%
+	Configures Dianoga to optimize images using webp format with lossy compression
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
 	<sitecore>
 		<pipelines>
 
-			<!-- webp lossy compression, quality set to 90% -->
+			<dianogaOptimize>
+				<!-- 				
+					DIANOGA OPTIMIZE WebP
+					Pipeline that defines how convert images to WebP format. Multiple optimizers may run over the same file.
+					Optimizers should derive from OptimizerProcessor or CommandLineToolOptimizer.
+					
+					Optimizers are expected to close the stream they receive under any circumstances! -->
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="webp">
+					<Extensions>webp</Extensions>
+					<Pipeline>dianogaOptimizeWebP</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+			<!-- 
+				Lossy compression for PNG with transparency, quality set to 90%
+			-->
+			<dianogaOptimizePng>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<AdditionalToolArguments>-q 90 -alpha_q 100 -m 6</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizePng>
+
+			<!-- Lossy compression for JPEG, quality set to 90% -->
+			<dianogaOptimizeJpeg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+					<AdditionalToolArguments>-q 90 -m 6 -exact</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJpeg>
+
+			<!-- try to optimize webp files further -->
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<AdditionalToolArguments>-q 90 -m 6 -exact</AdditionalToolArguments>

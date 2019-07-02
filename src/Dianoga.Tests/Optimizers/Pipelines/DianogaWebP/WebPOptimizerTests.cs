@@ -9,7 +9,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 	public class WebPOptimizerTests
 	{
 		[Fact]
-		public void ShouldSquishLosslessTestJpeg()
+		public void ShouldReturnOriginalStreamWhenOptimizedImageSizeIsGreater()
 		{
 			var inputStream = new MemoryStream();
 
@@ -29,8 +29,8 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 
 			sut.Process(args);
 
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			args.Stream.Length.Should().Be(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeFalse();
 		}
 
 		[Fact]
