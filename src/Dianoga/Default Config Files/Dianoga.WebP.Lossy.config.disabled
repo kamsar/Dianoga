@@ -24,6 +24,7 @@
 			<!-- Lossy compression for JPEG, quality set to 90% -->
 			<dianogaOptimizeJpeg>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
 					<AdditionalToolArguments>-q 90 -m 6</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeJpeg>
@@ -31,6 +32,7 @@
 			<!-- try to optimize webp files further -->
 			<dianogaOptimizeWebP>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
 					<AdditionalToolArguments>-q 90 -m 6</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeWebP>
