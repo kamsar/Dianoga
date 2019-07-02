@@ -17,7 +17,11 @@ namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 			if (args.AcceptWebP)
 			{
 				base.Process(args);
-				args.AbortPipeline();
+
+				if (args.IsOptimized)
+				{
+					args.AbortPipeline();
+				}
 			}
 		}
 
