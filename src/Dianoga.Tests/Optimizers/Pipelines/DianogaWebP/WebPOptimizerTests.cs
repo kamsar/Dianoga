@@ -9,7 +9,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 	public class WebPOptimizerTests
 	{
 		[Fact]
-		public void ShouldSquishTestJpeg()
+		public void ShouldSquishLosslessTestJpeg()
 		{
 			var inputStream = new MemoryStream();
 
@@ -19,9 +19,11 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			}
 
 			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-0.4.1-windows-x64\bin\cwebp.exe";
+			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.0.2-windows-x64\bin\cwebp.exe";
+			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless -exact";
 
 			var args = new OptimizerArgs(inputStream);
+			args.AcceptWebP = true;
 
 			var startingSize = args.Stream.Length;
 
@@ -32,7 +34,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		}
 
 		[Fact]
-		public void ShouldSquishTestPng()
+		public void ShouldSquishLosslessTestPng()
 		{
 			var inputStream = new MemoryStream();
 
@@ -42,9 +44,61 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			}
 
 			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-0.4.1-windows-x64\bin\cwebp.exe";
+			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.0.2-windows-x64\bin\cwebp.exe";
+			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless -exact";
 
 			var args = new OptimizerArgs(inputStream);
+			args.AcceptWebP = true;
+
+			var startingSize = args.Stream.Length;
+
+			sut.Process(args);
+
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
+		}
+
+		[Fact]
+		public void ShouldSquishLossyTestJpeg()
+		{
+			var inputStream = new MemoryStream();
+
+			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.jpg"))
+			{
+				testJpeg.CopyTo(inputStream);
+			}
+
+			var sut = new WebPOptimizer();
+			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.0.2-windows-x64\bin\cwebp.exe";
+			sut.AdditionalToolArguments = "-q 90 -m 6 -exact";
+
+			var args = new OptimizerArgs(inputStream);
+			args.AcceptWebP = true;
+
+			var startingSize = args.Stream.Length;
+
+			sut.Process(args);
+
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
+		}
+
+		[Fact]
+		public void ShouldSquishLossyTestPng()
+		{
+			var inputStream = new MemoryStream();
+
+			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.png"))
+			{
+				testJpeg.CopyTo(inputStream);
+			}
+
+			var sut = new WebPOptimizer();
+			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.0.2-windows-x64\bin\cwebp.exe";
+			sut.AdditionalToolArguments = "-q 90 -m 6 -exact";
+
+			var args = new OptimizerArgs(inputStream);
+			args.AcceptWebP = true;
 
 			var startingSize = args.Stream.Length;
 
