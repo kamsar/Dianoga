@@ -1,0 +1,17 @@
+﻿<!--
+	Configures Dianoga to optimize JPEG images with jpegoptim with quality set to 90%
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+
+			<!-- webp lossy compression, quality set to 85% -->
+			<dianogaOptimizeWebP>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<AdditionalToolArguments>-q 85 -m 6 -exact</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeWebP>
+
+		</pipelines>
+	</sitecore>
+</configuration>
