@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dianoga</RootNamespace>
     <AssemblyName>Dianoga</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -31,13 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nQuant.Core">
-      <HintPath>..\..\packages\nQuant.1.0.3\Lib\net40\nQuant.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -62,7 +55,6 @@
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
-    <Compile Include="Processors\Pipelines\DianogaOptimize\DisableDianogaForSite.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
     <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
@@ -101,9 +93,18 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Dianoga.nuspec" />
-    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="nQuant">
+      <Version>1.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Sitecore.Kernel">
+      <Version>9.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+      <Version>4.8.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
