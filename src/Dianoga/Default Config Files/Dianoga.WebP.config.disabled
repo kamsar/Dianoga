@@ -50,12 +50,14 @@
 		</mediaLibrary>
 
 		<!--Enable this section if you are running Dianoga under CDN. Otherwise CDN could cache webp response and return it for browsers that don't support it -->
-		<!--
+
 		<settings>
-			<setting name="MediaResponse.VaryHeader">
+			<setting name="Dianoga.WebP.ShowAlways" value="false"/>
+			
+			<!--<setting name="MediaResponse.VaryHeader">
 				<patch:attribute name="value">Accept</patch:attribute>
-			</setting>
+			</setting>-->
 		</settings>
-		-->
+
 	</sitecore>
 </configuration>
