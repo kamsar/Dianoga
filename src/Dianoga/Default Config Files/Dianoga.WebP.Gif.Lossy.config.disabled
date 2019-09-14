@@ -1,0 +1,14 @@
+﻿<!--
+	Configures Dianoga to optimize images using webp format with lossy compression
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaOptimizeGif>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<AdditionalToolArguments>-q 90 -m 6 -lossy</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeGif>
+		</pipelines>
+	</sitecore>
+</configuration>

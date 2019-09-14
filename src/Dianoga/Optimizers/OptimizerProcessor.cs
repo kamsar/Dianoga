@@ -77,6 +77,8 @@ namespace Dianoga.Optimizers
 					args.AddMessage($"{GetType().Name}: the optimized image resulted in a larger file size ({args.Stream.Length} vs {originalStream.Length}). Using the original instead.");
 					args.Stream.Dispose();
 					args.Stream = originalStream;
+
+					args.IsOptimized = false;
 				}
 				else
 				{

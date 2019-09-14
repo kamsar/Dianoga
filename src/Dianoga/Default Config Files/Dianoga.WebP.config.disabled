@@ -5,27 +5,13 @@
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
 	<sitecore>
 		<pipelines>
-			<dianogaOptimize>
-				<!-- if adding new processors make sure they have a unique desc attribute -->
-				<!-- Left dianogaOptimizeWebPWrapper>dianogaOptimizeWebP processors call stack for ability to use different webp optimizers per extension -->
-				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" patch:before="processor[1]" desc="webp">
-					<Extensions>jpg, jpeg, jfif, jpe, webp, png</Extensions>
-					<Pipeline>dianogaOptimizeWebP</Pipeline>
+			<!-- Lossless compression only makes sense for PNG files-->
+			<dianogaOptimizePng>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
+					<AdditionalToolArguments>-q 100 -m 6 -lossless</AdditionalToolArguments>
 				</processor>
-			</dianogaOptimize>
-
-			<!-- 
-				DIANOGA OPTIMIZE WebP
-				Pipeline that defines how convert images to WebP format. Multiple optimizers may run over the same file.
-				Optimizers should derive from OptimizerProcessor or CommandLineToolOptimizer.
-				
-				Optimizers are expected to close the stream they receive under any circumstances!
-			-->
-			<dianogaOptimizeWebP>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
-					<ExePath>/App_Data/Dianoga Tools/libwebp-0.4.1-windows-x64/bin/cwebp.exe</ExePath>
-				</processor>
-			</dianogaOptimizeWebP>
+			</dianogaOptimizePng>
 
 			<getMediaStream>
 				<!-- Parse HTTP request headers to define if browser support WebP format -->
