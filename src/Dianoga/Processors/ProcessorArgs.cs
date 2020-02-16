@@ -1,14 +1,15 @@
-﻿using Sitecore.Pipelines;
-using System.IO;
+﻿using System.IO;
+using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
 
 namespace Dianoga.Processors
 {
-	public class ProcessorArgs : PipelineArgs
+    public class ProcessorArgs : PipelineArgs
 	{
 		public MediaStream InputStream { get; }
+        public MediaOptions MediaOptions { get; }
 
-		public Stream ResultStream { get; set; }
+        public Stream ResultStream { get; set; }
 
 		public ProcessorArgsStatistics Statistics { get; }
 
@@ -20,9 +21,10 @@ namespace Dianoga.Processors
 			Statistics = new ProcessorArgsStatistics(this);
 		}
 
-		public ProcessorArgs(MediaStream inputStream, bool acceptWebP): this(inputStream)
+		public ProcessorArgs(MediaStream inputStream, MediaOptions options, bool acceptWebP): this(inputStream)
 		{
-			AcceptWebP = acceptWebP;
+            MediaOptions = options;
+            AcceptWebP = acceptWebP;
 		}
 
 

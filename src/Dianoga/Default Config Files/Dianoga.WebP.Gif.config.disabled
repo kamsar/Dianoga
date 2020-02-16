@@ -17,8 +17,8 @@
 
 			<dianogaOptimizeGif>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
-					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/gif2webp.exe</ExePath>
-					<AdditionalToolArguments>-q 100 -m 6</AdditionalToolArguments>
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/gif2webp.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeGif>
 		</pipelines>

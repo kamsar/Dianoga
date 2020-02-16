@@ -7,6 +7,12 @@
 
 			if (args.AcceptWebP)
 			{
+				var transformationOptions = args.MediaOptions.GetTransformationOptions();
+				if (transformationOptions.ContainsResizing())
+				{
+					this.AdditionalToolArguments = $"-resize {transformationOptions.Size.Width} {transformationOptions.Size.Height}";
+				}
+
 				base.Process(args);
 
 				if (args.IsOptimized)

@@ -2,9 +2,9 @@
 using System.Web;
 using Sitecore.Resources.Media;
 
-namespace Dianoga.Invokers.MediaCacheAsync.Pipelines.GetMediaStream
+namespace Dianoga.WebP.Pipelines.GetMediaStream
 {
-	public class ParseAcceptHeaders
+	public class ParseWebPAcceptHeaders
 	{
 		private bool? _browserSupportWebP;
 

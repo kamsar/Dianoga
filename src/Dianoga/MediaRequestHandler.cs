@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Web;
 using Sitecore.Resources.Media;
-using Sitecore.Rules.Conditions;
 
 namespace Dianoga
 {
@@ -19,11 +14,6 @@ namespace Dianoga
 			}
 
 			return base.DoProcessRequest(context, request, media);
-		}
-
-		private static bool AcceptWebP(HttpContext context)
-		{
-			return context?.Request.AcceptTypes != null && (context.Request.AcceptTypes).Contains("image/webp");
 		}
 
 	}

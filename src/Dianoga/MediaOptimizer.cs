@@ -1,11 +1,9 @@
-﻿using Dianoga.Processors;
-using Dianoga.Processors.Pipelines.DianogaOptimize;
+﻿using System;
+using System.Diagnostics;
+using Dianoga.Processors;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
-using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Dianoga
 {
@@ -26,20 +24,13 @@ namespace Dianoga
 				return null;
 			}
 
-			var runWebPOptimization = false;
-			if (Sitecore.Configuration.Factory.CreateObject("pipelines/dianogaOptimize/processor[@desc='webp']", false) is ExtensionBasedOptimizer dianogaProcessor)
-			{
-				if (dianogaProcessor.Extensions.Split(',').Contains(stream.Extension, StringComparer.OrdinalIgnoreCase))
-				{
-					runWebPOptimization = options.CustomOptions["extension"] == "webp";
-				}
-			}
+			var runWebPOptimization = options.CustomOptions["extension"] == "webp";
 
 			//Run optimizer based on extension
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var result = new ProcessorArgs(stream, runWebPOptimization);
+			var result = new ProcessorArgs(stream, options, runWebPOptimization);
 
 			try
 			{
