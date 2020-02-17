@@ -110,6 +110,10 @@ namespace Dianoga.Optimizers
 				Arguments = arguments
 			};
 
+#if DEBUG
+			Sitecore.Diagnostics.Log.Info($"\"{ExePath} {arguments}\"", this);
+#endif
+
 			var toolProcess = new Process();
 			toolProcess.StartInfo = processInfo;
 			toolProcess.OutputDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
@@ -121,7 +125,7 @@ namespace Dianoga.Optimizers
 			}
 			catch (Exception ex)
 			{
-				throw new InvalidOperationException($"{ExePath} could not be started because an error occurred. See the inner exception for details.", ex);
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" could not be started because an error occurred. See the inner exception for details.", ex);
 			}
 
 			toolProcess.BeginOutputReadLine();
@@ -139,12 +143,12 @@ namespace Dianoga.Optimizers
 					// do nothing if kill errors, we want the exception below
 				}
 
-				throw new InvalidOperationException($"{ExePath} took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
 			}
 
 			if (toolProcess.ExitCode != 0)
 			{
-				throw new InvalidOperationException($"{ExePath} exited with unexpected exit code {toolProcess.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {toolProcess.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
 			}
 		}
 
@@ -156,6 +160,10 @@ namespace Dianoga.Optimizers
 				FileName = ExePath,
 				Arguments = arguments
 			};
+
+#if DEBUG
+			Sitecore.Diagnostics.Log.Info($"\"{ExePath} {arguments}\"", this);
+#endif
 
 			var toolProcess = System.Diagnostics.Process.Start(processInfo);
 
@@ -171,12 +179,12 @@ namespace Dianoga.Optimizers
 					// do nothing if kill errors, we want the exception below
 				}
 
-				throw new InvalidOperationException($"{ExePath} took longer than {ToolTimeout}ms to run, which is a failure. Output not available using shell execute.");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output not available using shell execute.");
 			}
 
 			if (toolProcess.ExitCode != 0)
 			{
-				throw new InvalidOperationException($"{ExePath} exited with unexpected exit code {toolProcess.ExitCode}. Output not available using shell execute.");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {toolProcess.ExitCode}. Output not available using shell execute.");
 			}
 		}
 

@@ -48,9 +48,10 @@ namespace Dianoga
 					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message}", this);
 				}
 
-				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
+				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms]", this);
 
 				stream.Dispose();
+
 				var extension = result.Extension ?? stream.Extension;
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
@@ -65,7 +66,7 @@ namespace Dianoga
 
 		protected virtual string GetDimensions(MediaOptions options)
 		{
-			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "original size";
+			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "";
 
 			string result = string.Empty;
 

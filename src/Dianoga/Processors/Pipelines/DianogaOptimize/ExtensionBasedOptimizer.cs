@@ -39,7 +39,13 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 				if (optimizerArgs.IsOptimized)
 				{
 					args.Extension = optimizerArgs.Extension;
-					args.ResultStream = optimizerArgs.Stream;
+				}
+
+				args.ResultStream = optimizerArgs.Stream;
+
+				if (!string.IsNullOrEmpty(optimizerArgs.Message))
+				{
+					args.AddMessage(optimizerArgs.Message);
 				}
 
 				if (optimizerArgs.Aborted)

@@ -36,17 +36,17 @@
 			<dianogaOptimizeJpeg>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/cwebp.exe</ExePath>
-					<AdditionalToolArguments></AdditionalToolArguments>
+					<AdditionalToolArguments>-preset photo</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeJpeg>
 			<dianogaOptimizePng>
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/cwebp.exe</ExePath>
-					<AdditionalToolArguments></AdditionalToolArguments>
+					<AdditionalToolArguments>-preset icon</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizePng>
 			<dianogaOptimizeGif>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/gif2webp.exe</ExePath>
 					<AdditionalToolArguments></AdditionalToolArguments>
 				</processor>

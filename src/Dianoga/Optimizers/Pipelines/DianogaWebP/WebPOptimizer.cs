@@ -4,15 +4,26 @@ namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 {
 	public class WebPOptimizer : CommandLineToolOptimizer
 	{
+		private string _originalAdditionalToolArguments;
+
 		public override void Process(OptimizerArgs args)
 		{
 
 			if (args.MediaOptions.BrowserSupportsWebP())
 			{
+				if (string.IsNullOrEmpty(_originalAdditionalToolArguments))
+				{
+					_originalAdditionalToolArguments = AdditionalToolArguments;
+				}
+
 				var transformationOptions = args.MediaOptions.GetTransformationOptions();
 				if (transformationOptions.ContainsResizing())
 				{
-					this.AdditionalToolArguments = $"-resize {transformationOptions.Size.Width} {transformationOptions.Size.Height}";
+					AdditionalToolArguments = $"{_originalAdditionalToolArguments} -resize {transformationOptions.Size.Width} {transformationOptions.Size.Height}";
+				}
+				else
+				{
+					AdditionalToolArguments = _originalAdditionalToolArguments;
 				}
 
 				base.Process(args);
