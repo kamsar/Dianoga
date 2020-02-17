@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dianoga</RootNamespace>
     <AssemblyName>Dianoga</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,8 +34,9 @@
     <Reference Include="nQuant.Core">
       <HintPath>..\..\packages\nQuant.1.0.3\Lib\net40\nQuant.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Kernel">
-      <HintPath>..\..\lib\sitecore\Sitecore.Kernel.dll</HintPath>
+    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -44,36 +46,63 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionBasedImageOptimizer.cs" />
-    <Compile Include="IImageOptimizer.cs" />
-    <Compile Include="IOptimizerResult.cs" />
-    <Compile Include="Jpeg\JpegOptimizer.cs" />
-    <Compile Include="Jpeg\JpegOptimizerResult.cs" />
-    <Compile Include="Pipelines\Initialize\MediaCacheReplacer.cs" />
+    <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\Pipelines\GetMediaStream\ParseAcceptHeaders.cs" />
+    <Compile Include="MediaRequestHandler.cs" />
+    <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
+    <Compile Include="Optimizers\OptimizerProcessor.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaJpeg\MozJpegOptimizer.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\Pipelines\Initialize\MediaCacheReplacer.cs" />
     <Compile Include="MediaOptimizer.cs" />
-    <Compile Include="OptimizingMediaCache.cs" />
-    <Compile Include="Png\PngQuantOptimizerResult.cs" />
-    <Compile Include="Png\PngOptimizer.cs" />
-    <Compile Include="Png\PngOptimizerResult.cs" />
-    <Compile Include="Png\PngQuantOptimizer.cs" />
+    <Compile Include="Invokers\MediaCacheAsync\OptimizingMediaCache.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizer.cs" />
+    <Compile Include="Optimizers\OptimizerArgs.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaSvg\SvgoOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaWebP\WebPOptimizer.cs" />
+    <Compile Include="Processors\Pipelines\DianogaOptimize\ExtensionBasedOptimizer.cs" />
+    <Compile Include="Processors\Pipelines\DianogaOptimize\DianogaOptimizeProcessor.cs" />
+    <Compile Include="Processors\Pipelines\DianogaOptimize\PathExclusion.cs" />
+    <Compile Include="Processors\ProcessorArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Svg\EventHandlers\MediaRequest\CompressedSvgEncodingSetter.cs" />
+    <Compile Include="Svg\Pipelines\GetMediaStream\SvgIgnorer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dianoga Tools\libjpeg\jpeg62.dll" />
-    <Content Include="Dianoga Tools\libjpeg\jpegtran.exe" />
-    <Content Include="Dianoga Tools\libjpeg\license.txt" />
-    <Content Include="Dianoga Tools\PNGOptimizer\License.txt" />
-    <Content Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.dll" />
-    <Content Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.h" />
+    <None Include="Default Config Files\Dianoga.WebP.config.disabled" />
+    <None Include="Dianoga Tools\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dianoga.config">
+    <None Include="Default Config Files\Dianoga.ExcludePaths.config.example">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Dianoga Tools\PNGOptimizer\PngOptimizerDll.lib" />
+    <None Include="Default Config Files\Dianoga.Png.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Jpeg.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Jpeg.Lossy.config.disabled">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config.disabled">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Strategy.MediaCacheAsync.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Default Config Files\Dianoga.Svg.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Dianoga.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

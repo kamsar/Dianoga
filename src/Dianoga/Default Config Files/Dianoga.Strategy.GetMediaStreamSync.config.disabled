@@ -1,0 +1,24 @@
+﻿<!--
+	Sets up Dianoga to act within the getMediaStream pipeline, causing synchronous image optimization
+	
+	This is less optimal than MediaCacheAsync because it blocks the page load time of the first visitor,
+	while images are optimized. It is advantageous if you are planning to use a CDN where
+	it needs the optimized image every single time.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<getMediaStream>
+				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" />
+			</getMediaStream>
+
+			<getMediaStream>
+				<!-- Remove this if you are not using SVG support -->
+				<processor type="Dianoga.Svg.Pipelines.GetMediaStream.SvgIgnorer, Dianoga">
+					<!-- allow SVGs to be optimized synchronously before the ignorer aborts the pipeline -->
+					<SynchronouslyOptimizeSvgs>true</SynchronouslyOptimizeSvgs>
+				</processor>
+			</getMediaStream>
+		</pipelines>
+	</sitecore>
+</configuration>

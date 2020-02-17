@@ -1,0 +1,47 @@
+﻿<!--
+	Configures Dianoga to optimize images using webp format
+	By default if browser will sent "image/webp" in accept header then cwebp optimizer will be used.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaOptimize>
+				<!-- if adding new processors make sure they have a unique desc attribute -->
+				<!-- Left dianogaOptimizeWebPWrapper>dianogaOptimizeWebP processors call stack for ability to use different webp optimizers per extension -->
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" patch:before="processor[1]" desc="all">
+					<Extensions>jpg, jpeg, jfif, jpe, webp, png</Extensions>
+					<Pipeline>dianogaOptimizeWebP</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+			<!-- 
+				DIANOGA OPTIMIZE WebP
+				Pipeline that defines how convert images to WebP format. Multiple optimizers may run over the same file.
+				Optimizers should derive from OptimizerProcessor or CommandLineToolOptimizer.
+				
+				Optimizers are expected to close the stream they receive under any circumstances!
+			-->
+			<dianogaOptimizeWebP>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-0.4.1-windows-x64/bin/cwebp.exe</ExePath>
+				</processor>
+			</dianogaOptimizeWebP>
+
+			<getMediaStream>
+				<!-- Parse HTTP request headers to define if browser support WebP format -->
+				<processor type="Dianoga.Invokers.MediaCacheAsync.Pipelines.GetMediaStream.ParseAcceptHeaders, Dianoga" patch:before="processor[1]" />
+			</getMediaStream>
+		</pipelines>
+		<!-- Hack: make media provider switch content type of response from application/octet-stream to imape/webp-->
+		<mediaLibrary>
+			<mediaTypes>
+				<mediaType name="WebP image" extensions="webp">
+				<mimeType>image/webp</mimeType>
+				<forceDownload>false</forceDownload>
+				<sharedTemplate>system/media/unversioned/image</sharedTemplate>
+				<versionedTemplate>system/media/versioned/image</versionedTemplate>
+			</mediaType>
+		</mediaTypes>
+	</mediaLibrary>
+	</sitecore>
+</configuration>

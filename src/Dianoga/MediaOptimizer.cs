@@ -1,74 +1,70 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Xml;
-using Sitecore.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using Dianoga.Processors;
+using Sitecore.Collections;
 using Sitecore.Diagnostics;
+using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
-using Sitecore.StringExtensions;
 
 namespace Dianoga
 {
 	public class MediaOptimizer
 	{
-		protected static readonly IImageOptimizer[] Optimizers;
-
-		static MediaOptimizer()
-		{
-			var config = Factory.GetConfigNode("/sitecore/dianoga/optimizers");
-			Assert.IsNotNull(config, "Missing dianoga/optimizers config node! Missing or outdated App_Config/Include/Dianoga.config?");
-
-			Optimizers = config.ChildNodes
-				.OfType<XmlElement>()
-				.Select(Factory.CreateObject<IImageOptimizer>)
-				.ToArray();
-		}
-
 		/// <summary>
 		/// Optimizes a media stream and returns the optimized result. The original stream is closed if processing is successful.
+		/// Returns null if processing was unsuccessful.
 		/// </summary>
 		public virtual MediaStream Process(MediaStream stream, MediaOptions options)
 		{
-			Assert.ArgumentNotNull(stream, "stream");
+			Assert.ArgumentNotNull(stream, nameof(stream));
+			Assert.ArgumentNotNull(options, nameof(options));
 
 			if (!stream.AllowMemoryLoading)
 			{
-				Tracer.Error("Could not resize image as it was larger than the maximum size allowed for memory processing. Media item: {0}", stream.MediaItem.Path);
+				Log.Error($"Dianoga: Could not resize image as it was larger than the maximum size allowed for memory processing. Media item: {stream.MediaItem.Path}", this);
 				return null;
 			}
+			var runWebPOptimization = options.CustomOptions["extension"] == "webp";
 
-			var optimizer = CreateOptimizer(stream);
-
-			if (optimizer == null) return null;
-
+			//Run optimizer based on extension
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var result = optimizer.Optimize(stream);
+			var result = new ProcessorArgs(stream, runWebPOptimization);
 
+			try
+			{
+				CorePipeline.Run("dianogaOptimize", result);
+			}
+			catch (Exception exception)
+			{
+				Log.Error($"Dianoga: Unable to optimize {stream.MediaItem.MediaPath} due to a processing error! It will be unchanged.", exception, this);
+				return null;
+			}
 			sw.Stop();
 
-			if (result.Success)
+			if (result.ResultStream != null && result.ResultStream.CanRead)
 			{
-				stream.Stream.Close();
+				if (result.Message.Length > 0)
+				{
+					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message}", this);
+				}
 
-				Log.Info("Dianoga: optimized {0}.{1} [{2}] (final size: {3} bytes) - saved {4} bytes / {5:p}. Optimized in {6}ms.".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, GetDimensions(options), result.SizeAfter, result.SizeBefore - result.SizeAfter, 1 - ((result.SizeAfter / (float)result.SizeBefore)), sw.ElapsedMilliseconds), this);
+				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
 
-				return new MediaStream(result.CreateResultStream(), stream.Extension, stream.MediaItem);
+				stream.Dispose();
+				var extension = (string)options.CustomOptions["extension"] ?? stream.Extension;
+				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 
-			Log.Warn("Dianoga: unable to optimize {0}.{1} because {2}".FormatWith(stream.MediaItem.MediaPath, stream.MediaItem.Extension, result.ErrorMessage), this);
+			if(!string.IsNullOrWhiteSpace(result.Message))
+				Log.Warn($"Dianoga: unable to optimize {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} because {result.Message}", this);
+
+			// if no message exists that implies that nothing in the dianogaOptimize pipeline acted to optimize - e.g. it's a media type we don't know how to optimize, like PDF.
 
 			return null;
-		}
-
-		public virtual bool CanOptimize(MediaStream stream)
-		{
-			return CreateOptimizer(stream) != null;
-		}
-
-		protected virtual IImageOptimizer CreateOptimizer(MediaStream stream)
-		{
-			return Optimizers.FirstOrDefault(optimizer => optimizer.CanOptimize(stream));
 		}
 
 		protected virtual string GetDimensions(MediaOptions options)
