@@ -46,9 +46,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\MediaOptionsHelpers.cs" />
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
-    <Compile Include="WebP\Pipelines\GetMediaStream\ParseWebPAcceptHeaders.cs" />
     <Compile Include="MediaRequestHandler.cs" />
+    <Compile Include="WebP\Pipelines\GetMediaStream\ParseWebPAcceptHeaders.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizer.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="WebP\WebPThumbnailGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Default Config Files\Dianoga.WebP.Gif.config.disabled" />
     <None Include="Default Config Files\Dianoga.WebP.config.disabled" />
     <None Include="Dianoga Tools\jpegoptim-windows\COPYING.txt" />
     <None Include="Dianoga Tools\jpegoptim-windows\COPYRIGHT.txt" />

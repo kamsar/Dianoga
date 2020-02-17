@@ -12,7 +12,7 @@ namespace Dianoga.Optimizers
 
 		public bool IsOptimized { get; set; }
 
-		public bool AcceptWebP { get; set; }
+		public string Extension { get; set; }
 
 		public OptimizerArgs(Stream inputStream)
 		{
@@ -20,10 +20,9 @@ namespace Dianoga.Optimizers
 			Stream = inputStream;
 		}
 
-		public OptimizerArgs(Stream inputStream, MediaOptions options, bool acceptWebP) : this(inputStream)
+		public OptimizerArgs(Stream inputStream, MediaOptions options) : this(inputStream)
 		{
 			MediaOptions = options;
-			AcceptWebP = acceptWebP;
 		}
 	}
 }

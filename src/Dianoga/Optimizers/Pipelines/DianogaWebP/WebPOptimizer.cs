@@ -1,11 +1,13 @@
-﻿namespace Dianoga.Optimizers.Pipelines.DianogaWebP
+﻿using Dianoga.Helpers;
+
+namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 {
 	public class WebPOptimizer : CommandLineToolOptimizer
 	{
 		public override void Process(OptimizerArgs args)
 		{
 
-			if (args.AcceptWebP)
+			if (args.MediaOptions.BrowserSupportsWebP())
 			{
 				var transformationOptions = args.MediaOptions.GetTransformationOptions();
 				if (transformationOptions.ContainsResizing())
@@ -17,6 +19,8 @@
 
 				if (args.IsOptimized)
 				{
+					args.Extension = "webp";
+
 					//If WebP optimization was executed then abort running other optimizers
 					//because they don't accept webp input file format
 					args.AbortPipeline();

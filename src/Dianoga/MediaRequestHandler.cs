@@ -8,7 +8,7 @@ namespace Dianoga
 	{
 		protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
 		{
-			if (context?.Request.AcceptTypes != null && (context.Request.AcceptTypes).Contains("image/webp"))
+			if (context?.Request.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/webp"))
 			{
 				request.Options.CustomOptions["extension"] = "webp";
 			}

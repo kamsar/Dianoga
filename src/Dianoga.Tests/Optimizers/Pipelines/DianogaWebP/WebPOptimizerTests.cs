@@ -22,8 +22,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
 			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 
@@ -47,8 +48,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
 			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 
@@ -72,8 +74,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe";
 			sut.AdditionalToolArguments = "-q 100 -m 6";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 
@@ -97,8 +100,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
 			sut.AdditionalToolArguments = "-q 90 -m 6";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 
@@ -122,8 +126,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
 			sut.AdditionalToolArguments = "-q 90 -alpha_q 100 -m 6";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 
@@ -147,8 +152,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe";
 			sut.AdditionalToolArguments = "-q 90 -m 6 -lossy";
 
-			var args = new OptimizerArgs(inputStream);
-			args.AcceptWebP = true;
+			var opts = new Sitecore.Resources.Media.MediaOptions();
+			opts.CustomOptions["extension"] = "webp";
+			var args = new OptimizerArgs(inputStream, opts);
 
 			var startingSize = args.Stream.Length;
 

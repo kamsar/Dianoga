@@ -14,7 +14,8 @@ Dianoga supports:
 * JPEGs (via mozjpeg - lossless optimization)
 * PNGs (via PNGOptimizer - lossless, and/or nQuant - lossy)
 * SVGs (via SVGO - lossless, and automatic gzipping of SVG media responses)
-* WebP (via cwebp - lossy for JPEG and lossless for PNG)
+* WebP (via cwebp - lossy by default but easy to change to lossless)
+* Auto convert JPEG/PNG/GIF to WebP based on browser support
 
 Additional format support is possible to add via new processors in the `dianogaOptimize` pipeline.
 
@@ -36,7 +37,7 @@ Dianoga depends on the Dianoga Tools folder that is installed by the NuGet packa
 
 ### Optimization Strategies
 
-In Dianoga 3, you can choose your optimization strategy. Most people if serving media locally are best off with the defaults, which optimize the media as it is placed into the media cache. This results in minimal impact to the experience for front end visitors.
+In Dianoga, you can choose your optimization strategy. Most people if serving media locally are best off with the defaults, which optimize the media as it is placed into the media cache. This results in minimal impact to the experience for front end visitors.
 
 However, for folks using CDNs those sources must be sent the optimized version of the media immediately. For these situations, you can enable `Dianoga.Strategy.GetMediaStreamSync.config.disabled` and disable `Dianoga.Strategy.MediaCacheAsync.config`. This will cause optimization to occur synchronously as the media is first requested, which is appropriate if the media is being sent to a CDN. This may however cause a delay for the first hit user before they start seeing images.
 
@@ -60,20 +61,17 @@ To perform a manual installation:
 
 ## WebP feature
 
-WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). Google Chrome and Opera natively [support WebP on 21 of November 2017](https://caniuse.com/#feat=webp). Both Safari & Firefox are experimenting with supporting WebP images. Usage of WebP format could be a quick win when you need a speed up your website. By default WebP optimization is disabled.
+WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). [All evergreen browsers currently support WebP](https://caniuse.com/#feat=webp). IE11 is the only "mainstream" browser without support - but no worries as we can detect this and fall back to standard formats. Usage of WebP format could be a quick win when you need a speed up your website. By default WebP optimization is disabled.
 
 ### How WebP optimization works:
-Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed.
+Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed if they are enabled.
 
 ### How to enable WebP support:
-1. Enable `Dianoga.WebP.config.disabled` config for lossless compression (it is configured only for PNG)
-2. Enable `Dianoga.WebP.Lossy.config.disabled` config for lossy compression (quality set to 90%) (it is configured for PNG, JPEG and WEBP; PNGs are compressed with alpha channel)
-3. Enable `Dianoga.WebP.Gif.config.disabled` config for lossless compression of GIF files
-4. Enable `Dianoga WebP.Gif.Lossy.config.disabled` config for lossy compression (quality set to 90%)
-5. Open web.config and change line
+1. Enable `Dianoga.WebP.config.disabled` config and adjust any parameters if you require lossless or higher quality than the default
+2. Open web.config and change line
 `<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />` to
 `<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
-6. If you have custom `MediaRequestHandler` (e.g. Habitat is used) then skip step 2 and override `DoProcessRequest` method with detection of support of WebP format:
+3. If you have custom `MediaRequestHandler` (e.g. Habitat or SXA is used) then override `DoProcessRequest` method with detection of support of WebP format:
 
 ```C#
 protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
@@ -86,7 +84,10 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 	return base.DoProcessRequest(context, request, media);
 }
 ```
-7. If you run Sitecore under CDN, you need to uncomment `settings` section in `Dianoga.WebP.config`:
+
+### If you run Sitecore under CDN,
+
+1. Uncomment `settings` section in `Dianoga.WebP.config`:
 
 ```XML
 <settings>
@@ -96,14 +97,21 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 </settings>
 ```
 
+2. Enable the special patch of the GetMediaStreamSync in `Dianoga.WebP.config` strategy which patches it to run second in the `getMediaStream` pipeline:
+
+```XML
+<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:after="processor[1]" />
+				
+```
+
 
 ## Upgrade
 
-Upgrading from Dianoga 2.0 to 3.0 is fairly simple.
+Upgrading from any previous version of Dianoga is fairly simple.
 
 1. Upgrade the NuGet package.
 2. Remove any `App_Config\Include\Dianoga.config` that may exist (config has changed, you must reapply settings if changed in the new scheme)
-3. Remove `Dianoga Tools` if it exists (Dianoga 3 places tools under App_Data\Dianoga Tools instead so that IIS defaults to not serving anything there)
+3. Remove `Dianoga Tools` if it exists (Dianoga 3+ places tools under App_Data\Dianoga Tools instead so that IIS defaults to not serving anything there)
 4. Delete your MediaCache folder (defaults to App_Data/MediaCache) on all servers after deployment of Dianoga (otherwise unoptimized caches will remain present)
 5. Have fun.
 

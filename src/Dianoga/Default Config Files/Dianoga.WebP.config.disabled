@@ -1,6 +1,7 @@
 ﻿<!--
 	Configures Dianoga to optimize images using webp format
 	By default if browser will sent "image/webp" in accept header then cwebp optimizer will be used.
+	See https://developers.google.com/speed/webp/docs/cwebp for command line options you can pass via <AdditionalToolArguments>
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">
 	<sitecore>
@@ -18,6 +19,10 @@
 				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="png">
 					<Extensions>png</Extensions>
 					<Pipeline>dianogaOptimizePng</Pipeline>
+				</processor>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="gif">
+					<Extensions>gif</Extensions>
+					<Pipeline>dianogaOptimizeGif</Pipeline>
 				</processor>
 			</dianogaOptimize>
 
@@ -40,10 +45,19 @@
 					<AdditionalToolArguments></AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizePng>
+			<dianogaOptimizeGif>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/gif2webp.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeGif>
 
 			<getMediaStream>
-				<!-- Parse HTTP request headers to define if browser support WebP format -->
-				<processor type=" Dianoga.WebP.Pipelines.GetMediaStream.ParseWebPAcceptHeaders, Dianoga" patch:before="processor[1]" />
+				<processor type="Dianoga.WebP.Pipelines.GetMediaStream.ParseWebPAcceptHeaders, Dianoga" patch:before="processor[1]" />
+				<!-- Enable this if you are using Sync mode -->
+				<!--
+				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:after="processor[1]" />
+				-->
 			</getMediaStream>
 		</pipelines>
 

@@ -6,8 +6,8 @@ namespace Dianoga.WebP
 	public class WebPThumbnailGenerator : ThumbnailGenerator
 	{
 		public override MediaStream GetStream(
-			 MediaData mediaData,
-			 TransformationOptions options)
+		 MediaData mediaData,
+		 TransformationOptions options)
 		{
 			Assert.ArgumentNotNull((object)mediaData, nameof(mediaData));
 			Assert.ArgumentNotNull((object)options, "transformationOptions");

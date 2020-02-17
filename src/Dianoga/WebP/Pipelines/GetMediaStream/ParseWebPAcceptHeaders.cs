@@ -6,26 +6,11 @@ namespace Dianoga.WebP.Pipelines.GetMediaStream
 {
 	public class ParseWebPAcceptHeaders
 	{
-		private bool? _browserSupportWebP;
-
-		public virtual bool BrowserSupportWebP
-		{
-			get
-			{
-				if (_browserSupportWebP != null)
-				{
-					return _browserSupportWebP.Value;
-				}
-				return (HttpContext.Current != null)
-					   && (HttpContext.Current.Request.AcceptTypes != null)
-					   && (HttpContext.Current.Request.AcceptTypes).Contains("image/webp");
-			}
-			set { _browserSupportWebP = value; }
-		}
-
 		public virtual void Process(GetMediaStreamPipelineArgs args)
 		{
-			if (BrowserSupportWebP)
+			if ((HttpContext.Current != null)
+					&& (HttpContext.Current.Request.AcceptTypes != null)
+					&& (HttpContext.Current.Request.AcceptTypes).Contains("image/webp"))
 			{
 				args.Options.CustomOptions["extension"] = "webp";
 			}

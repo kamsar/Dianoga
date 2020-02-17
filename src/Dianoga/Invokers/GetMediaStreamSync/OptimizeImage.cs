@@ -47,9 +47,9 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 
 				args.OutputStream = optimizedOutputStream;
 
-				if (args.Options.CustomOptions["extension"] == "webp")
+				if (optimizedOutputStream.Extension == "webp")
 				{
-					// Webp is enabled and browser supports it so WebP processors will handle everything including resizing
+					// WebP processor has handled everything including resizing
 					args.AbortPipeline();
 				}
 			}

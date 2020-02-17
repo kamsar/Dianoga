@@ -4,16 +4,17 @@ using Sitecore.Resources.Media;
 
 namespace Dianoga.Processors
 {
-    public class ProcessorArgs : PipelineArgs
+	public class ProcessorArgs : PipelineArgs
 	{
 		public MediaStream InputStream { get; }
-        public MediaOptions MediaOptions { get; }
 
-        public Stream ResultStream { get; set; }
+		public MediaOptions MediaOptions { get; }
+
+		public string Extension { get; set; }
+
+		public Stream ResultStream { get; set; }
 
 		public ProcessorArgsStatistics Statistics { get; }
-
-		public bool AcceptWebP { get; set; }
 
 		public ProcessorArgs(MediaStream inputStream)
 		{
@@ -21,12 +22,10 @@ namespace Dianoga.Processors
 			Statistics = new ProcessorArgsStatistics(this);
 		}
 
-		public ProcessorArgs(MediaStream inputStream, MediaOptions options, bool acceptWebP): this(inputStream)
+		public ProcessorArgs(MediaStream inputStream, MediaOptions options) : this(inputStream)
 		{
-            MediaOptions = options;
-            AcceptWebP = acceptWebP;
+			MediaOptions = options;
 		}
-
 
 		public class ProcessorArgsStatistics
 		{
@@ -40,7 +39,7 @@ namespace Dianoga.Processors
 
 			public long SizeBefore { get; }
 			public long SizeAfter => _args.ResultStream?.Length ?? SizeBefore;
-			public float PercentageSaved => 1 - ((SizeAfter/(float) SizeBefore));
+			public float PercentageSaved => 1 - ((SizeAfter / (float)SizeBefore));
 			public long BytesSaved => SizeBefore - SizeAfter;
 		}
 	}
