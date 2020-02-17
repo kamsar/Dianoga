@@ -32,15 +32,26 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 
 				var sourceStream = args.ResultStream ?? args.InputStream.Stream;
 
-				var optimizerArgs = new OptimizerArgs(sourceStream, args.AcceptWebP);
+				var optimizerArgs = new OptimizerArgs(sourceStream, args.MediaOptions);
 
 				CorePipeline.Run(Pipeline, optimizerArgs);
 
 				if (optimizerArgs.IsOptimized)
-					args.ResultStream = optimizerArgs.Stream;
+				{
+					args.Extension = optimizerArgs.Extension;
+				}
 
-				if(optimizerArgs.Aborted)
+				args.ResultStream = optimizerArgs.Stream;
+
+				if (!string.IsNullOrEmpty(optimizerArgs.Message))
+				{
+					args.AddMessage(optimizerArgs.Message);
+				}
+
+				if (optimizerArgs.Aborted)
+				{
 					args.AbortPipeline();
+				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Sitecore.Pipelines;
+using Sitecore.Resources.Media;
 
 namespace Dianoga.Optimizers
 {
@@ -7,9 +8,11 @@ namespace Dianoga.Optimizers
 	{
 		public Stream Stream { get; set; }
 
+		public MediaOptions MediaOptions { get; }
+
 		public bool IsOptimized { get; set; }
 
-		public bool AcceptWebP { get; set; }
+		public string Extension { get; set; }
 
 		public OptimizerArgs(Stream inputStream)
 		{
@@ -17,9 +20,9 @@ namespace Dianoga.Optimizers
 			Stream = inputStream;
 		}
 
-		public OptimizerArgs(Stream inputStream, bool acceptWebP) : this(inputStream)
+		public OptimizerArgs(Stream inputStream, MediaOptions options) : this(inputStream)
 		{
-			AcceptWebP = acceptWebP;
+			MediaOptions = options;
 		}
 	}
 }

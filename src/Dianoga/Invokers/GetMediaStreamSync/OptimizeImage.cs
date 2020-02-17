@@ -1,5 +1,4 @@
-﻿using System.Web;
-using Sitecore.Diagnostics;
+﻿using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
 
 namespace Dianoga.Invokers.GetMediaStreamSync
@@ -30,6 +29,7 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 			Assert.ArgumentNotNull(args, "args");
 
 			if (args.Options.Thumbnail) return;
+			if (Sitecore.Context.Site.Name == "shell") return;
 
 			MediaStream outputStream = args.OutputStream;
 			if (outputStream == null) return;
@@ -47,6 +47,12 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 				outputStream.Stream.Close();
 
 				args.OutputStream = optimizedOutputStream;
+
+				if (optimizedOutputStream.Extension == "webp")
+				{
+					// WebP processor has handled everything including resizing
+					args.AbortPipeline();
+				}
 			}
 		}
 	}

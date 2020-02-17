@@ -1,24 +1,66 @@
 ﻿<!--
 	Configures Dianoga to optimize images using webp format
 	By default if browser will sent "image/webp" in accept header then cwebp optimizer will be used.
+	See https://developers.google.com/speed/webp/docs/cwebp for command line options you can pass via <AdditionalToolArguments>
 -->
-<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">
 	<sitecore>
 		<pipelines>
-			<!-- Lossless compression only makes sense for PNG files-->
+
+			<dianogaOptimize>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="webp">
+					<Extensions>webp</Extensions>
+					<Pipeline>dianogaOptimizeWebP</Pipeline>
+				</processor>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="jpeg">
+					<Extensions>jpg, jpeg</Extensions>
+					<Pipeline>dianogaOptimizeJpeg</Pipeline>
+				</processor>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="png">
+					<Extensions>png</Extensions>
+					<Pipeline>dianogaOptimizePng</Pipeline>
+				</processor>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="gif">
+					<Extensions>gif</Extensions>
+					<Pipeline>dianogaOptimizeGif</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+
+			<dianogaOptimizeWebP>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/cwebp.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeWebP>
+			<dianogaOptimizeJpeg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/cwebp.exe</ExePath>
+					<AdditionalToolArguments>-preset photo</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJpeg>
 			<dianogaOptimizePng>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
-					<ExePath>/App_Data/Dianoga Tools/libwebp-1.0.2-windows-x64/bin/cwebp.exe</ExePath>
-					<AdditionalToolArguments>-q 100 -m 6 -lossless</AdditionalToolArguments>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/cwebp.exe</ExePath>
+					<AdditionalToolArguments>-preset icon</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizePng>
+			<dianogaOptimizeGif>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/gif2webp.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeGif>
 
 			<getMediaStream>
-				<!-- Parse HTTP request headers to define if browser support WebP format -->
-				<processor type="Dianoga.Invokers.MediaCacheAsync.Pipelines.GetMediaStream.ParseAcceptHeaders, Dianoga" patch:before="processor[1]" />
+				<processor type="Dianoga.WebP.Pipelines.GetMediaStream.ParseWebPAcceptHeaders, Dianoga" patch:before="processor[1]" />
+				<!-- Enable this if you are using Sync mode -->
+				<!--
+				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:after="processor[1]" />
+				-->
 			</getMediaStream>
 		</pipelines>
-		<!-- Hack: make media provider switch content type of response from application/octet-stream to imape/webp-->
+
 		<mediaLibrary>
 			<mediaTypes>
 				<mediaType name="WebP image" extensions="webp">
@@ -26,6 +68,17 @@
 					<forceDownload>false</forceDownload>
 					<sharedTemplate>system/media/unversioned/image</sharedTemplate>
 					<versionedTemplate>system/media/versioned/image</versionedTemplate>
+					<mediaValidator type="Sitecore.Resources.Media.ImageValidator"/>
+					<thumbnails>
+						<generator type="Dianoga.WebP.WebPThumbnailGenerator, Dianoga">
+							<extension>webp</extension>
+						</generator>
+						<width>150</width>
+						<height>150</height>
+					</thumbnails>
+					<prototypes>
+						<media type="Dianoga.WebP.WebPMedia, Dianoga"/>
+					</prototypes>
 				</mediaType>
 			</mediaTypes>
 			<requestProtection>
@@ -34,6 +87,10 @@
 				</protectedMediaQueryParameters>
 			</requestProtection>
 		</mediaLibrary>
+
+		<sites>
+			<site name="shell" set:enableDianoga="true"/>
+		</sites>
 
 		<!--Enable this section if you are running Dianoga under CDN. Otherwise CDN could cache webp response and return it for browsers that don't support it -->
 		<!--

@@ -1,11 +1,9 @@
-﻿using Dianoga.Processors;
-using Dianoga.Processors.Pipelines.DianogaOptimize;
+﻿using System;
+using System.Diagnostics;
+using Dianoga.Processors;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
-using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Dianoga
 {
@@ -26,20 +24,11 @@ namespace Dianoga
 				return null;
 			}
 
-			var runWebPOptimization = false;
-			if (Sitecore.Configuration.Factory.CreateObject("pipelines/dianogaOptimize/processor[@desc='webp']", false) is ExtensionBasedOptimizer dianogaProcessor)
-			{
-				if (dianogaProcessor.Extensions.Split(',').Contains(stream.Extension, StringComparer.OrdinalIgnoreCase))
-				{
-					runWebPOptimization = options.CustomOptions["extension"] == "webp";
-				}
-			}
-
 			//Run optimizer based on extension
 			var sw = new Stopwatch();
 			sw.Start();
 
-			var result = new ProcessorArgs(stream, runWebPOptimization);
+			var result = new ProcessorArgs(stream, options);
 
 			try
 			{
@@ -59,10 +48,11 @@ namespace Dianoga
 					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message}", this);
 				}
 
-				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [{GetDimensions(options)}] (final size: {result.Statistics.SizeAfter} bytes) - saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}. Optimized in {sw.ElapsedMilliseconds}ms.", this);
+				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms]", this);
 
 				stream.Dispose();
-				var extension = runWebPOptimization ? options.CustomOptions["extension"] ?? stream.Extension : stream.Extension;
+
+				var extension = result.Extension ?? stream.Extension;
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 
@@ -76,7 +66,7 @@ namespace Dianoga
 
 		protected virtual string GetDimensions(MediaOptions options)
 		{
-			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "original size";
+			if (options.MaxHeight == 0 && options.MaxWidth == 0 && options.Height == 0 && options.Width == 0) return "";
 
 			string result = string.Empty;
 
