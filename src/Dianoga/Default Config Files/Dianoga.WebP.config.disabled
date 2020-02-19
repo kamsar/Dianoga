@@ -53,10 +53,9 @@
 			</dianogaOptimizeGif>
 
 			<getMediaStream>
-				<processor type="Dianoga.WebP.Pipelines.GetMediaStream.ParseWebPAcceptHeaders, Dianoga" patch:before="processor[1]" />
 				<!-- Enable this if you are using Sync mode -->
 				<!--
-				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:after="processor[1]" />
+				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:before="processor[1]" />
 				-->
 			</getMediaStream>
 		</pipelines>
@@ -96,7 +95,7 @@
 		<!--
 		<settings>
 			<setting name="MediaResponse.VaryHeader">
-				<patch:attribute name="value">Accept</patch:attribute>
+				<patch:attribute name="value">Accept,Accept-Encoding</patch:attribute>
 			</setting>
 		</settings>
 		-->

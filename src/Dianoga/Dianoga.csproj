@@ -49,7 +49,6 @@
     <Compile Include="Helpers\MediaOptionsHelpers.cs" />
     <Compile Include="Invokers\GetMediaStreamSync\OptimizeImage.cs" />
     <Compile Include="MediaRequestHandler.cs" />
-    <Compile Include="WebP\Pipelines\GetMediaStream\ParseWebPAcceptHeaders.cs" />
     <Compile Include="Optimizers\CommandLineToolOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerProcessor.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizer.cs" />
