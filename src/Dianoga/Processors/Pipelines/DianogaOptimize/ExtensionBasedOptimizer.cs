@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Dianoga.Optimizers;
 using Sitecore.Pipelines;
@@ -23,12 +22,6 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 		{
 			if (_supportedExtensionsLookup.Contains(args.InputStream.Extension))
 			{
-				// make sure we can buffer the media stream if we're going to act on it
-				if (args.ResultStream == null)
-				{
-					args.InputStream.MakeStreamSeekable();
-					args.InputStream.Stream.Seek(0, SeekOrigin.Begin);
-				}
 
 				var sourceStream = args.ResultStream ?? args.InputStream.Stream;
 
@@ -39,9 +32,8 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 				if (optimizerArgs.IsOptimized)
 				{
 					args.Extension = optimizerArgs.Extension;
+					args.ResultStream = optimizerArgs.Stream;
 				}
-
-				args.ResultStream = optimizerArgs.Stream;
 
 				if (!string.IsNullOrEmpty(optimizerArgs.Message))
 				{
@@ -53,6 +45,7 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 					args.AbortPipeline();
 				}
 			}
+			
 		}
 	}
 }

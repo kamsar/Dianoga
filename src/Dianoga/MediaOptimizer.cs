@@ -48,11 +48,11 @@ namespace Dianoga
 					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message}", this);
 				}
 
-				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms]", this);
+				var extension = result.Extension ?? stream.Extension;
+				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms] [Extension {extension}]", this);
 
 				stream.Dispose();
 
-				var extension = result.Extension ?? stream.Extension;
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
 

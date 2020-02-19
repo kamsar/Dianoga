@@ -54,6 +54,11 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 					args.AbortPipeline();
 				}
 			}
+			else
+			{
+				var mediaPath = outputStream.MediaItem.MediaPath;
+				Log.Info($"Dianoga: {mediaPath} is not something that can be optimized, due to file format, path exclusion, or runtime error", this);
+			}
 		}
 	}
 }

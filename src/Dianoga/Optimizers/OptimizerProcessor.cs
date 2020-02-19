@@ -59,6 +59,8 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ValidateReturnStream(OptimizerArgs args, Stream originalStream)
 		{
+			args.IsOptimized = false; // Assume its not by default
+
 			if (args.Stream != null && args.Stream.Length > 0)
 			{
 				if (args.Stream is FileStream) throw new InvalidOperationException($"{GetType().Name} returned a FileStream. This will leave orphaned files on disk after the stream is disposed. Don't do that. Return files as pre-buffered memory streams.");
@@ -77,12 +79,17 @@ namespace Dianoga.Optimizers
 					args.AddMessage($"{GetType().Name}: the optimized image resulted in a larger file size ({args.Stream.Length} vs {originalStream.Length}). Using the original instead.");
 					args.Stream.Dispose();
 					args.Stream = originalStream;
-
-					args.IsOptimized = false;
+				}
+				else if (args.Stream.Length == originalStream.Length)
+				{
+					args.AddMessage($"{GetType().Name}: the optimized image resulted in the same file size ({args.Stream.Length}). Using the original instead.");
+					args.Stream.Dispose();
+					args.Stream = originalStream;
 				}
 				else
 				{
 					originalStream.Dispose();
+					args.IsOptimized = true;
 				}
 			}
 			else

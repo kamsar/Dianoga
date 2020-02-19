@@ -71,30 +71,34 @@ namespace Dianoga.Optimizers
 
 			try
 			{
+				// First copy the stream to the temp source file
 				using (var fileStream = File.OpenWrite(tempFilePath))
 				{
 					args.Stream.CopyTo(fileStream);
-					args.Stream.Dispose();
 				}
 
+				// Execute the command line tool
 				if (UseShellExecute) ExecuteShell(arguments);
 				else ExecuteProcess(arguments);
 
-				// read the file to memory so we can nuke the temp file
+				// Read the output file to memory and nuke the temp file
 				var outputPath = OptimizerUsesSeparateOutputFile ? tempOutputPath : tempFilePath;
 				using (var fileStream = File.OpenRead(outputPath))
 				{
+					// If we got here everything has gone well so dispose the original stream and 
+					// write our optimised stream to it
+					args.Stream.Dispose();
 					args.Stream = new MemoryStream();
 					fileStream.CopyTo(args.Stream);
+					args.IsOptimized = true;
 				}
+
 			}
 			finally
 			{
 				if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
 				if (tempOutputPath != null && File.Exists(tempOutputPath)) File.Delete(tempOutputPath);
 			}
-
-			args.IsOptimized = true;
 		}
 
 		protected virtual void ExecuteProcess(string arguments)
