@@ -87,20 +87,22 @@ protected override bool DoProcessRequest(HttpContext context, MediaRequest reque
 
 ### If you run Sitecore under CDN,
 
-1. Uncomment `settings` section in `Dianoga.WebP.config`:
+
+1. Check [CDN support wiki](https://github.com/kamsar/Dianoga/wiki/CDN-Support-for-WebP)
+2. Uncomment `settings` section in `Dianoga.WebP.config`:
 
 ```XML
 <settings>
 	<setting name="MediaResponse.VaryHeader">
-		<patch:attribute name="value">Accept</patch:attribute>
+		<patch:attribute name="value">Accept,Accept-Encoding</patch:attribute>
 	</setting>
 </settings>
 ```
 
-2. Enable the special patch of the GetMediaStreamSync in `Dianoga.WebP.config` strategy which patches it to run second in the `getMediaStream` pipeline:
+3. Enable the special patch of the GetMediaStreamSync in `Dianoga.WebP.config` strategy which patches it to run first in the `getMediaStream` pipeline:
 
 ```XML
-<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:after="processor[1]" />
+<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:before="processor[1]" />
 				
 ```
 

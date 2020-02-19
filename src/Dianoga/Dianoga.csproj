@@ -487,8 +487,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe" />
-    <Content Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe" />
+    <None Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe" />
+    <None Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

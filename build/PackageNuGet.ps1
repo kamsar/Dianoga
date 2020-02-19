@@ -3,9 +3,9 @@ param($scriptRoot)
 $ErrorActionPreference = "Stop"
 
 function Resolve-MsBuild {
-	$msb2017 = Resolve-Path "${env:ProgramFiles(x86)}\Microsoft Visual Studio\*\*\MSBuild\*\bin\msbuild.exe" -ErrorAction SilentlyContinue
+	$msb2017 = Resolve-Path "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\*\MSBuild\*\bin\msbuild.exe" -ErrorAction SilentlyContinue
 	if($msb2017) {
-		Write-Host "Found MSBuild 2017 (or later)."
+		Write-Host "Found MSBuild 2019 (or later)."
 		Write-Host $msb2017
 		return $msb2017
 	}
