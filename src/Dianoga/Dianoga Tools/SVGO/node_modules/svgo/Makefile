@@ -1,5 +1,5 @@
 test:
-	@NODE_ENV=test ./node_modules/.bin/mocha
+	@npm run test
 
 lib-cov:
 	@./node_modules/.bin/istanbul instrument --output lib-cov --no-compact --variable global.__coverage__ lib
@@ -13,9 +13,9 @@ coveralls: lib-cov
 	@cat lcov.info | ./node_modules/.bin/coveralls
 	@rm -rf lib-cov lcov.info
 
-travis: jshint test coveralls
+travis: lint test coveralls
 
-jshint:
-	@jshint --show-non-errors .
+lint:
+	@npm run lint
 
 .PHONY: test

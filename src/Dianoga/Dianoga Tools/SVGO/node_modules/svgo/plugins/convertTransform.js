@@ -22,7 +22,6 @@ exports.params = {
 };
 
 var cleanupOutData = require('../lib/svgo/tools').cleanupOutData,
-    EXTEND = require('whet.extend'),
     transform2js = require('./_transforms.js').transform2js,
     transformsMultiply = require('./_transforms.js').transformsMultiply,
     matrixToTransform = require('./_transforms.js').matrixToTransform,
@@ -116,7 +115,7 @@ function definePrecision(data, params) {
         significantDigits = params.transformPrecision;
 
     // Clone params so it don't affect other elements transformations.
-    params = EXTEND({}, params);
+    params = Object.assign({}, params);
 
     // Limit transform precision with matrix one. Calculating with larger precision doesn't add any value.
     if (matrixData.length) {
@@ -132,9 +131,15 @@ function definePrecision(data, params) {
         params.degPrecision = Math.max(0, Math.min(params.floatPrecision, significantDigits - 2));
     }
 
-    floatRound = params.floatPrecision >= 1 ? smartRound.bind(this, params.floatPrecision) : round;
-    degRound = params.degPrecision >= 1 ? smartRound.bind(this, params.degPrecision) : round;
-    transformRound = params.transformPrecision >= 1 ? smartRound.bind(this, params.transformPrecision) : round;
+    floatRound = params.floatPrecision >= 1 && params.floatPrecision < 20 ?
+        smartRound.bind(this, params.floatPrecision) :
+        round;
+    degRound = params.degPrecision >= 1 && params.floatPrecision < 20 ?
+        smartRound.bind(this, params.degPrecision) :
+        round;
+    transformRound = params.transformPrecision >= 1 && params.floatPrecision < 20 ?
+        smartRound.bind(this, params.transformPrecision) :
+        round;
 
     return params;
 }
@@ -346,11 +351,13 @@ function round(data) {
  * @return {Array} output data array
  */
 function smartRound(precision, data) {
-    for (var i = data.length, tolerance = Math.pow(.1, precision); i--;) {
-        var rounded = +data[i].toFixed(precision - 1);
-        data[i] = +Math.abs(rounded - data[i]).toFixed(precision) >= tolerance ?
-            +data[i].toFixed(precision) :
-            rounded;
+    for (var i = data.length, tolerance = +Math.pow(.1, precision).toFixed(precision); i--;) {
+        if (data[i].toFixed(precision) != data[i]) {
+            var rounded = +data[i].toFixed(precision - 1);
+            data[i] = +Math.abs(rounded - data[i]).toFixed(precision + 1) >= tolerance ?
+                +data[i].toFixed(precision) :
+                rounded;
+        }
     }
     return data;
 }

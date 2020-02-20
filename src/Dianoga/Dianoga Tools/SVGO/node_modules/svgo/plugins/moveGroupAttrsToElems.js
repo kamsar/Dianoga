@@ -40,14 +40,20 @@ exports.fn = function(item) {
             return ~referencesProps.indexOf(attr.name) && ~attr.value.indexOf('url(');
         }) &&
         item.content.every(function(inner) {
-            return inner.isElem(pathElems);
+            return inner.isElem(pathElems) && !inner.hasAttr('id');
         })
     ) {
         item.content.forEach(function(inner) {
+            var attr = item.attr('transform');
             if (inner.hasAttr('transform')) {
-                inner.attr('transform').value = item.attr('transform').value + ' ' + inner.attr('transform').value;
+                inner.attr('transform').value = attr.value + ' ' + inner.attr('transform').value;
             } else {
-                inner.addAttr(item.attr('transform'));
+                inner.addAttr({
+                    'name': attr.name,
+                    'local': attr.local,
+                    'prefix': attr.prefix,
+                    'value': attr.value
+                });
             }
         });
 
