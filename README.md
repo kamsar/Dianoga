@@ -45,19 +45,26 @@ If you want to execute the Dianoga optimization pipeline programmatically (e.g. 
 
 ### Ignoring Paths
 
-Dianoga 3 allows for ignoring specific paths in the media library. See `Dianoga.ExcludePaths.config.example` for an example of this.
+Dianoga 3+ allows for ignoring specific paths in the media library. See `Dianoga.ExcludePaths.config.example` for an example of this.
 
 ## Installation
 
-Dianoga has a NuGet package for Sitecore 7 and 8 (.NET 4.5). Just install it, __clear your App_Data/MediaCache folder__, and you're done. Note: Installing the package will take longer than most NuGet packages due to the bundled optimizers.
-
-The code should compile against Sitecore 6.x without issue.
+Dianoga 5+ has a NuGet package for the main code and configs, and a separate package for the SVGO tools - `Dianoga.svgtools`. This was done as the SVG tools are an npm package with thousands of files, which not everyone uses. 
+Once Dianoga is installed, __clear your App_Data/MediaCache folder__, and you're done.
 
 To perform a manual installation:
 
 * Copy the `Dianoga Tools` folder to the `App_Data` folder of your website
 * Copy `Default Config Files/*.config` to `App_Config\Include\Dianoga`
 * Reference `Dianoga.dll` or the source project in your web project
+
+### Dianoga.svgtools
+
+If you are enabling the SVGO optimiser, you'll need Node.js so you can restore the svgo dependencies.
+1. Install the `Dianoga.svgtools` NuGet package
+2. Open a command prompt in `Dianoga Tools/SVGO/node_modules/svgo`
+3. Run `npm install`
+4. `Dianoga Tools/SVGO/node_modules/svgo/node_modules` are required for the operation of svgo, so they will need to be copied to your website
 
 ## WebP feature
 

@@ -1,21 +1,23 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <id>$id$</id>
-        <version>$version$</version>
-        <title>$title$</title>
+		<id>Dianoga.svgtools</id>
+		<version>5.0.0-beta.1</version>
+		<title>Dianoga.svgtools</title>
         <authors>Kam Figy, Mark Gibbons</authors>
         <owners>Kam Figy, Mark Gibbons</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
         <projectUrl>http://github.com/kamsar/Dianoga</projectUrl>
         <iconUrl>http://kamsar.net/nuget/dianoga/logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Automatic media library image file optimization for Sitecore</description>
+        <description>SVG tools required if SVGO is enabled</description>
         <copyright>Copyright 2020</copyright>
         <tags>sitecore optimization</tags>
+		<dependencies>
+            <dependency id="Dianoga" version="5.0.0-beta.1" />
+        </dependencies>
     </metadata> 
     <files>
-        <file src="Default Config Files\*" target="content\App_Config\Include\Dianoga" />
-        <file src="Dianoga Tools\**\*" exclude="Dianoga Tools\SVGO\**\*" target="content\App_Data\Dianoga Tools" />
+        <file src="Dianoga Tools\SVGO\**\*" target="content\App_Data\Dianoga Tools\SVGO" />
     </files>
 </package>
