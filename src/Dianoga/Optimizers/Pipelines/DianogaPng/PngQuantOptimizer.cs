@@ -19,21 +19,22 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 
 			using (var bitmap = new Bitmap(args.Stream))
 			{
-				args.Stream.Dispose();
-
 				var bitDepth = Image.GetPixelFormatSize(bitmap.PixelFormat);
 				if (bitDepth != 32)
 				{
 					args.AddMessage("The PNG image you are attempting to quantize does not contain a 32 bit ARGB palette. This image has a bit depth of {0} with {1} colors. Skipping quantization.".FormatWith(bitDepth, bitmap.Palette.Entries.Length));
 				}
-
-				using (var quantized = quantizer.QuantizeImage(bitmap))
+				else
 				{
-					quantized.Save(memoryStream, ImageFormat.Png);
+					using (var quantized = quantizer.QuantizeImage(bitmap))
+					{
+						quantized.Save(memoryStream, ImageFormat.Png);
+					}
+
+					args.Stream.Dispose();
+					args.Stream = memoryStream;
+					args.IsOptimized = true;
 				}
-				
-				args.Stream = memoryStream;
-				args.IsOptimized = true;
 			}
 		}
 	}
