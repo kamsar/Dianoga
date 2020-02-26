@@ -15,7 +15,7 @@
 		<tags>sitecore optimization</tags>
 	</metadata> 
 	<files>
-		<file src="Default Config Files\*" exclude="Default Config Files\Dianoga.Svg.config" target="content\App_Config\Include\Dianoga" />
+		<file src="Default Config Files\*" target="content\App_Config\Include\Dianoga" />
 		<file src="Dianoga Tools\**\*" exclude="Dianoga Tools\SVGO\**\*" target="content\App_Data\Dianoga Tools" />
 	</files>
 </package>
