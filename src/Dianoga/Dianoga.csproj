@@ -57,6 +57,7 @@
     <Compile Include="MediaOptimizer.cs" />
     <Compile Include="Invokers\MediaCacheAsync\OptimizingMediaCache.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngOptimizer.cs" />
+    <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantCliOptimizer.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantOptimizer.cs" />
     <Compile Include="Optimizers\OptimizerArgs.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaSvg\GzipSvgData.cs" />
@@ -85,6 +86,9 @@
     <None Include="Dianoga Tools\PNGOptimizer\License.txt" />
     <None Include="Dianoga Tools\PNGOptimizer\PngOptimizerCL.exe" />
     <None Include="Dianoga Tools\PNGOptimizer\Readme.txt" />
+    <None Include="Dianoga Tools\pngquant\COPYRIGHT" />
+    <None Include="Dianoga Tools\pngquant\Drag PNG here to reduce palette automatically.bat" />
+    <None Include="Dianoga Tools\pngquant\Drag PNG here to reduce palette to 256.bat" />
     <None Include="Dianoga Tools\SVGO\node.exe" />
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +124,10 @@
     <None Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe" />
     <None Include="Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Dianoga Tools\pngquant\pngquant.exe" />
+    <None Include="Dianoga Tools\pngquant\README.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
