@@ -1,6 +1,6 @@
 ﻿<!--
 	Example of adding path ignorance to Dianoga. This causes media items under the ignored path(s) to not be optimized.
-	Good for monstrous source images, SVGs where metadata is desirable, etc.
+	Good for monstrous source images, SVGs where metadata is desirable, etc. Wildcards supported.
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
 	<sitecore>
@@ -11,7 +11,9 @@
 					<paths hint="list:AddExclusion">
 						<!-- Note: these are MEDIA paths, not full paths. So remove '/sitecore/media library' from the base path. -->
 						<path>/Files/Huge JPEGs</path>
-						<path>/My Site/Metadata SVGs</path>
+						<path>*/scripts/*</path>
+						<path>*/optimized-min</path>
+						<path>/Project/*.jpg</path>
 					</paths>
 				</processor>
 			</dianogaOptimize>
