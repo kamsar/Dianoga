@@ -75,7 +75,7 @@
     <Compile Include="WebP\WebPThumbnailGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Default Config Files\Dianoga.WebP.config.disabled" />
+    <None Include="Default Config Files\Dianoga.WebP.config" />
     <None Include="Dianoga Tools\jpegoptim-windows\COPYING.txt" />
     <None Include="Dianoga Tools\jpegoptim-windows\COPYRIGHT.txt" />
     <None Include="Dianoga Tools\jpegoptim-windows\jpegoptim.exe" />
@@ -110,10 +110,10 @@
     <None Include="Default Config Files\Dianoga.Strategy.MediaCacheAsync.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Default Config Files\Dianoga.config">
+    <None Include="Default Config Files\Dianoga.DisableForSites.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Default Config Files\Dianoga.Svg.config">
+    <None Include="Default Config Files\Dianoga.Svg.config.disabled">
       <SubType>Designer</SubType>
     </None>
     <None Include="Dianoga.nuspec" />

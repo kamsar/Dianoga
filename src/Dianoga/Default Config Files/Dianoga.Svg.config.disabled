@@ -1,19 +1,12 @@
 ﻿<!--
 	Configures Dianoga to support SVG
 	
-	By default this does not run any optimizer over SVGs, because SVGO, which seems to be the de facto library,
-	requires Node.js and that isn't something that can ship with a NuGet package. See Dianoga.Svg.SVGO.config.disabled
-	for directions to install and enable SVGO, if you want to use that to optimize the files as well.
-	
-	Without SVGO, this patch file will enable:
-	* Storing SVGs in the media library without issue
-	* Gzipping SVGs that are served from the media library (a very good optimization since SVG = XML and is thus highly compressible)
-	
-	What this does not enable:
-	* Using SVGs in rich text editors
-	* Rendering SVGs using field renderer that include height and width attributes on their <img> tag (note: you don't want this on responsive sites anyway)
-	* If you care about the above and want to maintain the hacks needed to enable it, see http://sitecorecorner.com/2015/11/23/sitecore-svg-support/
-	
+	If you are enabling the SVGO optimiser, you'll need Node.js so you can restore the svgo dependencies.
+	1. Install the `Dianoga.svgtools` NuGet package
+	2. Open a command prompt in `Dianoga Tools/SVGO/node_modules/svgo`
+	3. Run `npm install`
+	4. `Dianoga Tools/SVGO/node_modules/svgo/node_modules` are required for the operation of svgo, so they will need to be copied to your website
+
 	Props:
 	SVG mime type config courtesy of Richard Seal, https://community.sitecore.net/developers/f/8/t/1670
 	SVG compression courtesy of Anders Laub, https://laubplusco.net/compress-svg-images-sitecore-media-library/
@@ -22,8 +15,9 @@
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
 	<sitecore>
-		<!-- Enable serving SVG from the media library -->
-		<mediaLibrary>
+		<!-- Enable serving SVG from the media library. 
+		     Newer versions of Sitecore have this already so check your version and enable as necessary -->
+		<!--<mediaLibrary>
 			<mediaTypes>
 				<mediaType name="SVG image" extensions="svg">
 					<mimeType>image/svg+xml</mimeType>
@@ -32,7 +26,7 @@
 					<versionedTemplate>system/media/versioned/image</versionedTemplate>
 				</mediaType>
 			</mediaTypes>
-		</mediaLibrary>
+		</mediaLibrary>-->
 
 		<!-- INITIALIZE DIANOGA SVG OPTIMIZATION -->
 		<pipelines>
