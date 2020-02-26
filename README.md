@@ -12,7 +12,7 @@ Dianoga is also great for situations where content editors may not be image edit
 
 Dianoga supports:
 * JPEGs (via mozjpeg - lossless optimization)
-* PNGs (via PNGOptimizer - lossless, and/or nQuant - lossy)
+* PNGs (via PNGOptimizer - lossless, and/or nQuant or pngquant - lossy)
 * SVGs (via SVGO - lossless, and automatic gzipping of SVG media responses)
 * WebP (via cwebp - lossy for JPEG and lossless for PNG)
 

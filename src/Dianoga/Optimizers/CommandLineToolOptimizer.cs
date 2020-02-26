@@ -139,12 +139,12 @@ namespace Dianoga.Optimizers
 					// do nothing if kill errors, we want the exception below
 				}
 
-				throw new InvalidOperationException($"{ExePath} took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
 			}
 
 			if (toolProcess.ExitCode != 0)
 			{
-				throw new InvalidOperationException($"{ExePath} exited with unexpected exit code {toolProcess.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
+				throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {toolProcess.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
 			}
 		}
 
