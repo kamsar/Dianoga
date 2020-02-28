@@ -84,7 +84,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 						if (optimizedStream == null)
 						{
-							Log.Info($"Dianoga: {mediaPath} is not something that can be optimized, either because of its file format or because it is excluded.", this);
+							Log.Info($"Dianoga: {mediaPath} cannot be optimized due to media type or path exclusion", this);
 							cacheRecord = CreateCacheRecord(media, options, backupMediaStream);
 						}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Dianoga.Optimizers;
 using Sitecore.Pipelines;
@@ -22,6 +23,12 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 		{
 			if (_supportedExtensionsLookup.Contains(args.InputStream.Extension))
 			{
+				if (args.ResultStream == null)
+				{
+					// MakeStreamSeekable will buffer the stream if its not seekable
+					args.InputStream.MakeStreamSeekable();
+					args.InputStream.Stream.Seek(0, SeekOrigin.Begin);
+				}
 
 				var sourceStream = args.ResultStream ?? args.InputStream.Stream;
 
@@ -29,11 +36,9 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 
 				CorePipeline.Run(Pipeline, optimizerArgs);
 
-				if (optimizerArgs.IsOptimized)
-				{
-					args.Extension = optimizerArgs.Extension;
-					args.ResultStream = optimizerArgs.Stream;
-				}
+				args.IsOptimized = optimizerArgs.IsOptimized;
+				args.Extension = optimizerArgs.Extension;
+				args.ResultStream = optimizerArgs.Stream;
 
 				if (!string.IsNullOrEmpty(optimizerArgs.Message))
 				{
@@ -45,7 +50,7 @@ namespace Dianoga.Processors.Pipelines.DianogaOptimize
 					args.AbortPipeline();
 				}
 			}
-			
+
 		}
 	}
 }

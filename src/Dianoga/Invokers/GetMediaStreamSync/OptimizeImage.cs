@@ -42,9 +42,9 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 
 			MediaStream optimizedOutputStream = _optimizer.Process(outputStream, args.Options);
 
-			if (optimizedOutputStream != null)
+			if (optimizedOutputStream != null && outputStream.Stream != optimizedOutputStream.Stream)
 			{
-				outputStream.Stream.Close();
+				outputStream.Dispose(); // Uses thread safe dispose helper that won't double dispose
 
 				args.OutputStream = optimizedOutputStream;
 
@@ -57,7 +57,7 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 			else
 			{
 				var mediaPath = outputStream.MediaItem.MediaPath;
-				Log.Info($"Dianoga: {mediaPath} is not something that can be optimized, due to file format, path exclusion, or runtime error", this);
+				Log.Info($"Dianoga: {mediaPath} cannot be optimized due to media type or path exclusion", this);
 			}
 		}
 	}

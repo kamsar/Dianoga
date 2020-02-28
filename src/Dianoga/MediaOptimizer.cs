@@ -49,9 +49,10 @@ namespace Dianoga
 				}
 
 				var extension = result.Extension ?? stream.Extension;
-				Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms] [Extension {extension}]", this);
-
-				stream.Dispose();
+				if (result.IsOptimized)
+				{
+					Log.Info($"Dianoga: optimized {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} [original size: {GetDimensions(options)} {result.Statistics.SizeBefore} bytes] [final size: {result.Statistics.SizeAfter} bytes] [saved {result.Statistics.BytesSaved} bytes / {result.Statistics.PercentageSaved:p}] [Optimized in {sw.ElapsedMilliseconds}ms] [Extension {extension}]", this);
+				}
 
 				return new MediaStream(result.ResultStream, extension, stream.MediaItem);
 			}
