@@ -43,6 +43,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Optimizers\Pipelines\DianogaPng\PngQuantCliOptimizerTests.cs" />
     <Compile Include="PathExclusionTests.cs" />
     <Compile Include="Optimizers\DianogaOptimizerProcessorTests.cs" />
     <Compile Include="Optimizers\Pipelines\DianogaJpeg\JpegOptimOptimizerTests.cs" />
