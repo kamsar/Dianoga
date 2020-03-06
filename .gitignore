@@ -15,6 +15,7 @@ src/*/bin
 src/*/obj
 lib/sitecore/*
 !lib/sitecore/readme.txt
+src/Dianoga.Tests/Optimizers/Pipelines/DianogaSvg/SVGO
 
 # Ignore user-scoped solution and project settings
 *.user

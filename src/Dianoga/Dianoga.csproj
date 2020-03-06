@@ -79,9 +79,9 @@
     <None Include="Dianoga Tools\jpegoptim-windows\COPYING.txt" />
     <None Include="Dianoga Tools\jpegoptim-windows\COPYRIGHT.txt" />
     <None Include="Dianoga Tools\jpegoptim-windows\jpegoptim.exe" />
-    <None Include="Dianoga Tools\mozjpeg_3.1_x86\jpegtran.exe" />
-    <None Include="Dianoga Tools\mozjpeg_3.1_x86\libjpeg-62.dll" />
-    <None Include="Dianoga Tools\mozjpeg_3.1_x86\LICENSE.txt" />
+    <None Include="Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe" />
+    <None Include="Dianoga Tools\mozjpeg_3.3.1_x86\libjpeg-62.dll" />
+    <None Include="Dianoga Tools\mozjpeg_3.3.1_x86\LICENSE.txt" />
     <None Include="Dianoga Tools\PNGOptimizer\Changelog.txt" />
     <None Include="Dianoga Tools\PNGOptimizer\License.txt" />
     <None Include="Dianoga Tools\PNGOptimizer\PngOptimizerCL.exe" />
@@ -101,7 +101,7 @@
     <None Include="Default Config Files\Dianoga.Jpeg.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Default Config Files\Dianoga.Jpeg.Lossy.config.disabled">
+    <None Include="Default Config Files\Dianoga.Jpeg.JpegOptim.config.disabled">
       <SubType>Designer</SubType>
     </None>
     <None Include="Default Config Files\Dianoga.Strategy.GetMediaStreamSync.config.disabled">
@@ -127,6 +127,9 @@
   <ItemGroup>
     <None Include="Dianoga Tools\pngquant\pngquant.exe" />
     <None Include="Dianoga Tools\pngquant\README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

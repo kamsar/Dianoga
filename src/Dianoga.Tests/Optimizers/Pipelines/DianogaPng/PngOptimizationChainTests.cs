@@ -13,7 +13,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 		{
 			var inputStream = new MemoryStream();
 
-			using (var testPng = File.OpenRead(@"Optimizers\Pipelines\DianogaPng\test.png"))
+			using (var testPng = File.OpenRead(@"TestImages\small.png"))
 			{
 				testPng.CopyTo(inputStream);
 			}

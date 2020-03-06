@@ -1,36 +1,38 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Dianoga.Optimizers;
-using Dianoga.Optimizers.Pipelines.DianogaPng;
+using Dianoga.Optimizers.Pipelines.DianogaSvg;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
+namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 {
-	public class PngQuantOptimizerTests
+	public class SvgOptimizerTests
 	{
 		ITestOutputHelper output;
-		public PngQuantOptimizerTests(ITestOutputHelper output)
+		public SvgOptimizerTests(ITestOutputHelper output)
 		{
 			this.output = output;
 		}
 
-
-
 		[Fact]
-		public void ShouldSquishSmallPng()
+		public void ShouldSquishSmallSvg()
 		{
-			Test(@"TestImages\small.png");
+			Test(@"TestImages\small.svg",
+				@"../../Optimizers/Pipelines/DianogaSvg/SVGO/node.exe",
+				"--disable=removeUselessDefs --disable=cleanupIDs");
 		}
 
 		[Fact]
-		public void ShouldSquishLargePng()
+		public void ShouldSquishLargeSvg()
 		{
-			Test(@"TestImages\large.png");
+			Test(@"TestImages\large.svg",
+				@"../../Optimizers/Pipelines/DianogaSvg/SVGO/node.exe",
+				"--disable=removeUselessDefs --disable=cleanupIDs");
 		}
 
-		private void Test(string imagePath)
+		private void Test(string imagePath, string exePath, string exeArgs)
 		{
 			var inputStream = new MemoryStream();
 
@@ -39,7 +41,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 				testJpeg.CopyTo(inputStream);
 			}
 
-			var sut = new PngQuantOptimizer();
+			var sut = new SvgoOptimizer();
+			sut.ExePath = exePath;
+			sut.AdditionalToolArguments = exeArgs;
 
 			var args = new OptimizerArgs(inputStream);
 

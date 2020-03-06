@@ -1,19 +1,27 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using Dianoga.Optimizers;
 using Dianoga.Optimizers.Pipelines.DianogaWebP;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 {
 	public class WebPOptimizerTests
 	{
+		ITestOutputHelper output;
+		public WebPOptimizerTests(ITestOutputHelper output)
+		{
+			this.output = output;
+		}
+
 		[Fact]
 		public void ShouldReturnOriginalStreamWhenOptimizedImageSizeIsGreater()
 		{
 			var inputStream = new MemoryStream();
 
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.jpg"))
+			using (var testJpeg = File.OpenRead(@"TestImages\small.jpg"))
 			{
 				testJpeg.CopyTo(inputStream);
 			}
@@ -28,129 +36,108 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 
 			var startingSize = args.Stream.Length;
 
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
 			sut.Process(args);
+			stopwatch.Stop();
+			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
 
 			args.Stream.Length.Should().Be(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeFalse();
 		}
 
 		[Fact]
-		public void ShouldSquishLosslessTestPng()
+		public void ShouldSquishLosslessSmallPng()
 		{
-			var inputStream = new MemoryStream();
-
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.png"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
-
-			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
-			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless";
-
-			var opts = new Sitecore.Resources.Media.MediaOptions();
-			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
-
-			var startingSize = args.Stream.Length;
-
-			sut.Process(args);
-
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			Test(@"TestImages\small.png",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-q 100 -m 6 -lossless");
 		}
 
 		[Fact]
-		public void ShouldSquishLosslessTestGif()
+		public void ShouldSquishLosslessLargePng()
 		{
-			var inputStream = new MemoryStream();
-
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.gif"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
-
-			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe";
-			sut.AdditionalToolArguments = "-q 100 -m 6";
-
-			var opts = new Sitecore.Resources.Media.MediaOptions();
-			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
-
-			var startingSize = args.Stream.Length;
-
-			sut.Process(args);
-
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			Test(@"TestImages\large.png",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-q 100 -m 6 -lossless");
 		}
 
 		[Fact]
 		public void ShouldSquishLossyTestJpeg()
 		{
-			var inputStream = new MemoryStream();
-
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.jpg"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
-
-			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
-			sut.AdditionalToolArguments = "-q 90 -m 6";
-
-			var opts = new Sitecore.Resources.Media.MediaOptions();
-			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
-
-			var startingSize = args.Stream.Length;
-
-			sut.Process(args);
-
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			Test(@"TestImages\large.jpg",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-q 90 -m 6");
 		}
 
 		[Fact]
-		public void ShouldSquishLossyTestPng()
+		public void ShouldSquishLossySmallJpegDefaults()
 		{
-			var inputStream = new MemoryStream();
+			Test(@"TestImages\small.jpg",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-preset photo -q 80");
+		}
 
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.png"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
+		[Fact]
+		public void ShouldSquishLossyLargeJpegDefaults()
+		{
+			Test(@"TestImages\small.jpg",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-preset photo -q 80");
+		}
 
-			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
-			sut.AdditionalToolArguments = "-q 90 -alpha_q 100 -m 6";
+		[Fact]
+		public void ShouldSquishLossySmallPngHighAlpha()
+		{
+			Test(@"TestImages\small.png",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-q 90 -alpha_q 100 -m 6");
+		}
 
-			var opts = new Sitecore.Resources.Media.MediaOptions();
-			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
+		[Fact]
+		public void ShouldSquishLossySmallPngDefaults()
+		{
+			Test(@"TestImages\small.png",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-preset icon -q 80");
+		}
 
-			var startingSize = args.Stream.Length;
-
-			sut.Process(args);
-
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+		[Fact]
+		public void ShouldSquishLossyLargePngDefaults()
+		{
+			Test(@"TestImages\large.png",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-preset icon -q 80");
 		}
 
 		[Fact]
 		public void ShouldSquishLossyTestGif()
 		{
+			Test(@"TestImages\small.gif",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				"-q 90 -lossy");
+		}
+
+		[Fact]
+		public void ShouldSquishLosslessTestGif()
+		{
+			Test(@"TestImages\small.gif",
+				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				"-q 80");
+		}
+
+		private void Test(string imagePath, string exePath, string exeArgs)
+		{
 			var inputStream = new MemoryStream();
 
-			using (var testJpeg = File.OpenRead(@"Optimizers\Pipelines\DianogaWebP\test.gif"))
+			using (var testJpeg = File.OpenRead(imagePath))
 			{
 				testJpeg.CopyTo(inputStream);
 			}
 
 			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe";
-			sut.AdditionalToolArguments = "-q 90 -m 6 -lossy";
+			sut.ExePath = exePath;
+			sut.AdditionalToolArguments = exeArgs;
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
 			opts.CustomOptions["extension"] = "webp";
@@ -158,7 +145,11 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 
 			var startingSize = args.Stream.Length;
 
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
 			sut.Process(args);
+			stopwatch.Stop();
+			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
 
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();

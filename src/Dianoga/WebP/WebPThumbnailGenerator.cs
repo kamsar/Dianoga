@@ -1,4 +1,6 @@
-﻿using Sitecore.Diagnostics;
+﻿using Dianoga.Optimizers;
+using Sitecore.Diagnostics;
+using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
 
 namespace Dianoga.WebP
@@ -37,14 +39,15 @@ namespace Dianoga.WebP
 				MaxHeight = options.MaxSize.Height
 			};
 			mediaOptions.CustomOptions["extension"] = "webp";
-			MediaStream optimizedOutputStream = new MediaOptimizer().Process(stream, mediaOptions);
+			var args = new OptimizerArgs(stream.Stream, mediaOptions);
+			CorePipeline.Run("dianogaOptimizeWebP", args);
 
-			if (optimizedOutputStream != null)
+			if (args.IsOptimized)
 			{
-				stream.Stream.Close();
+				return new MediaStream(args.Stream, args.Extension, stream.MediaItem);
 			}
+			return null;
 
-			return optimizedOutputStream;
 		}
 
 		private TransformationOptions GetOptions(MediaData mediaData, TransformationOptions options)
