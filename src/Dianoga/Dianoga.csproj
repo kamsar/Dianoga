@@ -129,7 +129,7 @@
     <None Include="Dianoga Tools\pngquant\README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe" />
+    <None Include="Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
