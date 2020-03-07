@@ -99,7 +99,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.png",
 				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset icon -q 80");
+				"-preset icon");
 		}
 
 		[Fact]
@@ -107,7 +107,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\large.png",
 				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset icon -q 80");
+				"-preset icon");
 		}
 
 		[Fact]
