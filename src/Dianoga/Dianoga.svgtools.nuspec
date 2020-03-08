@@ -2,19 +2,19 @@
 <package>
 	<metadata>
 		<id>Dianoga.svgtools</id>
-		<version>5.0.0-rc.3</version>
+		<version>5.0.0-rc.4</version>
 		<title>Dianoga.svgtools</title>
 		<authors>Kam Figy, Mark Gibbons</authors>
 		<owners>Kam Figy, Mark Gibbons</owners>
 		<license type="expression">MIT</license>
-		<projectUrl>http://github.com/kamsar/Dianoga</projectUrl>
-		<iconUrl>http://kamsar.net/nuget/dianoga/logo.png</iconUrl>
+		<projectUrl>https://github.com/kamsar/Dianoga</projectUrl>
+		<iconUrl>https://kamsar.net/nuget/dianoga/logo.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>SVG tools required if SVGO is enabled</description>
 		<copyright>Copyright 2020</copyright>
 		<tags>sitecore optimization</tags>
 		<dependencies>
-			<dependency id="Dianoga" version="5.0.0-rc.3" />
+			<dependency id="Dianoga" version="5.0.0-rc.4" />
 		</dependencies>
 	</metadata> 
 	<files>

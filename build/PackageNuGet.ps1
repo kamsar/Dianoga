@@ -29,5 +29,5 @@ $solution = "$scriptRoot\..\Dianoga.sln"
 & $nuGet restore $solution
 & $msBuild $solution /p:Configuration=Release /t:Rebuild /m
 
-& $nuGet pack "$scriptRoot\..\src\Dianoga\Dianoga.csproj" -Symbols -Prop "Configuration=Release" -NoDefaultExcludes
+& dotnet pack "$scriptRoot\..\src\Dianoga\Dianoga.csproj" -Property:Configuration=Release -o $scriptRoot --include-symbols
 & $nuGet pack "$scriptRoot\..\src\Dianoga\Dianoga.svgtools.nuspec"
