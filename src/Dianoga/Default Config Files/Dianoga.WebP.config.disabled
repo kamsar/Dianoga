@@ -51,13 +51,7 @@
 					<AdditionalToolArguments>-q 80 -lossy</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeGif>
-
-			<getMediaStream>
-				<!-- Enable this if you are using Sync mode -->
-				<!--
-				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:before="processor[1]" />
-				-->
-			</getMediaStream>
+			
 		</pipelines>
 
 		<mediaLibrary>
@@ -85,14 +79,6 @@
 					<parameter description="extension" name="extension"/>
 				</protectedMediaQueryParameters>
 			</requestProtection>
-
-			<!-- Enable this section if you are running Dianoga under CDN. It adds "&web=true" to media links if the browser supports it for a unique CDN cache key. -->
-			<!--
-			<mediaProvider type="Dianoga.MediaProvider, Dianoga" 
-				 patch:instead="mediaProvider[@type='Sitecore.Resources.Media.MediaProvider, Sitecore.Kernel']"/>
-			-->
-			
 		</mediaLibrary>
-
 	</sitecore>
 </configuration>

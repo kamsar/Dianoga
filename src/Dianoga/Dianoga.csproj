@@ -1,56 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net452;net462;net471</TargetFrameworks>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Description>Automatic media library image file optimization for Sitecore</Description>
-    <Version>5.0.0-rc.4</Version>
-    <Authors>Kam Figy, Mark Gibbons</Authors>
-    <PackageProjectUrl>https://github.com/kamsar/Dianoga</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/kamsar/Dianoga</RepositoryUrl>
-	<PackageIconUrl>https://kamsar.net/nuget/dianoga/logo.png</PackageIconUrl>
-    <PackageTags>sitecore optimization</PackageTags>
-    <Copyright>Copyright 2020</Copyright>
-    <Company />
-    <Product />
-  </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
-    <PackageReference Include="Sitecore.Kernel">
-      <Version>8.2.180406</Version>
-	  <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="Sitecore.Kernel">
-      <Version>9.0.180604</Version>
-	  <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
-      <Version>3.8.1</Version>
-	  <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="Sitecore.Kernel">
-      <Version>9.3.0</Version>
-	  <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
-      <Version>9.3.0</Version>
-	  <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.XML" />
-  </ItemGroup>
-  <ItemGroup>
-  <Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
-  <Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net452;net462;net471</TargetFrameworks>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Description>Automatic media library image file optimization for Sitecore</Description>
+		<Version>5.0.0-rc.4</Version>
+		<Authors>Kam Figy, Mark Gibbons</Authors>
+		<PackageProjectUrl>https://github.com/kamsar/Dianoga</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/kamsar/Dianoga</RepositoryUrl>
+		<PackageIconUrl>https://kamsar.net/nuget/dianoga/logo.png</PackageIconUrl>
+		<PackageTags>sitecore optimization</PackageTags>
+		<Copyright>Copyright 2020</Copyright>
+		<Company />
+		<Product />
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>8.2.180406</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>8.2.180406</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>9.0.180604</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>9.0.180604</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+			<Version>3.8.1</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System" />
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Drawing" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.XML" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
+		<Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Default Config Files\Dianoga.WebP.CDN.config.disabled" />
+	</ItemGroup>
 </Project>

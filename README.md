@@ -2,7 +2,7 @@
 
 An automatic image optimizer for the Sitecore media library. Reduce the size of your images served from Sitecore by 8-70%, completely automatically.
 
-When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [nQuant](https://nquant.codeplex.com/), [SVGO](https://github.com/svg/svgo) or [WebP](https://developers.google.com/speed/webp/) on the image data immediately after it is placed in the Sitecore media cache. 
+When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [SVGO](https://github.com/svg/svgo) or [WebP](https://developers.google.com/speed/webp/) on the image data immediately after it is placed in the Sitecore media cache. 
 
 Dianoga ensures that your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features (for example with [Adaptive Images](https://marketplace.sitecore.net/en/Modules/Sitecore_Adaptive_Images.aspx)). Even if you have already optimized every image uploaded into the media library, after Sitecore performs image processing the result is _not_ optimized (an unfortunate limitation of most other image optimization libraries for Sitecore is that they only apply to the original image).
 
@@ -11,10 +11,10 @@ Dianoga is also great for situations where content editors may not be image edit
 ## Format Support
 
 Dianoga supports:
-* JPEGs (via mozjpeg - lossless optimization)
-* PNGs (via PNGOptimizer - lossless, and/or nQuant or pngquant - lossy)
+* JPEGs (via mozjpeg - lossless or lossy)
+* PNGs (via PNGOptimizer - lossless / pngquant - lossy)
 * SVGs (via SVGO - lossless, and automatic gzipping of SVG media responses)
-* WebP (via cwebp - lossy by default but easy to change to lossless)
+* WebP (via cwebp - lossless or lossy)
 * Auto convert JPEG/PNG/GIF to WebP based on browser support
 
 Additional format support is possible to add via new processors in the `dianogaOptimize` pipeline.
@@ -76,42 +76,20 @@ Browser sends request to server to get image. If browser supports WebP image for
 ### How to enable WebP support:
 1. Enable `Dianoga.WebP.config.disabled` config and adjust any parameters if you require lossless or higher quality than the default
 2. Open web.config and change line
-`<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />` to
+
+`<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />`
+
+to
+
 `<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
-3. If you have custom `MediaRequestHandler` (e.g. Habitat or SXA is used) then override `DoProcessRequest` method with detection of support of WebP format:
 
-```C#
-protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
-{
-	if (context?.Request.AcceptTypes != null && (context.Request.AcceptTypes).Contains("image/webp"))
-	{
-		request.Options.CustomOptions["extension"] = "webp";
-	}
+OR if you use SXA
 
-	return base.DoProcessRequest(context, request, media);
-}
-```
+`<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandlerXA, Dianoga" name="Sitecore.MediaRequestHandler" />`
 
-### If you run Sitecore under CDN,
+OR if you have a custom `MediaRequestHandler` then you need to make some changes - see `MediaRequestHandler.cs`
 
-
-1. Check [CDN support wiki](https://github.com/kamsar/Dianoga/wiki/CDN-Support-for-WebP)
-2. Uncomment `settings` section in `Dianoga.WebP.config`:
-
-```XML
-<settings>
-	<setting name="MediaResponse.VaryHeader">
-		<patch:attribute name="value">Accept,Accept-Encoding</patch:attribute>
-	</setting>
-</settings>
-```
-
-3. Enable the special patch of the GetMediaStreamSync in `Dianoga.WebP.config` strategy which patches it to run first in the `getMediaStream` pipeline:
-
-```XML
-<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:before="processor[1]" />
-				
-```
+3. If you run Sitecore under CDN: review and enable `Dianoga.WebP.CDN.config.disabled`
 
 
 ## Upgrade
@@ -138,6 +116,6 @@ You can optimize any type of image that the media library supports with Dianoga.
 
 Adding a new `Processor` to the config will enable you to call a micro-pipeline you define to process that type.
 
-In your `Optimizer` micro-pipeline you can add or remove optimizers (e.g. nQuant) that are applied in order to the specified file type.
+In your `Optimizer` micro-pipeline you can add or remove optimizers that are applied in order to the specified file type.
 
 Comments are available in the config files and source for your perusal.

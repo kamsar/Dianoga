@@ -1,0 +1,27 @@
+﻿<!--
+	Configures Dianoga to support WebP on a CDN
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">
+	<sitecore>
+		<pipelines>
+			<!-- Run the Sync processor first so that no other Sitecore processors are run for webp -->
+			<getMediaStream>
+				<processor type="Dianoga.Invokers.GetMediaStreamSync.OptimizeImage, Dianoga" patch:before="processor[1]" />
+			</getMediaStream>
+			<!-- Generate a unique HTML cache key for renderings since the links will have query string extension=webp -->
+			<mvc.renderRendering>
+				<processor 
+					type="Dianoga.WebP.Pipelines.GenerateCacheKey, Dianoga"
+					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" />
+			</mvc.renderRendering>
+		</pipelines>
+	
+		<mediaLibrary>
+			<!-- Add query string "extension=webp" to media links if the browser supports it for a unique CDN cache key. -->
+			<mediaProvider 
+				type="Dianoga.WebP.MediaProvider, Dianoga"
+				patch:instead="mediaProvider[@type='Sitecore.Resources.Media.MediaProvider, Sitecore.Kernel']"/>
+		</mediaLibrary>
+
+	</sitecore>
+</configuration>

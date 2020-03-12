@@ -1,22 +1,20 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
 using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
 
-namespace Dianoga
+namespace Dianoga.WebP
 {
 #pragma warning disable CS0612 // Type or member is obsolete
 	public class MediaProvider : Sitecore.Resources.Media.MediaProvider
 	{
+
 		public override string GetMediaUrl(MediaItem item, MediaUrlOptions options)
 		{
 			var url = base.GetMediaUrl(item, options);
 
-			if (item.MimeType.StartsWith("image") &&
-				HttpContext.Current.Request.AcceptTypes != null &&
-				HttpContext.Current.Request.AcceptTypes.Contains("image/webp"))
+			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
 			{
-				url += "&webp=true";
+				url += "&extension=webp";
 			}
 
 			return url;
@@ -27,11 +25,9 @@ namespace Dianoga
 		{
 			var url = base.GetMediaUrl(item, options);
 
-			if (item.MimeType.StartsWith("image") &&
-				HttpContext.Current.Request.AcceptTypes != null &&
-				HttpContext.Current.Request.AcceptTypes.Contains("image/webp"))
+			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
 			{
-				url += "&webp=true";
+				url += "&extension=webp";
 			}
 
 			return url;

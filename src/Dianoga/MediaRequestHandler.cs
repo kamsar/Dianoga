@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
+using Dianoga.WebP;
 using Sitecore.Resources.Media;
 
 namespace Dianoga
@@ -8,7 +8,7 @@ namespace Dianoga
 	{
 		protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
 		{
-			if (context?.Request.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/webp"))
+			if (context?.Request.QueryString?["extension"] == "webp" || context.BrowserSupportsWebP())
 			{
 				request.Options.CustomOptions["extension"] = "webp";
 			}

@@ -1,4 +1,4 @@
-﻿using Dianoga.Helpers;
+﻿using Dianoga.WebP;
 
 namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 {

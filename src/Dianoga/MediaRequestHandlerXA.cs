@@ -1,6 +1,6 @@
 ﻿#if !NET452
-using System.Linq;
 using System.Web;
+using Dianoga.WebP;
 using Sitecore.Pipelines;
 using Sitecore.XA.Foundation.MediaRequestHandler.Pipelines.MediaRequestHandler;
 
@@ -16,7 +16,7 @@ namespace Dianoga
 			{
 				return mediaRequestHandlerArgs.Result;
 			}
-			if (context?.Request.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/webp"))
+			if (context?.Request.QueryString?["extension"] == "webp" || context.BrowserSupportsWebP())
 			{
 				mediaRequestHandlerArgs.Request.Options.CustomOptions["extension"] = "webp";
 			}
