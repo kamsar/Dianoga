@@ -16,7 +16,7 @@ namespace Dianoga
 			{
 				return mediaRequestHandlerArgs.Result;
 			}
-			if (context?.Request.QueryString?["extension"] == "webp" || context.BrowserSupportsWebP())
+			if (context?.Request.QueryString?["extension"] == "webp" || (!Helpers.CdnEnabled && context.BrowserSupportsWebP()))
 			{
 				mediaRequestHandlerArgs.Request.Options.CustomOptions["extension"] = "webp";
 			}

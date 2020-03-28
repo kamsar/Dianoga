@@ -7,6 +7,7 @@ namespace Dianoga.WebP
 {
 	public static class Helpers
 	{
+		public static bool CdnEnabled => Sitecore.Configuration.Settings.GetBoolSetting("Dianoga.CDN.Enabled", false);
 
 		public static bool BrowserSupportsWebP(this HttpContext context)
 		{
