@@ -2,7 +2,7 @@
 <package>
 	<metadata>
 		<id>Dianoga.svgtools</id>
-		<version>5.0.0-rc.5</version>
+		<version>5.0.0-rc.6</version>
 		<title>Dianoga.svgtools</title>
 		<authors>Kam Figy, Mark Gibbons</authors>
 		<owners>Kam Figy, Mark Gibbons</owners>
@@ -14,7 +14,7 @@
 		<copyright>Copyright 2020</copyright>
 		<tags>sitecore optimization</tags>
 		<dependencies>
-			<dependency id="Dianoga" version="5.0.0-rc.5" />
+			<dependency id="Dianoga" version="5.0.0-rc.6" />
 		</dependencies>
 	</metadata> 
 	<files>
