@@ -20,16 +20,16 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldSquishSmallSvg()
 		{
 			Test(@"TestImages\small.svg",
-				@"../../Optimizers/Pipelines/DianogaSvg/SVGO/node.exe",
-				"--disable=removeUselessDefs --disable=cleanupIDs");
+				@"..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
+				"");
 		}
 
 		[Fact]
 		public void ShouldSquishLargeSvg()
 		{
 			Test(@"TestImages\large.svg",
-				@"../../Optimizers/Pipelines/DianogaSvg/SVGO/node.exe",
-				"--disable=removeUselessDefs --disable=cleanupIDs");
+				@"..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
+				"");
 		}
 
 		private void Test(string imagePath, string exePath, string exeArgs)
@@ -53,7 +53,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 			stopwatch.Start();
 			sut.Process(args);
 			stopwatch.Stop();
-			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
+			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms Size: {args.Stream.Length}");
 
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();

@@ -60,15 +60,12 @@ To perform a manual installation:
 
 ### Dianoga.svgtools
 
-If you are enabling the SVGO optimiser, you'll need Node.js so you can restore the svgo dependencies.
-1. Install the `Dianoga.svgtools` NuGet package
-2. Open a command prompt in `Dianoga Tools/SVGO/node_modules/svgo`
-3. Run `npm install`
-4. `Dianoga Tools/SVGO/node_modules/svgo/node_modules` are required for the operation of svgo, so they will need to be copied to your website
+If you are enabling the SVGO optimiser, you'll also need the [Dianoga.svgtools](https://www.nuget.org/packages/Dianoga.svgtools) NuGet package.
+This is simply a prepackaged compiled version of SVGO called SVGOP from [here](https://github.com/twardoch/svgop).
 
 ## WebP feature
 
-WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). [All evergreen browsers currently support WebP](https://caniuse.com/#feat=webp). IE11 is the only "mainstream" browser without support - but no worries as we can detect this and fall back to standard formats. Usage of WebP format could be a quick win when you need a speed up your website. By default WebP optimization is disabled.
+WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). [All evergreen browsers except Safari currently support WebP](https://caniuse.com/#feat=webp). By default WebP optimization is disabled since you need to do some due diligence around reviewing configs, how it works, and importantly if you are using a CDN you need to do some extra steps.
 
 ### How WebP optimization works:
 Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed if they are enabled.

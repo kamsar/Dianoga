@@ -1,11 +1,7 @@
 ﻿<!--
 	Configures Dianoga to support SVG
 	
-	If you are enabling the SVGO optimiser, you'll need Node.js so you can restore the svgo dependencies.
-	1. Install the `Dianoga.svgtools` NuGet package
-	2. Open a command prompt in `Dianoga Tools/SVGO/node_modules/svgo`
-	3. Run `npm install`
-	4. `Dianoga Tools/SVGO/node_modules/svgo/node_modules` are required for the operation of svgo, so they will need to be copied to your website
+	If you are enabling the SVGO optimiser, you'll also need the `Dianoga.svgtools` NuGet package
 
 	Props:
 	SVG mime type config courtesy of Richard Seal, https://community.sitecore.net/developers/f/8/t/1670
@@ -47,31 +43,30 @@
 			<dianogaOptimizeSvg>
 				<!-- Optimize the SVG with SVGO https://github.com/svg/svgo -->
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaSvg.SvgoOptimizer, Dianoga">
-					<ExePath>/App_Data/Dianoga Tools/SVGO/node.exe</ExePath>
-					<!-- See https://github.com/svg/svgo#cli for arguments. removeUselessDefs and cleanupIDs are disabled because they eat SVG sprite-sheets -->
-					<AdditionalToolArguments>--disable=removeUselessDefs --disable=cleanupIDs</AdditionalToolArguments>
+					<ExePath>/App_Data/Dianoga Tools/SVGO/svgop.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeSvg>
 		</pipelines>
 
-		<!--- SVG COMPRESSION: auto gzip SVGs from media library on serve -->
-		<pipelines>
+		<!-- SVG COMPRESSION: auto gzip SVGs from media library on serve.
+			 Note that most web servers these days don't need this as they will dynamically compress on the fly. -->
+		<!--<pipelines>
 			<dianogaOptimizeSvg>
-				<!-- adds gzip compression to SVGs as an optimization. Make sure this is always LAST if used. -->
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaSvg.GzipSvgData, Dianoga" />
 			</dianogaOptimizeSvg>
 
 			<getMediaStream>
-				<!-- Prevent Sitecore from attempting to resize SVGs as bitmaps -->
+				--><!-- Prevent Sitecore from attempting to resize SVGs as bitmaps --><!--
 				<processor type="Dianoga.Svg.Pipelines.GetMediaStream.SvgIgnorer, Dianoga" patch:before="processor[1]" />
 			</getMediaStream>
 		</pipelines>
 
 		<events>
-			<!-- Adds the right HTTP header to tell the browser we're gzipping compressed media items when they are compressed -->
+			--><!-- Adds the right HTTP header to tell the browser we're gzipping compressed media items when they are compressed --><!--
 			<event name="media:request">
 				<handler type="Dianoga.Svg.EventHandlers.MediaRequest.CompressedSvgEncodingSetter, Dianoga" method="OnMediaRequest" />
 			</event>
-		</events>
+		</events>-->
 	</sitecore>
 </configuration>

@@ -51,9 +51,9 @@ namespace Dianoga.Optimizers
 		protected virtual bool OptimizerUsesSeparateOutputFile => true;
 
 		/// <summary>
-		/// Shell execute uses PATH and can run non-exe files (e.g. cmd) but it cannot capture output
+		/// Process execute timeout in ms
 		/// </summary>
-		protected bool UseShellExecute { get; set; }
+		protected virtual int ToolTimeout => 60000;
 
 		protected override void ProcessOptimizer(OptimizerArgs args)
 		{
@@ -78,8 +78,7 @@ namespace Dianoga.Optimizers
 				}
 
 				// Execute the command line tool
-				if (UseShellExecute) ExecuteShell(arguments);
-				else ExecuteProcess(arguments);
+				ExecuteProcess(arguments);
 
 				// Read the output file to memory and nuke the temp file
 				var outputPath = OptimizerUsesSeparateOutputFile ? tempOutputPath : tempFilePath;
@@ -103,92 +102,55 @@ namespace Dianoga.Optimizers
 
 		protected virtual void ExecuteProcess(string arguments)
 		{
-			var processOutput = new ConcurrentBag<string>();
-
-			var processInfo = new ProcessStartInfo
-			{
-				UseShellExecute = false,
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				FileName = ExePath,
-				Arguments = arguments
-			};
 
 #if DEBUG
 			Sitecore.Diagnostics.Log.Info($"\"{ExePath} {arguments}\"", this);
 #endif
 
-			var toolProcess = new Process();
-			toolProcess.StartInfo = processInfo;
-			toolProcess.OutputDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
-			toolProcess.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
-
-			try
+			using (var process = new Process())
 			{
-				toolProcess.Start();
-			}
-			catch (Exception ex)
-			{
-				throw new InvalidOperationException($"\"{ExePath} {arguments}\" could not be started because an error occurred. See the inner exception for details.", ex);
-			}
+				process.StartInfo.FileName = ExePath;
+				process.StartInfo.Arguments = arguments;
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.RedirectStandardError = true;
+				process.StartInfo.CreateNoWindow = true;
 
-			toolProcess.BeginOutputReadLine();
-			toolProcess.BeginErrorReadLine();
+				var processOutput = new ConcurrentBag<string>();
+				process.OutputDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
+				process.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 
-
-			if (!toolProcess.WaitForExit(ToolTimeout))
-			{
 				try
 				{
-					toolProcess.Kill();
+					process.Start();
 				}
-				catch
+				catch (Exception ex)
 				{
-					// do nothing if kill errors, we want the exception below
+					throw new InvalidOperationException($"\"{ExePath} {arguments}\" could not be started because an error occurred. See the inner exception for details.", ex);
 				}
 
-				throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
-			}
+				process.BeginOutputReadLine();
+				process.BeginErrorReadLine();
 
-			if (toolProcess.ExitCode != 0)
-			{
-				throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {toolProcess.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
-			}
-		}
 
-		protected virtual void ExecuteShell(string arguments)
-		{
-			var processInfo = new ProcessStartInfo
-			{
-				UseShellExecute = true,
-				FileName = ExePath,
-				Arguments = arguments
-			};
-
-#if DEBUG
-			Sitecore.Diagnostics.Log.Info($"\"{ExePath} {arguments}\"", this);
-#endif
-
-			var toolProcess = System.Diagnostics.Process.Start(processInfo);
-
-			// ReSharper disable once PossibleNullReferenceException
-			if (!toolProcess.WaitForExit(ToolTimeout))
-			{
-				try
+				if (!process.WaitForExit(ToolTimeout))
 				{
-					toolProcess.Kill();
+					try
+					{
+						process.Kill();
+					}
+					catch
+					{
+						// do nothing if kill errors, we want the exception below
+					}
+
+					throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output: {string.Join(Environment.NewLine, processOutput)}");
 				}
-				catch
+
+				if (process.ExitCode != 0)
 				{
-					// do nothing if kill errors, we want the exception below
+					throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {process.ExitCode}. Output: {string.Join(Environment.NewLine, processOutput)}");
 				}
-
-				throw new InvalidOperationException($"\"{ExePath} {arguments}\" took longer than {ToolTimeout}ms to run, which is a failure. Output not available using shell execute.");
-			}
-
-			if (toolProcess.ExitCode != 0)
-			{
-				throw new InvalidOperationException($"\"{ExePath} {arguments}\" exited with unexpected exit code {toolProcess.ExitCode}. Output not available using shell execute.");
 			}
 		}
 
@@ -205,7 +167,5 @@ namespace Dianoga.Optimizers
 				throw new InvalidOperationException($"Error occurred while creating temp file to optimize. This can happen if IIS does not have write access to {Path.GetTempPath()}, or if the temp folder has 65535 files in it and is full.", ioe);
 			}
 		}
-
-		protected virtual int ToolTimeout => 60000; // in msec
 	}
 }
