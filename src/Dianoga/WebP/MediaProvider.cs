@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
+using Sitecore.Web;
 
 namespace Dianoga.WebP
 {
@@ -14,7 +15,7 @@ namespace Dianoga.WebP
 
 			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
 			{
-				url += "&extension=webp";
+				url = WebUtil.AddQueryString(url, "extension", "webp");
 			}
 
 			return url;
@@ -27,7 +28,7 @@ namespace Dianoga.WebP
 
 			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
 			{
-				url += "&extension=webp";
+				url = WebUtil.AddQueryString(url, "extension", "webp");
 			}
 
 			return url;
