@@ -17,9 +17,13 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
-      run: dotnet restore
+    #- name: Install dependencies
+    #  run: dotnet restore
+    #- name: Build
+    #  run: dotnet build --configuration Release --no-restore
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.0
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: msbuild Dianoga.sln /t:Restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test [*.sln]
