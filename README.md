@@ -6,9 +6,9 @@ An automatic image optimizer for the Sitecore media library. Reduce the size of 
 
 When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [SVGO](https://github.com/svg/svgo) or [WebP](https://developers.google.com/speed/webp/) on the image data immediately after it is placed in the Sitecore media cache. 
 
-Dianoga ensures that your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features (for example with [Adaptive Images](https://marketplace.sitecore.net/en/Modules/Sitecore_Adaptive_Images.aspx)). Even if you have already optimized every image uploaded into the media library, after Sitecore performs image processing the result is _not_ optimized (an unfortunate limitation of most other image optimization libraries for Sitecore is that they only apply to the original image).
+Dianoga ensures that your site is always serving fully optimised media library images even if you are using Sitecore's dynamic resizing features. Even if you have already optimized every image uploaded into the media library, after Sitecore performs image processing the result is _not_ optimized (an unfortunate limitation of most other image optimization libraries for Sitecore is that they only apply to the original image).
 
-Dianoga is also great for situations where content editors may not be image editing experts and upload images that contain gobs of EXIF data and other nonessential metadata - these are removed automatically before being shown to visitors. All of the optimizations done are lossless (no quantizing, etc) so you lose no image quality.
+Dianoga is also great for situations where content editors may not be image editing experts and upload images that contain gobs of EXIF data and other nonessential metadata - these are removed automatically before being shown to visitors. 
 
 ## Format Support
 
@@ -31,8 +31,6 @@ Note that because the cache is updated after the first image request, the _first
 
 ## Limitations
 
-Because Dianoga uses a DLL version of PNGOptimizer, it is platform-specific and only runs on 64-bit application pools. You can still use nQuant for PNGs on 32-bit pools.
-
 Dianoga depends on the Dianoga Tools folder that is installed by the NuGet package into the web project it is installed on. You can relocate these tools if you wish by changing the paths in the `App_Config/Include/Dianoga/(Dianoga.Jpeg.config|Dianoga.Png.config|Dianoga.Svg.config)` files.
 
 ## Options
@@ -51,7 +49,7 @@ Dianoga 3+ allows for ignoring specific paths in the media library. See `Dianoga
 
 ## Installation
 
-Dianoga 5+ has a NuGet package for the main code and configs, and a separate package for the SVGO tools - `Dianoga.svgtools`. This was done as the SVG tools are an npm package with thousands of files, which not everyone uses. 
+Dianoga 5+ has a NuGet package for the main code and configs, and a separate package for the SVGO tools - `Dianoga.svgtools`. This was done as SVGO is an 80MB library.
 Once Dianoga is installed, __clear your App_Data/MediaCache folder__, and you're done.
 
 To perform a manual installation:
