@@ -2,7 +2,7 @@
 
 An automatic image optimizer for the Sitecore media library. Reduce the size of your images served from Sitecore by 8-70%, completely automatically.
 
-![Dianoga CI](https://github.com/kamsar/Dianoga/workflows/Dianoga%20CI/badge.svg) ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Dianoga)
+![Dianoga CI](https://github.com/kamsar/Dianoga/workflows/Dianoga%20CI/badge.svg) ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Dianoga?logo=nuget&link=https://www.nuget.org/packages/Dianoga)
 
 When media images are requested, Dianoga automatically runs [mozjpeg](https://github.com/mozilla/mozjpeg), [PNGOptimizer](http://psydk.org/pngoptimizer), [SVGO](https://github.com/svg/svgo) or [WebP](https://developers.google.com/speed/webp/) on the image data immediately after it is placed in the Sitecore media cache. 
 
