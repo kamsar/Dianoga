@@ -20,7 +20,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishSmallJpeg()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
 				"--strip-all --all-progressive -m90");
 		}
 
@@ -28,7 +28,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishLargeJpeg()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
 				"--strip-all --all-progressive -m90");
 		}
 

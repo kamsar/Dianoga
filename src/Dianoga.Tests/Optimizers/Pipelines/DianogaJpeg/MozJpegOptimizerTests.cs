@@ -20,7 +20,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishSmallJpegLossless()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
 				"-progressive");
 		}
 
@@ -28,7 +28,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishLargeJpegLossless()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
 				"-progressive");
 		}
 
@@ -36,7 +36,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishSmallJpegLossy()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
 				"-quality 80");
 		}
 
@@ -44,7 +44,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishLargeJpegLossy()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
 				"-quality 80");
 		}
 

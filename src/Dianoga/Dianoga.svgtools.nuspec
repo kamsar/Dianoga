@@ -10,9 +10,9 @@
 		<projectUrl>https://github.com/kamsar/Dianoga</projectUrl>
 		<iconUrl>https://kamsar.net/nuget/dianoga/logo.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>SVG tools required if SVGO is enabled</description>
+		<description>Dianoga - SVGO package for SVG optimization</description>
 		<copyright>Copyright 2020</copyright>
-		<tags>sitecore optimization</tags>
+		<tags>sitecore image optimization</tags>
 		<dependencies>
 			<dependency id="Dianoga" version="5.0.0-rc.6" />
 		</dependencies>

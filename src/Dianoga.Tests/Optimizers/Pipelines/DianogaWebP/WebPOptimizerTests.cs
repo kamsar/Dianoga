@@ -27,7 +27,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			}
 
 			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
+			sut.ExePath = @"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
 			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless";
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
@@ -50,7 +50,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessSmallPng()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-q 100 -m 6 -lossless");
 		}
 
@@ -58,7 +58,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessLargePng()
 		{
 			Test(@"TestImages\large.png",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-q 100 -m 6 -lossless");
 		}
 
@@ -66,7 +66,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyTestJpeg()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-q 90 -m 6");
 		}
 
@@ -74,7 +74,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallJpegDefaults()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-preset photo -q 80");
 		}
 
@@ -82,7 +82,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyLargeJpegDefaults()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-preset photo -q 80");
 		}
 
@@ -90,7 +90,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallPngHighAlpha()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-q 90 -alpha_q 100 -m 6");
 		}
 
@@ -98,7 +98,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallPngDefaults()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-preset icon");
 		}
 
@@ -106,7 +106,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyLargePngDefaults()
 		{
 			Test(@"TestImages\large.png",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
 				"-preset icon");
 		}
 
@@ -114,7 +114,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyTestGif()
 		{
 			Test(@"TestImages\small.gif",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
 				"-q 90 -lossy");
 		}
 
@@ -122,7 +122,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessTestGif()
 		{
 			Test(@"TestImages\small.gif",
-				@"..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
 				"-q 80");
 		}
 

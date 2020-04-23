@@ -20,7 +20,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldSquishSmallSvg()
 		{
 			Test(@"TestImages\small.svg",
-				@"..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
 				"");
 		}
 
@@ -28,7 +28,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldSquishLargeSvg()
 		{
 			Test(@"TestImages\large.svg",
-				@"..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
 				"");
 		}
 

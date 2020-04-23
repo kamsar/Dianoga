@@ -21,7 +21,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 		public void ShouldSquishSmallPng()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\Dianoga\Dianoga Tools\pngquant\pngquant.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\pngquant\pngquant.exe",
 				"");
 		}
 
@@ -29,7 +29,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaPng
 		public void ShouldSquishLargePng()
 		{
 			Test(@"TestImages\large.png",
-				@"..\..\..\Dianoga\Dianoga Tools\pngquant\pngquant.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\pngquant\pngquant.exe",
 				"");
 		}
 

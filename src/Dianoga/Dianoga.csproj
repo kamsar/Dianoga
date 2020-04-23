@@ -10,7 +10,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/kamsar/Dianoga</RepositoryUrl>
 		<PackageIconUrl>https://kamsar.net/nuget/dianoga/logo.png</PackageIconUrl>
-		<PackageTags>sitecore optimization</PackageTags>
+		<PackageTags>sitecore image optimization</PackageTags>
 		<Copyright>Copyright 2020</Copyright>
 		<Company />
 		<Product />
