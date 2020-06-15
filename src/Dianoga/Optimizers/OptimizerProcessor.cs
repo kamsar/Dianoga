@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Sitecore.Diagnostics;
 
 namespace Dianoga.Optimizers
 {
@@ -38,17 +39,12 @@ namespace Dianoga.Optimizers
 
 				ValidateReturnStream(args, originalStream);
 			}
-			catch
+			catch (Exception ex)
 			{
-				// make sure we dispose all the streams on exception and rethrow the error
-				try
-				{
-					originalStream.Dispose();
-					args.Stream.Dispose();
-				}
-				catch { }
-
-				throw;
+				args.IsOptimized = false;
+				args.Stream.Dispose();
+				args.Stream = originalStream;
+				Log.Error($"Dianoga: Unable to optimize due to a processing error! It will be unchanged.", ex, this);
 			}
 		}
 

@@ -3,6 +3,7 @@ using System.IO;
 using Dianoga.Optimizers;
 using Dianoga.Optimizers.Pipelines.DianogaWebP;
 using FluentAssertions;
+using FluentAssertions.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,29 +20,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		[Fact]
 		public void ShouldReturnOriginalStreamWhenOptimizedImageSizeIsGreater()
 		{
-			var inputStream = new MemoryStream();
-
-			using (var testJpeg = File.OpenRead(@"TestImages\small.jpg"))
-			{
-				testJpeg.CopyTo(inputStream);
-			}
-
-			var sut = new WebPOptimizer();
-			sut.ExePath = @"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe";
-			sut.AdditionalToolArguments = "-q 100 -m 6 -lossless";
-
-			var opts = new Sitecore.Resources.Media.MediaOptions();
-			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
-
-			var startingSize = args.Stream.Length;
-
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			sut.Process(args);
-			stopwatch.Stop();
-			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
-
+			Test(@"TestImages\small.jpg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-q 100 -m 6 -lossless", out var args, out var startingSize);
 			args.Stream.Length.Should().Be(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeFalse();
 		}
@@ -51,7 +32,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.png",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-q 100 -m 6 -lossless");
+				"-q 100 -m 6 -lossless", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -59,7 +42,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\large.png",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-q 100 -m 6 -lossless");
+				"-q 100 -m 6 -lossless", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -67,7 +52,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\large.jpg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-q 90 -m 6");
+				"-q 90 -m 6", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -75,7 +62,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.jpg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset photo -q 80");
+				"-preset photo -q 80", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -83,7 +72,19 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.jpg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset photo -q 80");
+				"-preset photo -q 80", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
+		}
+
+		[Fact]
+		public void ShouldNotSquishCorruptedJpegLossy()
+		{
+			Test(@"TestImages\corrupted.jpg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				"-preset photo -q 80", out var args, out var startingSize);
+			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
+			args.IsOptimized.Should().BeFalse();
 		}
 
 		[Fact]
@@ -91,7 +92,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.png",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-q 90 -alpha_q 100 -m 6");
+				"-q 90 -alpha_q 100 -m 6", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -99,7 +102,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.png",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset icon");
+				"-preset icon", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -107,7 +112,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\large.png",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
-				"-preset icon");
+				"-preset icon", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -115,7 +122,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.gif",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
-				"-q 90 -lossy");
+				"-q 90 -lossy", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -123,10 +132,12 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			Test(@"TestImages\small.gif",
 				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
-				"-q 80");
+				"-q 80", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
-		private void Test(string imagePath, string exePath, string exeArgs)
+		private void Test(string imagePath, string exePath, string exeArgs, out OptimizerArgs argsOut, out long startingSize)
 		{
 			var inputStream = new MemoryStream();
 
@@ -143,7 +154,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			opts.CustomOptions["extension"] = "webp";
 			var args = new OptimizerArgs(inputStream, opts);
 
-			var startingSize = args.Stream.Length;
+			startingSize = args.Stream.Length;
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -151,8 +162,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 			stopwatch.Stop();
 			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
 
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			argsOut = args;
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.IO;
 using Dianoga.Optimizers;
 using Dianoga.Optimizers.Pipelines.DianogaJpeg;
 using FluentAssertions;
+using FluentAssertions.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,7 +22,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		{
 			Test(@"TestImages\small.jpg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
-				"--strip-all --all-progressive -m90");
+				"--strip-all --all-progressive -m90", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
 		[Fact]
@@ -29,10 +32,22 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		{
 			Test(@"TestImages\large.jpg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
-				"--strip-all --all-progressive -m90");
+				"--strip-all --all-progressive -m90", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
 		}
 
-		private void Test(string imagePath, string exePath, string exeArgs)
+		[Fact]
+		public void ShouldNotSquishCorruptedJpegLossy()
+		{
+			Test(@"TestImages\corrupted.jpg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\jpegoptim-windows\jpegoptim.exe",
+				"--strip-all --all-progressive -m90", out var args, out var startingSize);
+			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
+			args.IsOptimized.Should().BeFalse();
+		}
+
+		private void Test(string imagePath, string exePath, string exeArgs, out OptimizerArgs argsOut, out long startingSize)
 		{
 			var inputStream = new MemoryStream();
 
@@ -47,7 +62,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 
 			var args = new OptimizerArgs(inputStream);
 
-			var startingSize = args.Stream.Length;
+			startingSize = args.Stream.Length;
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -55,8 +70,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 			stopwatch.Stop();
 			output.WriteLine($"Time: {stopwatch.ElapsedMilliseconds}ms");
 
-			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
-			args.IsOptimized.Should().BeTrue();
+			argsOut = args;
 		}
 	}
 }
