@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
-		<TargetFramework>net471</TargetFramework>
+		<TargetFrameworks>net452;net462;net471;net48</TargetFrameworks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,8 +14,59 @@
 		<PackageReference Include="Moq">
 			<Version>4.13.1</Version>
 		</PackageReference>
+	</ItemGroup>
+
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>8.2.180406</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>8.2.180406</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>9.0.180604</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>9.0.180604</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+			<Version>3.8.1</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net471'">
 		<PackageReference Include="Sitecore.Kernel">
 			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+			<Version>9.3.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<PackageReference Include="Sitecore.Kernel">
+			<Version>10.0.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.Mvc">
+			<Version>10.0.0</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Sitecore.XA.Foundation.MediaRequestHandler">
+			<Version>10.0.0</Version>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
 
