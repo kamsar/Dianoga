@@ -29,7 +29,7 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 			Assert.ArgumentNotNull(args, "args");
 
 			if (args.Options.Thumbnail) return;
-			if (Sitecore.Context.Site.Name == "shell") return;
+			if (Sitecore.Context.Site?.Name == "shell") return;
 
 			MediaStream outputStream = args.OutputStream;
 			if (outputStream == null) return;
