@@ -5,6 +5,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 	public class WebPOptimizer : CommandLineToolOptimizer
 	{
 		private string _originalAdditionalToolArguments;
+		public bool DisableResizing { get; set; }
 
 		public override void Process(OptimizerArgs args)
 		{

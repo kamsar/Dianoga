@@ -38,7 +38,7 @@ namespace Dianoga.Optimizers
 			}
 		}
 
-		public bool DisableResizing { get; set; }
+		
 		/// <summary>
 		/// If true, additional arguments are prepended to the arguments from CreateToolArguments()
 		/// If false, additional arguments are added at the end
