@@ -45,7 +45,7 @@ namespace Dianoga
 			{
 				if (result.Message.Length > 0)
 				{
-					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message}", this);
+					Log.Info($"Dianoga: messages occurred while optimizing {stream.MediaItem.MediaPath}: {result.Message.Trim()}", this);
 				}
 
 				var extension = result.Extension ?? stream.Extension;
@@ -58,7 +58,7 @@ namespace Dianoga
 			}
 
 			if (!string.IsNullOrWhiteSpace(result.Message))
-				Log.Warn($"Dianoga: unable to optimize {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} because {result.Message}", this);
+				Log.Warn($"Dianoga: unable to optimize {stream.MediaItem.MediaPath}.{stream.MediaItem.Extension} because {result.Message.Trim()}", this);
 
 			// if no message exists that implies that nothing in the dianogaOptimize pipeline acted to optimize - e.g. it's a media type we don't know how to optimize, like PDF.
 
