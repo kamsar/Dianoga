@@ -5,6 +5,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 	public class WebPOptimizer : CommandLineToolOptimizer
 	{
 		private string _originalAdditionalToolArguments;
+		public bool DisableResizing { get; set; }
 
 		public override void Process(OptimizerArgs args)
 		{
@@ -17,7 +18,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 				}
 
 				var transformationOptions = args.MediaOptions.GetTransformationOptions();
-				if (transformationOptions.ContainsResizing())
+				if (!DisableResizing && transformationOptions.ContainsResizing())
 				{
 					AdditionalToolArguments = $"{_originalAdditionalToolArguments} -resize {transformationOptions.Size.Width} {transformationOptions.Size.Height}";
 				}

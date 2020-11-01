@@ -49,6 +49,7 @@
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
 					<ExePath>/App_Data/Dianoga Tools/libwebp-1.1.0-windows-x64/bin/gif2webp.exe</ExePath>
 					<AdditionalToolArguments>-q 80 -lossy</AdditionalToolArguments>
+					<DisableResizing>true</DisableResizing>
 				</processor>
 			</dianogaOptimizeGif>
 			
