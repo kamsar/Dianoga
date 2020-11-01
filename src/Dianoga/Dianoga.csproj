@@ -4,7 +4,7 @@
 		<TargetFrameworks>net452;net462;net471;net48</TargetFrameworks>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Description>Automatic media library image file optimization for Sitecore</Description>
-		<Version>5.0.2</Version>
+		<Version>5.0.3</Version>
 		<Authors>Kam Figy, Mark Gibbons</Authors>
 		<PackageProjectUrl>https://github.com/kamsar/Dianoga</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
