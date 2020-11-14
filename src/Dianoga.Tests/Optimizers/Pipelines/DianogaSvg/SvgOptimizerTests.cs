@@ -28,6 +28,16 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		}
 
 		[Fact]
+		public void ShouldSquishSmallSvgWithArgs()
+		{
+			Test(@"TestImages\small.svg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
+				"--disable=removeViewBox", out var args, out var startingSize);
+			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
+			args.IsOptimized.Should().BeTrue();
+		}
+
+		[Fact]
 		public void ShouldSquishLargeSvg()
 		{
 			Test(@"TestImages\large.svg",

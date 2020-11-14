@@ -21,6 +21,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 			using (Process toolProcess = new Process())
 			{
 				toolProcess.StartInfo.FileName = ExePath;
+				toolProcess.StartInfo.Arguments = AdditionalToolArguments;
 				toolProcess.StartInfo.UseShellExecute = false;
 				toolProcess.StartInfo.RedirectStandardInput = true;
 				toolProcess.StartInfo.RedirectStandardOutput = true;
@@ -30,7 +31,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 				toolProcess.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 
 #if DEBUG
-				Sitecore.Diagnostics.Log.Info($"\"{ExePath}\"", this);
+				Sitecore.Diagnostics.Log.Info($"\"{ExePath} {AdditionalToolArguments}\"", this);
 #endif
 
 				try
