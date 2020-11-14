@@ -21,7 +21,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishSmallJpegLossless()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\jpegtran.exe",
 				"-progressive", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -31,7 +31,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishLargeJpegLossless()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\jpegtran.exe",
 				"-progressive", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -41,7 +41,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishSmallJpegLossy()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\cjpeg.exe",
 				"-quality 80", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -51,7 +51,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldSquishLargeJpegLossy()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\cjpeg.exe",
 				"-quality 80", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -61,7 +61,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldNotSquishCorruptedJpegLossless()
 		{
 			Test(@"TestImages\corrupted.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\jpegtran.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\jpegtran.exe",
 				"-quality 80", out var args, out var startingSize);
 			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
 			args.IsOptimized.Should().BeFalse();
@@ -71,7 +71,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJpeg
 		public void ShouldNotSquishCorruptedJpegLossy()
 		{
 			Test(@"TestImages\corrupted.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg_3.3.1_x86\cjpeg.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\mozjpeg\cjpeg.exe",
 				"-quality 80", out var args, out var startingSize);
 			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
 			args.IsOptimized.Should().BeFalse();

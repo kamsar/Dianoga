@@ -21,7 +21,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldReturnOriginalStreamWhenOptimizedImageSizeIsGreater()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-q 100 -m 6 -lossless", out var args, out var startingSize);
 			args.Stream.Length.Should().Be(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeFalse();
@@ -31,7 +31,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessSmallPng()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-q 100 -m 6 -lossless", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -41,7 +41,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessLargePng()
 		{
 			Test(@"TestImages\large.png",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-q 100 -m 6 -lossless", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -51,7 +51,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyTestJpeg()
 		{
 			Test(@"TestImages\large.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-q 90 -m 6", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -61,7 +61,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallJpegDefaults()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-preset photo -q 80", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -71,7 +71,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyLargeJpegDefaults()
 		{
 			Test(@"TestImages\small.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-preset photo -q 80", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -81,7 +81,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldNotSquishCorruptedJpegLossy()
 		{
 			Test(@"TestImages\corrupted.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-preset photo -q 80", out var args, out var startingSize);
 			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
 			args.IsOptimized.Should().BeFalse();
@@ -91,7 +91,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallPngHighAlpha()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-q 90 -alpha_q 100 -m 6", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -101,7 +101,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossySmallPngDefaults()
 		{
 			Test(@"TestImages\small.png",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-preset icon", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -111,7 +111,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyLargePngDefaults()
 		{
 			Test(@"TestImages\large.png",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\cwebp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\cwebp.exe",
 				"-preset icon", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -121,7 +121,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLossyTestGif()
 		{
 			Test(@"TestImages\small.gif",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\gif2webp.exe",
 				"-q 90 -lossy", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
@@ -131,7 +131,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		public void ShouldSquishLosslessTestGif()
 		{
 			Test(@"TestImages\small.gif",
-				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp-1.1.0-windows-x64\bin\gif2webp.exe",
+				@"..\..\..\..\Dianoga\Dianoga Tools\libwebp\gif2webp.exe",
 				"-q 80", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
