@@ -18,11 +18,11 @@ namespace Dianoga.Optimizers.Pipelines.DianogaPng
 			try
 			{
 				// must have a PNG extension and GetTempFileName gives us .tmp
-				var tmpFileName = Path.GetTempFileName();
+				var tmpFileName = base.GetTempFilePath();
 
 				// GetTempFileName actually creates a zero length file; we want to delete that
 				// to avoid creating uncontrolled temp files (#36)
-				File.Delete(tmpFileName);
+				if (File.Exists(tmpFileName)) File.Delete(tmpFileName);
 
 				return Path.ChangeExtension(tmpFileName, ".png");
 			}

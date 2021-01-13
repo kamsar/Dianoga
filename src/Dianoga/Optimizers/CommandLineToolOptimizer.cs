@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Web.Hosting;
+using Sitecore.Configuration;
 
 namespace Dianoga.Optimizers
 {
@@ -185,6 +186,11 @@ namespace Dianoga.Optimizers
 		{
 			try
 			{
+				var tempFilePath = Settings.GetSetting("Dianoga.TempFilePath");
+				if (!string.IsNullOrEmpty(tempFilePath))
+				{
+					return Path.Combine(tempFilePath, Path.GetRandomFileName());
+				}
 				return Path.GetTempFileName();
 			}
 			catch (IOException ioe)
