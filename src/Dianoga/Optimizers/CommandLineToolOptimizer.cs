@@ -38,7 +38,6 @@ namespace Dianoga.Optimizers
 			}
 		}
 
-		
 		/// <summary>
 		/// If true, additional arguments are prepended to the arguments from CreateToolArguments()
 		/// If false, additional arguments are added at the end
@@ -61,14 +60,7 @@ namespace Dianoga.Optimizers
 			var tempFilePath = GetTempFilePath();
 			var tempOutputPath = OptimizerUsesSeparateOutputFile ? GetTempFilePath() : null;
 
-			var arguments = CreateToolArguments(tempFilePath, tempOutputPath);
-
-			if (!string.IsNullOrEmpty(AdditionalToolArguments))
-			{
-				arguments = PrependAdditionalArguments ?
-					$"{AdditionalToolArguments.TrimEnd()} {arguments}" :
-					$"{arguments.TrimEnd()} {AdditionalToolArguments.TrimEnd()}";
-			}
+			var arguments = GenerateArguments(args, tempFilePath, tempOutputPath);
 
 			try
 			{
@@ -92,13 +84,45 @@ namespace Dianoga.Optimizers
 					fileStream.CopyTo(args.Stream);
 					args.IsOptimized = true;
 				}
-
 			}
 			finally
 			{
 				if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
 				if (tempOutputPath != null && File.Exists(tempOutputPath)) File.Delete(tempOutputPath);
 			}
+		}
+
+		/// <summary>
+		/// Generate arguments by merging default tool arguments with any possible additional arguments
+		/// </summary>
+		protected virtual string GenerateArguments(OptimizerArgs args, string tempFilePath, string tempOutputPath)
+		{
+			var arguments = CreateToolArguments(tempFilePath, tempOutputPath);
+
+			if (!string.IsNullOrEmpty(AdditionalToolArguments))
+			{
+				arguments = PrependAdditionalArguments ?
+					$"{AdditionalToolArguments.TrimEnd()} {arguments}" :
+					$"{arguments.TrimEnd()} {AdditionalToolArguments.TrimEnd()}";
+			}
+
+			var mediaSpecificArguments = GetMediaSpecificArguments(args)?.TrimEnd();
+			if (!string.IsNullOrEmpty(mediaSpecificArguments))
+			{
+				arguments = PrependAdditionalArguments ?
+					$"{mediaSpecificArguments} {arguments.TrimEnd()}" :
+					$"{arguments.TrimEnd()} {mediaSpecificArguments}";
+			}
+
+			return arguments;
+		}
+
+		/// <summary>
+		/// Generate arguments based on the provided media & media options, such as resize parameters
+		/// </summary>
+		protected virtual string GetMediaSpecificArguments(OptimizerArgs args)
+		{
+			return null;
 		}
 
 		protected virtual void ExecuteProcess(string arguments)
