@@ -1,11 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using Sitecore;
+﻿using Sitecore;
+using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Resources.Media;
 using Sitecore.Sites;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks.Dataflow;
 
 namespace Dianoga.Invokers.MediaCacheAsync
 {
@@ -17,10 +18,12 @@ namespace Dianoga.Invokers.MediaCacheAsync
 	public class OptimizingMediaCache : MediaCache
 	{
 		private readonly MediaOptimizer _optimizer;
+		private readonly ActionBlock<Action> _actionBlock;
 
-		public OptimizingMediaCache(MediaOptimizer optimizer)
+		public OptimizingMediaCache(MediaOptimizer optimizer, ActionBlock<Action> actionBlock)
 		{
 			_optimizer = optimizer;
+			_actionBlock = actionBlock;
 		}
 
 		public override bool AddStream(Media media, MediaOptions options, MediaStream stream, out MediaStream cachedStream)
@@ -50,66 +53,80 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 			// Sitecore will use this to stream the media while we persist
 			cachedStream = stream;
-
-			// make a copy of the stream to use temporarily while we async persist
-			var copyStream = new MemoryStream();
-			stream.CopyTo(copyStream);
-			copyStream.Seek(0, SeekOrigin.Begin);
-
-			var copiedMediaStream = new MediaStream(copyStream, stream.Extension, stream.MediaItem);
-
+			
 			// we store the site context because on the background thread: without the Sitecore context saved (on a worker thread), that disables the media cache
 			var currentSite = Context.Site;
 
-			ThreadPool.QueueUserWorkItem(state =>
-			{
-				var mediaPath = stream.MediaItem.MediaPath;
-
-				try
-				{
-					// make a stream backup we can use to persist in the event of an optimization failure
-					// (which will dispose of copyStream)
-					var backupStream = new MemoryStream();
-					copyStream.CopyTo(backupStream);
-					backupStream.Seek(0, SeekOrigin.Begin);
-
-					var backupMediaStream = new MediaStream(backupStream, stream.Extension, stream.MediaItem);
-
-					// switch to the right site context (see above)
-					using (new SiteContextSwitcher(currentSite))
-					{
-						MediaCacheRecord cacheRecord = null;
-
-						var optimizedStream = _optimizer.Process(copiedMediaStream, options);
-
-						if (optimizedStream == null)
-						{
-							Log.Info($"Dianoga: {mediaPath} cannot be optimized due to media type or path exclusion", this);
-							cacheRecord = CreateCacheRecord(media, options, backupMediaStream);
-						}
-
-						if (cacheRecord == null)
-						{
-							cacheRecord = CreateCacheRecord(media, options, optimizedStream);
-							backupMediaStream.Dispose();
-						}
-
-						AddToActiveList(cacheRecord);
-
-						cacheRecord.Persist();
-
-						RemoveFromActiveList(cacheRecord);
-					}
-				}
-				catch (Exception ex)
-				{
-					// this runs in a background thread, and an exception here would cause IIS to terminate the app pool. Bad! So we catch/log, just in case.
-					Log.Error($"Dianoga: Exception occurred on the background thread when optimizing: {mediaPath}", ex, this);
-				}
-			});
+			_actionBlock.Post(() => Optimize(currentSite, stream.MediaItem, media, options));
 
 			return true;
 		}
+
+		private void Optimize(SiteContext currentSite, MediaItem mediaItem, Media media, MediaOptions options)
+		{
+            MediaStream originalMediaStream = null;
+			MediaStream backupMediaStream = null;
+			MediaStream optimizedMediaStream = null;
+
+            try
+            {
+				//get stream from mediaItem to reduce memory usage
+				using (var stream = mediaItem.GetMediaStream())
+				{
+					// make a copy of the stream to use
+					var originalStream = new MemoryStream();
+					stream.CopyTo(originalStream);
+					originalStream.Seek(0, SeekOrigin.Begin);
+
+					originalMediaStream = new MediaStream(originalStream, mediaItem.Extension, mediaItem);
+
+					// make a stream backup we can use to persist in the event of an optimization failure
+					// (which will dispose of originalStream)
+					var backupStream = new MemoryStream();
+					originalStream.CopyTo(backupStream);
+					backupStream.Seek(0, SeekOrigin.Begin);
+
+					backupMediaStream = new MediaStream(backupStream, mediaItem.Extension, mediaItem);
+				}
+
+				// switch to the right site context (see above)
+				using (new SiteContextSwitcher(currentSite))
+                {
+                    MediaCacheRecord cacheRecord = null;
+
+                    optimizedMediaStream = _optimizer.Process(originalMediaStream, options);
+
+                    if (optimizedMediaStream == null)
+                    {
+                        Log.Info($"Dianoga: {mediaItem.MediaPath} cannot be optimized due to media type or path exclusion", this);
+                        cacheRecord = CreateCacheRecord(media, options, backupMediaStream);
+                    }
+
+                    if (cacheRecord == null)
+                    {
+	                    cacheRecord = CreateCacheRecord(media, options, optimizedMediaStream);
+                    }
+
+                    AddToActiveList(cacheRecord);
+
+                    cacheRecord.Persist();
+
+                    RemoveFromActiveList(cacheRecord);
+                }
+            }
+            catch (Exception ex)
+            {
+	            // this runs in a background thread, and an exception here would cause IIS to terminate the app pool. Bad! So we catch/log, just in case.
+				Log.Error($"Dianoga: Exception occurred on the background thread when optimizing: {mediaItem.MediaPath}", ex, this);
+            }
+            finally
+            {
+				// release resources used by the optimization task
+                originalMediaStream?.Dispose();
+                backupMediaStream?.Dispose();
+                optimizedMediaStream?.Dispose();
+            }
+        }
 
 		// the 'active list' is an internal construct that lets Sitecore stream media to the client at the same time as it's being written to cache
 		// unfortunately though the rest of MediaCache is virtual, these methods are inexplicably not
