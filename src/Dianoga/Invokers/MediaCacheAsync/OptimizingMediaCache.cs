@@ -68,31 +68,37 @@ namespace Dianoga.Invokers.MediaCacheAsync
 			MediaStream originalMediaStream = null;
 			MediaStream backupMediaStream = null;
 			MediaStream optimizedMediaStream = null;
-			
+
 			try
 			{
-				//get stream from mediaItem to reduce memory usage
-				using (var stream = media.GetStream(options))
-				{
-					// make a copy of the stream to use
-					var originalStream = new MemoryStream();
-					stream.CopyTo(originalStream);
-					originalStream.Seek(0, SeekOrigin.Begin);
-
-					originalMediaStream = new MediaStream(originalStream, media.Extension, mediaItem);
-
-					// make a stream backup we can use to persist in the event of an optimization failure
-					// (which will dispose of originalStream)
-					var backupStream = new MemoryStream();
-					originalStream.CopyTo(backupStream);
-					backupStream.Seek(0, SeekOrigin.Begin);
-
-					backupMediaStream = new MediaStream(backupStream, media.Extension, mediaItem);
-				}
-
 				// switch to the right site context (see above)
 				using (new SiteContextSwitcher(currentSite))
 				{
+					//if the image is already optimized, abort task
+					if (this.Contains(media, options))
+					{
+						return;
+					}
+
+					//get stream from mediaItem to reduce memory usage
+					using (var stream = media.GetStream(options))
+					{
+						// make a copy of the stream to use
+						var originalStream = new MemoryStream();
+						stream.CopyTo(originalStream);
+						originalStream.Seek(0, SeekOrigin.Begin);
+
+						originalMediaStream = new MediaStream(originalStream, media.Extension, mediaItem);
+
+						// make a stream backup we can use to persist in the event of an optimization failure
+						// (which will dispose of originalStream)
+						var backupStream = new MemoryStream();
+						originalStream.CopyTo(backupStream);
+						backupStream.Seek(0, SeekOrigin.Begin);
+
+						backupMediaStream = new MediaStream(backupStream, media.Extension, mediaItem);
+					}
+
 					MediaCacheRecord cacheRecord = null;
 
 					optimizedMediaStream = _optimizer.Process(originalMediaStream, options);
