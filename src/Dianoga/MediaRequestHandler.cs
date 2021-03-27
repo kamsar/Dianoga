@@ -8,7 +8,7 @@ namespace Dianoga
 	{
 		protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
 		{
-			if (context?.Request.QueryString?["extension"] == "webp" || (!Helpers.CdnEnabled && context.BrowserSupportsWebP()))
+			if ((context?.Request.QueryString?["extension"]?.Contains("webp") ?? false) || (!Helpers.CdnEnabled && context.BrowserSupportsWebP()))
 			{
 				request.Options.CustomOptions["extension"] = "webp";
 			}

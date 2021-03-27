@@ -13,7 +13,7 @@ namespace Dianoga.WebP
 		{
 			var url = base.GetMediaUrl(item, options);
 
-			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
+			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP() && !url.Contains("extension"))
 			{
 				url = WebUtil.AddQueryString(url, "extension", "webp");
 			}
@@ -21,12 +21,12 @@ namespace Dianoga.WebP
 			return url;
 		}
 
-#if NET471
+#if NET471 || NET48
 		public override string GetMediaUrl(MediaItem item, Sitecore.Links.UrlBuilders.MediaUrlBuilderOptions options)
 		{
 			var url = base.GetMediaUrl(item, options);
 
-			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP())
+			if (item.MimeType.StartsWith("image") && HttpContext.Current.BrowserSupportsWebP() && !url.Contains("extension"))
 			{
 				url = WebUtil.AddQueryString(url, "extension", "webp");
 			}
