@@ -16,11 +16,39 @@ namespace Dianoga
 			{
 				return mediaRequestHandlerArgs.Result;
 			}
-			if ((context?.Request.QueryString?["extension"]?.Contains("webp") ?? false) || (!Helpers.CdnEnabled && context.BrowserSupportsWebP()))
-			{
-				mediaRequestHandlerArgs.Request.Options.CustomOptions["extension"] = "webp";
-			}
+
+			AddCustomOptions(context, mediaRequestHandlerArgs);
+
 			return DoProcessRequest(mediaRequestHandlerArgs.Context, mediaRequestHandlerArgs.Request, mediaRequestHandlerArgs.Media);
+		}
+
+		protected virtual void AddCustomOptions(HttpContext context, MediaRequestHandlerArgs mediaRequestHandlerArgs)
+		{
+			var requestExtension = context?.Request.QueryString?["extension"];
+			var supportsWebp = context.BrowserSupportsWebP();
+			var supportsAvif = context.BrowserSupportsAvif();
+			if ((requestExtension?.Contains("webp") ?? false) || 
+				(requestExtension?.Contains("avif") ?? false) || 
+				(!Helpers.CdnEnabled && (supportsWebp || supportsAvif)))
+			{
+				var customExtension = string.Empty;
+				if (supportsWebp && supportsAvif)
+				{
+					customExtension = "webp,avif";
+				}
+				else if (supportsWebp)
+				{
+					customExtension = "webp";
+				}
+				else if (supportsAvif)
+				{
+					customExtension = "avif";
+				}
+				if (!string.IsNullOrEmpty(customExtension))
+				{
+					mediaRequestHandlerArgs.Request.Options.CustomOptions["extension"] = customExtension;
+				}
+			}
 		}
 	}
 }

@@ -34,13 +34,29 @@
 				</processor>
 			</dianogaOptimizeWebP>
 			<dianogaOptimizeJpeg>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJpeg.MozJpegOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/mozjpeg/cjpeg.exe</ExePath>
+					<AdditionalToolArguments>-quality 80</AdditionalToolArguments>
+				</processor>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaAvif.AvifOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/avif/avifenc.exe</ExePath>
+					<AdditionalToolArguments>-s 10</AdditionalToolArguments>
+				</processor>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp/cwebp.exe</ExePath>
 					<AdditionalToolArguments>-preset photo -q 80</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeJpeg>
 			<dianogaOptimizePng>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga" patch:before="processor[1]">
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaPng.PngQuantCliOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/pngquant/pngquant.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
+				</processor>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaAvif.AvifOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/avif/avifenc.exe</ExePath>
+					<AdditionalToolArguments>-s 10</AdditionalToolArguments>
+				</processor>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaWebP.WebPOptimizer, Dianoga">
 					<ExePath>/App_Data/Dianoga Tools/libwebp/cwebp.exe</ExePath>
 					<AdditionalToolArguments>-preset icon</AdditionalToolArguments>
 				</processor>
@@ -52,7 +68,7 @@
 					<DisableResizing>true</DisableResizing>
 				</processor>
 			</dianogaOptimizeGif>
-			
+
 		</pipelines>
 
 		<mediaLibrary>
@@ -73,6 +89,13 @@
 					<prototypes>
 						<media type="Dianoga.WebP.WebPMedia, Dianoga"/>
 					</prototypes>
+				</mediaType>
+				<mediaType name="Avif image" extensions="avif">
+					<mimeType>image/avif</mimeType>
+					<forceDownload>false</forceDownload>
+					<sharedTemplate>system/media/unversioned/image</sharedTemplate>
+					<versionedTemplate>system/media/versioned/image</versionedTemplate>
+					<mediaValidator type="Sitecore.Resources.Media.ImageValidator"/>
 				</mediaType>
 			</mediaTypes>
 			<requestProtection>

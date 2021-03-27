@@ -48,9 +48,9 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 
 				args.OutputStream = optimizedOutputStream;
 
-				if (optimizedOutputStream.Extension == "webp")
+				if (optimizedOutputStream.Extension == "webp" || optimizedOutputStream.Extension == "avif")
 				{
-					// WebP processor has handled everything including resizing
+					// Further processing will fail
 					args.AbortPipeline();
 				}
 			}
