@@ -1,11 +1,11 @@
-﻿using Sitecore;
-using Sitecore.Diagnostics;
-using Sitecore.Resources.Media;
-using Sitecore.Sites;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks.Dataflow;
+using Sitecore;
+using Sitecore.Diagnostics;
+using Sitecore.Resources.Media;
+using Sitecore.Sites;
 
 namespace Dianoga.Invokers.MediaCacheAsync
 {
@@ -27,7 +27,6 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 		public override bool AddStream(Media media, MediaOptions options, MediaStream stream, out MediaStream cachedStream)
 		{
-			/* STOCK METHOD (Decompiled) */
 			Assert.ArgumentNotNull(media, "media");
 			Assert.ArgumentNotNull(options, "options");
 			Assert.ArgumentNotNull(stream, "stream");
@@ -56,6 +55,8 @@ namespace Dianoga.Invokers.MediaCacheAsync
 			// we store the site context because on the background thread: without the Sitecore context saved (on a worker thread), that disables the media cache
 			var currentSite = Context.Site;
 
+
+			// use an action block to ensure only the configured number of threads will try and optimize
 			_actionBlock.Post(() => Optimize(currentSite, media, options));
 
 			return true;

@@ -1,19 +1,14 @@
-﻿using Sitecore.Diagnostics;
+﻿using System;
+using System.Threading.Tasks.Dataflow;
+using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
-using System;
-using System.Threading.Tasks.Dataflow;
 
 namespace Dianoga.Invokers.MediaCacheAsync.Pipelines.Initialize
 {
 	public class MediaCacheReplacer
 	{
-		private int _maxConcurrentThreads = -1;
-		public int MaxConcurrentThreads
-		{
-			get => _maxConcurrentThreads;
-			set => _maxConcurrentThreads = value < 1 ? -1 : value;
-		}
+		private int _maxConcurrentThreads = 1; // Hardcoded to 1 as we can see some concurrency issues with more threads
 
 		public virtual void Process(PipelineArgs args)
 		{
@@ -21,12 +16,12 @@ namespace Dianoga.Invokers.MediaCacheAsync.Pipelines.Initialize
 				action => { action(); },
 				new ExecutionDataflowBlockOptions
 				{
-					MaxDegreeOfParallelism = MaxConcurrentThreads
+					MaxDegreeOfParallelism = _maxConcurrentThreads
 				}
 			);
 
 			MediaManager.Cache = new OptimizingMediaCache(new MediaOptimizer(), actionBlock);
-			Log.Info($"Dianoga: Installed optimizing media cache to provide async optimization with max {MaxConcurrentThreads} concurrent threads.", this);
+			Log.Info($"Dianoga: Installed optimizing media cache to provide async optimization with max {_maxConcurrentThreads} concurrent threads.", this);
 		}
 	}
 }
