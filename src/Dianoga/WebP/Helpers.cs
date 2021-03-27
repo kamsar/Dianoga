@@ -11,12 +11,22 @@ namespace Dianoga.WebP
 
 		public static bool BrowserSupportsWebP(this HttpContext context)
 		{
-			return context?.Request.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/webp");
+			return context?.Request?.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/webp");
 		}
 
 		public static bool BrowserSupportsWebP(this MediaOptions mediaOptions)
 		{
-			return mediaOptions.GetCustomExtension() == "webp";
+			return mediaOptions?.GetCustomExtension()?.Contains("webp") ?? false;
+		}
+
+		public static bool BrowserSupportsAvif(this HttpContext context)
+		{
+			return context?.Request?.AcceptTypes != null && context.Request.AcceptTypes.Contains("image/avif");
+		}
+
+		public static bool BrowserSupportsAvif(this MediaOptions mediaOptions)
+		{
+			return mediaOptions?.GetCustomExtension()?.Contains("avif") ?? false;
 		}
 
 		public static string GetCustomExtension(this MediaOptions mediaOptions)

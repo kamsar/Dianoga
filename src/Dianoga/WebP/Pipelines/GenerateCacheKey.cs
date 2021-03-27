@@ -13,7 +13,8 @@ namespace Dianoga.WebP.Pipelines
 				return;
 
 			var webp = HttpContext.Current.BrowserSupportsWebP();
-			var cacheKey = "_#webp:" + webp;
+			var avif = HttpContext.Current.BrowserSupportsAvif();
+			var cacheKey = "_#webp:" + webp + "_#avif:" + avif;
 			args.CacheKey += cacheKey;
 		}
 	}
