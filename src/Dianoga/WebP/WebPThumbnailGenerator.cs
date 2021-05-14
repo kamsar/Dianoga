@@ -39,7 +39,7 @@ namespace Dianoga.WebP
 				MaxHeight = options.MaxSize.Height
 			};
 			mediaOptions.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(stream.Stream, mediaOptions);
+			var args = new OptimizerArgs(stream.Stream, mediaOptions, stream.MediaItem.MediaPath);
 			CorePipeline.Run("dianogaOptimizeWebP", args);
 
 			if (args.IsOptimized)
