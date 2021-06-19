@@ -152,7 +152,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
 			opts.CustomOptions["extension"] = "webp";
-			var args = new OptimizerArgs(inputStream, opts);
+			var args = new OptimizerArgs(inputStream, opts, imagePath);
 
 			startingSize = args.Stream.Length;
 

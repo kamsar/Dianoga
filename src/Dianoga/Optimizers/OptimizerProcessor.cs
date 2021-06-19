@@ -44,7 +44,7 @@ namespace Dianoga.Optimizers
 				args.IsOptimized = false;
 				args.Stream.Dispose();
 				args.Stream = originalStream;
-				Log.Error($"Dianoga: Unable to optimize due to a processing error! It will be unchanged.", ex, this);
+				Log.Error($"Dianoga: Unable to optimize {args.MediaPath} due to a processing error! It will be unchanged.", ex, this);
 			}
 		}
 
