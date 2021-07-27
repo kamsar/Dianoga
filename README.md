@@ -86,7 +86,7 @@ OR if you use SXA
 
 OR if you have a custom `MediaRequestHandler` then you need to make some changes - see `MediaRequestHandler.cs`
 
-3. If you run Sitecore under CDN: review and enable `Dianoga.WebP.CDN.config.disabled`
+3. If you run Sitecore under CDN: carefully review and enable `Dianoga.WebP.CDN.config.disabled`, and disable `Dianoga.Strategy.GetMediaStreamSync.config`.
 
 
 ## Upgrade
