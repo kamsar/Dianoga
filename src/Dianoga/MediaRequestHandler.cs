@@ -8,9 +8,31 @@ namespace Dianoga
 	{
 		protected override bool DoProcessRequest(HttpContext context, MediaRequest request, Media media)
 		{
-			if ((context?.Request.QueryString?["extension"]?.Contains("webp") ?? false) || (!Helpers.CdnEnabled && context.BrowserSupportsWebP()))
+			var supportsWebp = context.BrowserSupportsWebP();
+			var supportsAvif = context.BrowserSupportsAvif();
+			var requestExtension = context?.Request.QueryString?["extension"];
+
+			if ((requestExtension?.Contains("webp") ?? false) ||
+			    (requestExtension?.Contains("avif") ?? false) ||
+			    (!Helpers.CdnEnabled && (supportsWebp || supportsAvif)))
 			{
-				request.Options.CustomOptions["extension"] = "webp";
+				var customExtension = string.Empty;
+				if (supportsWebp && supportsAvif)
+				{
+					customExtension = "webp,avif";
+				}
+				else if (supportsWebp)
+				{
+					customExtension = "webp";
+				}
+				else if (supportsAvif)
+				{
+					customExtension = "avif";
+				}
+				if (!string.IsNullOrEmpty(customExtension))
+				{
+					request.Options.CustomOptions["extension"] = customExtension;
+				}
 			}
 
 			return base.DoProcessRequest(context, request, media);
