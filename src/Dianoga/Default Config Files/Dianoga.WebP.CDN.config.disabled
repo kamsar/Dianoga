@@ -3,9 +3,6 @@
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/" xmlns:set="http://www.sitecore.net/xmlconfig/set/">
 	<sitecore>
-		<settings>
-			<setting name="Dianoga.CDN.Enabled" value="true"/>
-		</settings>
 		<pipelines>
 			<!-- Run the Sync processor first so that no other Sitecore processors are run for webp -->
 			<getMediaStream>
@@ -18,13 +15,5 @@
 					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" />
 			</mvc.renderRendering>
 		</pipelines>
-	
-		<mediaLibrary>
-			<!-- Add query string "extension=webp" to media links if the browser supports it for a unique CDN cache key. -->
-			<mediaProvider 
-				type="Dianoga.WebP.MediaProvider, Dianoga"
-				patch:instead="mediaProvider[@type='Sitecore.Resources.Media.MediaProvider, Sitecore.Kernel']"/>
-		</mediaLibrary>
-
 	</sitecore>
 </configuration>
