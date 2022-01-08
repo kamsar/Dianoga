@@ -67,14 +67,14 @@
 					<versionedTemplate>system/media/versioned/image</versionedTemplate>
 					<mediaValidator type="Sitecore.Resources.Media.ImageValidator"/>
 					<thumbnails>
-						<generator type="Dianoga.WebP.WebPThumbnailGenerator, Dianoga">
+						<generator type="Dianoga.NextGenFormats.WebP.WebPThumbnailGenerator, Dianoga">
 							<extension>webp</extension>
 						</generator>
 						<width>150</width>
 						<height>150</height>
 					</thumbnails>
 					<prototypes>
-						<media type="Dianoga.WebP.WebPMedia, Dianoga"/>
+						<media type="Dianoga.NextGenFormats.WebP.WebPMedia, Dianoga"/>
 					</prototypes>
 				</mediaType>
 				<mediaType name="Avif image" extensions="avif">

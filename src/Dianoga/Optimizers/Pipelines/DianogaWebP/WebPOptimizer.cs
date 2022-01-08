@@ -1,5 +1,4 @@
 ﻿using Dianoga.NextGenFormats;
-using Dianoga.WebP;
 
 namespace Dianoga.Optimizers.Pipelines.DianogaWebP
 {

@@ -1,6 +1,6 @@
 ﻿using Sitecore.Resources.Media;
 
-namespace Dianoga.WebP
+namespace Dianoga.NextGenFormats.WebP
 {
 	public class WebPMedia : ImageMedia
 	{
