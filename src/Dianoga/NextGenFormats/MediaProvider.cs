@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System.Web;
 using Sitecore.Data.Items;
-using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
 using Sitecore.Web;
 
@@ -33,19 +31,12 @@ namespace Dianoga.NextGenFormats
 
 		protected virtual string GetMediaUrl(MediaItem item, string url)
 		{
+			var helpers = new Helpers();
 			if (item.MimeType.StartsWith("image") && !url.Contains("extension"))
 			{
-				var acceptTypes = HttpContext.Current?.Request?.AcceptTypes ?? new string[]{};
-				if (acceptTypes.Any())
+				var extensions = helpers.GetSupportedFormats(new HttpContextWrapper(HttpContext.Current));
+				if (string.IsNullOrEmpty(extensions))
 				{
-					var nextGenFormats = new SupportedFormatsArgs()
-					{
-						Input = string.Join(",", acceptTypes),
-						Suffix = "image/"
-					};
-					CorePipeline.Run("dianogaGetSupportedFormats", nextGenFormats);
-
-					var extensions = string.Join(",", nextGenFormats.Extensions);
 					return WebUtil.AddQueryString(url, "extension", extensions);
 				}
 			}

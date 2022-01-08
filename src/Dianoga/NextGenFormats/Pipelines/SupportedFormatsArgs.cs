@@ -11,6 +11,6 @@ namespace Dianoga.NextGenFormats
 		}
 		public Set<string> Extensions { get; set; }
 		public string Input { get; set; }
-		public string Suffix { get; set; }
+		public string Prefix { get; set; }
 	}
 }

@@ -10,7 +10,7 @@
 
 		public void Process(SupportedFormatsArgs args)
 		{
-			var supports = args.Input.Contains($"{args.Suffix}{Extension}"); ;
+			var supports = args.Input.Contains($"{args.Prefix}{Extension}"); ;
 			if (supports)
 			{
 				args.Extensions.Add(Extension);

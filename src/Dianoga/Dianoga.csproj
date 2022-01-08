@@ -92,8 +92,15 @@
 		<None Remove="Default Config Files\Dianoga.TempFilePath.config.example" />
 		<None Remove="Default Config Files\Dianoga.WebP.CDN.config.disabled" />
 		<None Remove="Dianoga Tools\libwebp\COPYING.txt" />
+		<None Remove="WebP\Helpers.cs.bak" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Include="WebP\Helpers.cs.bak" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="NextGenFormats\Avif\" />
+	  <Folder Include="NextGenFormats\JpegXL\" />
+	  <Folder Include="NextGenFormats\WebP\Pipelines\" />
 	  <Folder Include="Processors\Pipelines\NewFolder\" />
 	</ItemGroup>
 </Project>
