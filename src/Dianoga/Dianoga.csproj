@@ -83,19 +83,4 @@
 		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
 		<Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Remove="Default Config Files\Dianoga.NextGenFormats.CDN.config.disabled" />
-		<None Remove="Default Config Files\Dianoga.NextGenFormats.config" />
-		<None Remove="Default Config Files\Dianoga.TempFilePath.config.example" />
-		<None Remove="Default Config Files\z.01.Dianoga.NextGenFormats.WebP.config.disabled" />
-		<None Remove="Default Config Files\z.02.Dianoga.NextGenFormats.Avif.config.disabled" />
-		<None Remove="Default Config Files\z.03.Dianoga.NextGenFormats.JpegXL.config" />
-		<None Remove="Dianoga Tools\libwebp\COPYING.txt" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="NextGenFormats\Avif\" />
-	  <Folder Include="NextGenFormats\JpegXL\" />
-	  <Folder Include="NextGenFormats\WebP\Pipelines\" />
-	  <Folder Include="Processors\Pipelines\NewFolder\" />
-	</ItemGroup>
 </Project>
