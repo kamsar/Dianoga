@@ -7,7 +7,7 @@
 		<pipelines>
 			<dianogaGetSupportedFormats>
 				<processor type="Dianoga.NextGenFormats.Pipelines.DianogaGetSupportedFormats.CheckSupport, Dianoga" desc="avif">
-					<Extensions>avif</Extensions>
+					<Extension>avif</Extension>
 				</processor>
 			</dianogaGetSupportedFormats>
 
@@ -15,7 +15,7 @@
 				<processor
 					type="Dianoga.NextGenFormats.Pipelines.GenerateCacheKey, Dianoga"
 					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" desc="avif">
-					<Extensions>avif</Extensions>
+					<Extension>avif</Extension>
 				</processor>
 			</mvc.renderRendering>
 

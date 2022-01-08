@@ -1,9 +1,8 @@
 ﻿using System.Web;
-using Dianoga.NextGenFormats;
 using Sitecore.Diagnostics;
 using Sitecore.Mvc.Pipelines.Response.RenderRendering;
 
-namespace Dianoga.WebP.Pipelines
+namespace Dianoga.NextGenFormats.Pipelines
 {
 	public class GenerateCacheKey : RenderRenderingProcessor
 	{

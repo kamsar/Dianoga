@@ -7,7 +7,7 @@
 		<pipelines>
 			<dianogaGetSupportedFormats>
 				<processor type="Dianoga.NextGenFormats.Pipelines.DianogaGetSupportedFormats.CheckSupport, Dianoga" desc="webp">
-					<Extensions>webp</Extensions>
+					<Extension>webp</Extension>
 				</processor>
 			</dianogaGetSupportedFormats>
 
@@ -15,7 +15,7 @@
 				<processor
 					type="Dianoga.NextGenFormats.Pipelines.GenerateCacheKey, Dianoga"
 					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" desc="webp">
-					<Extensions>webp</Extensions>
+					<Extension>webp</Extension>
 				</processor>
 			</mvc.renderRendering>
 
