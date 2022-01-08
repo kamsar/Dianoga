@@ -20,9 +20,14 @@ namespace Dianoga.NextGenFormats
 			}
 		}
 
-		public static bool CheckSupportedFormat(this HttpContextBase context, string extension)
+		public static bool CheckSupportOfExtension(this HttpContextBase context, string extension)
 		{
 			return Helpers.CheckSupportedFormat(context, extension);
+		}
+
+		public static bool CheckSupportOfExtension(this MediaOptions mediaOptions, string extension)
+		{
+			return Helpers.CheckSupportedFormat(mediaOptions?.CustomOptions["extension"], extension);
 		}
 	}
 }

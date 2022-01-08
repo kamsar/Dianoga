@@ -28,7 +28,7 @@ namespace Dianoga.NextGenFormats
 
 		public virtual bool CheckSupportedFormat(string input, string extension)
 		{
-			return input.Contains(extension);
+			return input?.Contains(extension) ?? false;
 		}
 
 		public virtual string GetCustomOptions(HttpContextBase context)

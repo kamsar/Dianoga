@@ -1,19 +1,20 @@
-﻿using Dianoga.WebP;
+﻿using Dianoga.NextGenFormats;
 
 namespace Dianoga.Optimizers.Pipelines.DianogaAvif
 {
 	public class AvifOptimizer : CommandLineToolOptimizer
 	{
+		public readonly string Extension = "avif";
 
 		public override void Process(OptimizerArgs args)
 		{
-			if (args.MediaOptions.BrowserSupportsAvif())
+			if (args.MediaOptions.CheckSupportOfExtension(Extension))
 			{
 				base.Process(args);
 
 				if (args.IsOptimized)
 				{
-					args.Extension = "avif";
+					args.Extension = Extension;
 
 					//If avif optimization was executed then abort running other optimizers
 					//because they don't accept avif input file format
