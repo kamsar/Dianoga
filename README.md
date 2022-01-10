@@ -17,7 +17,11 @@ Dianoga supports:
 * PNGs (via PNGOptimizer - lossless / pngquant - lossy)
 * SVGs (via SVGO - lossless, and automatic gzipping of SVG media responses)
 * WebP (via cwebp - lossless or lossy)
+* Avif (via avifenc - lossless or lossy)
+* JPEG XL (via cjxl - lossless or lossy)
 * Auto convert JPEG/PNG/GIF to WebP based on browser support
+* Auto convert JPEG/PNG to Avif based on browser support
+* Auto convert JPEG/PNG/GIF to JPEG XL (jxl) based on browser support
 
 Additional format support is possible to add via new processors in the `dianogaOptimize` pipeline.
 
@@ -63,30 +67,72 @@ To perform a manual installation:
 If you are enabling the SVGO optimiser, you'll also need the [Dianoga.svgtools](https://www.nuget.org/packages/Dianoga.svgtools) NuGet package.
 This is simply a prepackaged compiled version of SVGO called SVGOP from [here](https://github.com/twardoch/svgop).
 
-## WebP feature
+## Next-gen Formats Support
 
-WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). [All evergreen browsers except Safari currently support WebP](https://caniuse.com/#feat=webp). By default WebP optimization is disabled since you need to do some due diligence around reviewing configs, how it works, and importantly if you are using a CDN you need to do some extra steps.
+Next-gen images use formats with superior compression and quality characteristics compared to their GIF, JPEG, and PNG ancestors. These image formats support advanced features designed to take up less data while maintaining a high quality level, making them perfect for web use. 
 
-### How WebP optimization works:
-Browser sends request to server to get image. If browser supports WebP image format then it sends "image/webp" value in Accept header. It is possible to detect this header on server and return WebP image to browser instead of JPEG or PNG. If browser doesn't support WebP then other image optimizers are executed if they are enabled.
+### How Next-gen Formats Optimization Works:
 
-### How to enable WebP support:
-1. Enable `Dianoga.WebP.config.disabled` config and adjust any parameters if you require lossless or higher quality than the default
-2. Open web.config and change line
+Browser sends request to server to get image. It sends list of accepted image formats in the `Accept` header, e.g. it can be `image/avif,image/webp,image/apng,image/*,*/*;q=0.8`. Presence of `image/webp` means that this browser supports `WebP` image format. Absense of `image/jxl` means that this browser does not support `JPEG XL` format. It is possible to check this header on server side and return `WebP` format image to browser instead of `JPEG`, `PNG` or `GIF`. If browser doesn't support any next-gen formats then other image optimizers are executed if they are enabled.
+
+### How to Enable Next-gen Formats Support:
+
+1. Open web.config and change line
 
 `<add verb="*" path="sitecore_media.ashx" type="Sitecore.Resources.Media.MediaRequestHandler, Sitecore.Kernel" name="Sitecore.MediaRequestHandler" />`
 
 to
 
-`<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
+`<add verb="*" path="sitecore_media.ashx" type="Dianoga.NextGenFormats.MediaRequestHandler, Dianoga" name="Sitecore.MediaRequestHandler" />`
 
 OR if you use SXA
 
-`<add verb="*" path="sitecore_media.ashx" type="Dianoga.MediaRequestHandlerXA, Dianoga" name="Sitecore.MediaRequestHandler" />`
+`<add verb="*" path="sitecore_media.ashx" type="Dianoga.NextGenFormats.MediaRequestHandlerXA, Dianoga" name="Sitecore.MediaRequestHandler" />`
 
 OR if you have a custom `MediaRequestHandler` then you need to make some changes - see `MediaRequestHandler.cs`
 
-3. If you run Sitecore under CDN: carefully review and enable `Dianoga.WebP.CDN.config.disabled`, and disable `Dianoga.Strategy.GetMediaStreamSync.config`.
+2. If you run Sitecore under CDN: review and enable `Dianoga.NextGenFormats.CDN.config.disabled`. It will add `?extension=<list of supported extensions>` query parameter to all images present on your pages.
+
+3. Enable any next-gen formats configuration files that you want. e.g.: `z.01.Dianoga.NextGenFormats.WebP.config.disabled`, `z.02.Dianoga.NextGenFormats.Avif.config.disabled`, `z.03.Dianoga.NextGenFormats.Jxl.config.disabled`
+
+4. Review files that you have enabled and adjust any parameters if you require lossless or higher quality than the default
+
+5. Adjust order of next-gen formats configuration files. 
+
+WebP, Avif and JPEG XL formats are not convertable to each other. Dianoga works with file stream and сonsistently converts file stream using optimizers. 
+e.g. JPEG > mozjpeg > Avif. Once stream is converted to one next-gen format it could not be easily reconverted to another format, e.g. Avif <=> WebP, because current encoders doesn't support it. 
+
+Configuration files should be applied in **reversed** priority order. The first format should be applied in last confiration file.
+
+E.g. We want to support all JPEG XL, Avif and WebP in next priority 1. JPEG XL 2. Avif 3. WebP. If browser supports JPEG XL then try to use it. If browser doesn't support JPEG XL then check if browser support Avif and try to use it. If browser doesn't support both JPEG XL and Avif then check if browser supports WebP and try to use it.
+
+Then next-gen configuration file names should have prefixes to put files in the proper order: **z.01**.Dianoga.NextGenFormats.WebP.config.disabled, **z.02**.Dianoga.NextGenFormats.Avif.config.disabled, **z.03**.Dianoga.NextGenFormats.Jxl.config.disabled
+
+### Next-gen formats list
+
+#### WebP
+
+WebP is is an image format employing both lossy and lossless compression. It is currently developed by Google, based on technology acquired with the purchase of On2 Technologies. WebP file size is [25%-34% smaller compared to JPEG file size](https://developers.google.com/speed/webp/docs/webp_study) and  [26% smaller for PNG](https://developers.google.com/speed/webp/docs/webp_lossless_alpha_study). [All evergreen browsers except Safari currently support WebP](https://caniuse.com/#feat=webp). 
+
+By default WebP optimization is disabled since you need to do some due diligence around reviewing configs, how it works, and importantly if you are using a CDN you need to do some extra steps.
+
+If you want to enable usage of `WebP` format, please rename `z.01.Dianoga.NextGenFormats.WebP.config.disabled` to `z.01.Dianoga.NextGenFormats.WebP.config`
+
+#### Avif
+
+Avif is a modern image format based on the AV1 video format. AVIF generally has better compression than WebP, JPEG, PNG and GIF and is designed to supersede them. AVIF competes with JPEG XL which has worse support, similar compression quality and is generally seen as more feature-rich than AVIF. [Avif is supported by Chrome and Firefox browsers](https://caniuse.com/#feat=avif).
+
+By default Avif optimization is disabled since you need to do some due diligence around reviewing configs, how it works, and importantly if you are using a CDN you need to do some extra steps.
+
+If you want to enable usage of `Avif` format, please rename `z.02.Dianoga.NextGenFormats.Avif.config.disabled` to `z.02.Dianoga.NextGenFormats.Avif.config`
+
+#### JPEG XL
+
+JPEG XL is a modern image format optimized for web environments. JPEG XL generally has better compression than WebP, JPEG, PNG and GIF and is designed to supersede them. JPEG XL competes with AVIF which has better support, similar compression quality but fewer features overall. JPEG XL is not supported yet by modern browsers. [But support could be enabled via flags in Chrome, Firefox, Opera and Edge](https://caniuse.com/?search=jpeg%20xl). 
+
+By default JPEG XL optimization is disabled since you need to do some due diligence around reviewing configs, how it works, and importantly if you are using a CDN you need to do some extra steps.
+
+If you want to enable usage of `JPEG XL` format, please rename `z.03.Dianoga.NextGenFormats.Jxl.config.disabled` to `z.02.Dianoga.NextGenFormats.Jxl.config`
 
 
 ## Upgrade

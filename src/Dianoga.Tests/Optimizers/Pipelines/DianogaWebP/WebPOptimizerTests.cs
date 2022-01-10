@@ -141,14 +141,16 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaWebP
 		{
 			var inputStream = new MemoryStream();
 
-			using (var testJpeg = File.OpenRead(imagePath))
+			using (var inputFileStream = File.OpenRead(imagePath))
 			{
-				testJpeg.CopyTo(inputStream);
+				inputFileStream.CopyTo(inputStream);
 			}
 
-			var sut = new WebPOptimizer();
-			sut.ExePath = exePath;
-			sut.AdditionalToolArguments = exeArgs;
+			var sut = new WebPOptimizer
+			{
+				ExePath = exePath, 
+				AdditionalToolArguments = exeArgs
+			};
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
 			opts.CustomOptions["extension"] = "webp";

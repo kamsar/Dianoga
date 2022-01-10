@@ -1,0 +1,39 @@
+﻿<!--
+	Configures Dianoga to optimize images using avif format
+	By default if browser will sent "image/avif" in accept header then avifenc optimizer will be used.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaGetSupportedFormats>
+				<processor type="Dianoga.NextGenFormats.Pipelines.DianogaGetSupportedFormats.CheckSupport, Dianoga" desc="avif">
+					<Extension>avif</Extension>
+				</processor>
+			</dianogaGetSupportedFormats>
+
+			<mvc.renderRendering>
+				<processor
+					type="Dianoga.NextGenFormats.Pipelines.GenerateCacheKey, Dianoga"
+					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" desc="avif">
+					<Extension>avif</Extension>
+				</processor>
+			</mvc.renderRendering>
+
+			<dianogaOptimizeJpeg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaAvif.AvifOptimizer, Dianoga"
+				           patch:after="processor[@type='Dianoga.Optimizers.Pipelines.DianogaJpeg.MozJpegOptimizer, Dianoga']">
+					<ExePath>/App_Data/Dianoga Tools/avif/avifenc.exe</ExePath>
+					<AdditionalToolArguments>-s 10</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJpeg>
+
+			<dianogaOptimizePng>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaAvif.AvifOptimizer, Dianoga"
+				    patch:after="processor[@type='Dianoga.Optimizers.Pipelines.DianogaPng.PngQuantCliOptimizer, Dianoga']">
+					<ExePath>/App_Data/Dianoga Tools/avif/avifenc.exe</ExePath>
+					<AdditionalToolArguments>-s 10</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizePng>
+		</pipelines>
+	</sitecore>
+</configuration>
