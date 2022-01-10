@@ -168,7 +168,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaJxl
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
 			opts.CustomOptions["extension"] = "jxl";
-			var args = new OptimizerArgs(inputStream, opts);
+			var args = new OptimizerArgs(inputStream, opts, imagePath);
 
 			startingSize = args.Stream.Length;
 

@@ -112,7 +112,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaAvif
 
 			var opts = new Sitecore.Resources.Media.MediaOptions();
 			opts.CustomOptions["extension"] = "avif";
-			var args = new OptimizerArgs(inputStream, opts);
+			var args = new OptimizerArgs(inputStream, opts, imagePath);
 
 			startingSize = args.Stream.Length;
 
@@ -124,5 +124,6 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaAvif
 
 			argsOut = args;
 		}
+
 	}
 }
