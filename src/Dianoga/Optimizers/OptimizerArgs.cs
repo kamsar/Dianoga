@@ -14,15 +14,18 @@ namespace Dianoga.Optimizers
 
 		public string Extension { get; set; }
 
+		public string MediaPath { get; set; }
+
 		public OptimizerArgs(Stream inputStream)
 		{
 			IsOptimized = false;
 			Stream = inputStream;
 		}
 
-		public OptimizerArgs(Stream inputStream, MediaOptions options) : this(inputStream)
+		public OptimizerArgs(Stream inputStream, MediaOptions options, string mediaPath) : this(inputStream)
 		{
 			MediaOptions = options;
+			MediaPath = mediaPath;
 		}
 	}
 }

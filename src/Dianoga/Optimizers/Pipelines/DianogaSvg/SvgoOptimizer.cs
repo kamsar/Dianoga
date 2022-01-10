@@ -31,7 +31,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 				toolProcess.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 
 #if DEBUG
-				Sitecore.Diagnostics.Log.Info($"\"{ExePath} {AdditionalToolArguments}\"", this);
+				DianogaLog.Info($"\"{ExePath} {AdditionalToolArguments}\"");
 #endif
 
 				try

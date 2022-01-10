@@ -41,7 +41,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 			if (!stream.Stream.CanRead)
 			{
-				Log.Warn($"Cannot optimize {media.MediaData.MediaItem.MediaPath} because cache was passed a non readable stream.", this);
+				DianogaLog.Warn($"Cannot optimize {media.MediaData.MediaItem.MediaPath} because cache was passed a non readable stream.");
 				return false;
 			}
 
@@ -57,12 +57,12 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 
 			// use an action block to ensure only the configured number of threads will try and optimize
-			_actionBlock.Post(() => Optimize(currentSite, media, options));
+			_actionBlock.Post(() => Optimize(currentSite, media, options, stream));
 
 			return true;
 		}
 
-		private void Optimize(SiteContext currentSite, Media media, MediaOptions options)
+		private void Optimize(SiteContext currentSite, Media media, MediaOptions options, MediaStream stream)
 		{
 			var mediaItem = media.MediaData.MediaItem;
 
@@ -82,14 +82,14 @@ namespace Dianoga.Invokers.MediaCacheAsync
 					}
 
 					//get stream from mediaItem to reduce memory usage
-					using (var stream = media.GetStream(options))
+					using (var mediaItemStream = media.GetStream(options))
 					{
 						// make a copy of the stream to use
 						var originalStream = new MemoryStream();
-						stream.CopyTo(originalStream);
+						mediaItemStream.CopyTo(originalStream);
 						originalStream.Seek(0, SeekOrigin.Begin);
 
-						originalMediaStream = new MediaStream(originalStream, media.Extension, mediaItem);
+						originalMediaStream = new MediaStream(originalStream, stream.Extension, mediaItem);
 
 						// make a stream backup we can use to persist in the event of an optimization failure
 						// (which will dispose of originalStream)
@@ -97,7 +97,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 						originalStream.CopyTo(backupStream);
 						backupStream.Seek(0, SeekOrigin.Begin);
 
-						backupMediaStream = new MediaStream(backupStream, media.Extension, mediaItem);
+						backupMediaStream = new MediaStream(backupStream, stream.Extension, mediaItem);
 					}
 
 					MediaCacheRecord cacheRecord = null;
@@ -106,7 +106,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 					if (optimizedMediaStream == null)
 					{
-						Log.Info($"Dianoga: {mediaItem.MediaPath} cannot be optimized due to media type or path exclusion", this);
+						DianogaLog.Info($"Dianoga: {mediaItem.MediaPath} cannot be optimized due to media type or path exclusion");
 						cacheRecord = CreateCacheRecord(media, options, backupMediaStream);
 					}
 
@@ -125,7 +125,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 			catch (Exception ex)
 			{
 				// this runs in a background thread, and an exception here would cause IIS to terminate the app pool. Bad! So we catch/log, just in case.
-				Log.Error($"Dianoga: Exception occurred on the background thread when optimizing: {mediaItem.MediaPath}", ex, this);
+				DianogaLog.Error($"Dianoga: Exception occurred on the background thread when optimizing: {mediaItem.MediaPath}", ex);
 			}
 			finally
 			{
@@ -144,7 +144,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 			if (baseMethod != null)
 				baseMethod.Invoke(this, new object[] { record });
-			else Log.Error("Dianoga: Couldn't use malevolent private reflection on AddToActiveList! This may mean Dianoga isn't entirely compatible with this version of Sitecore, though it should only affect a performance optimization.", this);
+			else DianogaLog.Error("Dianoga: Couldn't use malevolent private reflection on AddToActiveList! This may mean Dianoga isn't entirely compatible with this version of Sitecore, though it should only affect a performance optimization.");
 
 			// HEY SITECORE, CAN WE GET THESE VIRTUAL? KTHX.
 		}
@@ -155,7 +155,7 @@ namespace Dianoga.Invokers.MediaCacheAsync
 
 			if (baseMethod != null)
 				baseMethod.Invoke(this, new object[] { record });
-			else Log.Error("Dianoga: Couldn't use malevolent private reflection on RemoveFromActiveList! This may mean Dianoga isn't entirely compatible with this version of Sitecore, though it should only affect a performance optimization.", this);
+			else DianogaLog.Error("Dianoga: Couldn't use malevolent private reflection on RemoveFromActiveList! This may mean Dianoga isn't entirely compatible with this version of Sitecore, though it should only affect a performance optimization.");
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace Dianoga.Invokers.GetMediaStreamSync
 			else
 			{
 				var mediaPath = outputStream.MediaItem.MediaPath;
-				Log.Info($"Dianoga: {mediaPath} cannot be optimized due to media type or path exclusion", this);
+				DianogaLog.Info($"Dianoga: {mediaPath} cannot be optimized due to media type or path exclusion");
 			}
 		}
 	}

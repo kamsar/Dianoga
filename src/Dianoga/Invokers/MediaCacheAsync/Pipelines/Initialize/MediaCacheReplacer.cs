@@ -21,7 +21,7 @@ namespace Dianoga.Invokers.MediaCacheAsync.Pipelines.Initialize
 			);
 
 			MediaManager.Cache = new OptimizingMediaCache(new MediaOptimizer(), actionBlock);
-			Log.Info($"Dianoga: Installed optimizing media cache to provide async optimization with max {_maxConcurrentThreads} concurrent threads.", this);
+			DianogaLog.Info($"Dianoga: Installed optimizing media cache to provide async optimization with max {_maxConcurrentThreads} concurrent threads.");
 		}
 	}
 }

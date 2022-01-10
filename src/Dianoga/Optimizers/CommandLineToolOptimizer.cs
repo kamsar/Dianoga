@@ -14,7 +14,7 @@ namespace Dianoga.Optimizers
 	{
 		private string _pathToExe;
 
-		private string _additionalToolArguments;		
+		private string _additionalToolArguments;
 
 		public virtual string ExePath
 		{
@@ -130,7 +130,7 @@ namespace Dianoga.Optimizers
 		{
 
 #if DEBUG
-			Sitecore.Diagnostics.Log.Info($"\"{ExePath} {arguments}\"", this);
+			DianogaLog.Info($"\"{ExePath} {arguments}\"");
 #endif
 
 			using (var process = new Process())
