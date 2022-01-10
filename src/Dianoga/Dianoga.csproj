@@ -83,9 +83,4 @@
 		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
 		<Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
 	</ItemGroup>
-	<ItemGroup>
-		<None Remove="Default Config Files\Dianoga.TempFilePath.config.example" />
-		<None Remove="Default Config Files\Dianoga.WebP.CDN.config.disabled" />
-		<None Remove="Dianoga Tools\libwebp\COPYING.txt" />
-	</ItemGroup>
 </Project>

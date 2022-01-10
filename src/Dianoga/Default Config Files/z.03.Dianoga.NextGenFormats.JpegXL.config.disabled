@@ -1,0 +1,61 @@
+﻿<!--
+	Configures Dianoga to optimize images using JpegXL format
+	By default if browser will sent "image/jxl" in accept header then JpegXL optimizer will be used.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<pipelines>
+			<dianogaGetSupportedFormats>
+				<processor type="Dianoga.NextGenFormats.Pipelines.DianogaGetSupportedFormats.CheckSupport, Dianoga" desc="jxl">
+					<Extension>jxl</Extension>
+				</processor>
+			</dianogaGetSupportedFormats>
+
+			<mvc.renderRendering>
+				<processor
+					type="Dianoga.NextGenFormats.Pipelines.GenerateCacheKey, Dianoga"
+					patch:after="processor[@type='Sitecore.Mvc.Pipelines.Response.RenderRendering.GenerateCacheKey, Sitecore.Mvc']" desc="jxl">
+					<Extension>jxl</Extension>
+				</processor>
+			</mvc.renderRendering>
+
+			<dianogaOptimize>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="jxl">
+					<Extensions>jxl</Extensions>
+					<Pipeline>dianogaOptimizeJxl</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+			<dianogaOptimizeJxl>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
+					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJxl>
+
+			<dianogaOptimizeJpeg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga"
+				           patch:after="processor[@type='Dianoga.Optimizers.Pipelines.DianogaJpeg.MozJpegOptimizer, Dianoga']">
+					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
+					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeJpeg>
+
+			<dianogaOptimizePng>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga"
+				           patch:after="processor[@type='Dianoga.Optimizers.Pipelines.DianogaPng.PngQuantCliOptimizer, Dianoga']">
+					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
+					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizePng>
+
+			<dianogaOptimizeGif>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga"
+				           patch:before="processor[1]">
+					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
+					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeGif>
+		</pipelines>
+	</sitecore>
+</configuration>

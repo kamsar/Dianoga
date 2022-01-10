@@ -1,10 +1,11 @@
 ﻿using Dianoga.NextGenFormats;
 
-namespace Dianoga.Optimizers.Pipelines.DianogaAvif
+namespace Dianoga.Optimizers.Pipelines.DianogaJxl
 {
-	public class AvifOptimizer : CommandLineToolOptimizer
+	public class JxlOptimizer : CommandLineToolOptimizer
 	{
-		public readonly string Extension = "avif";
+		public readonly string Extension = "jxl";
+		public bool DisableResizing { get; set; }
 
 		public override void Process(OptimizerArgs args)
 		{
@@ -16,8 +17,8 @@ namespace Dianoga.Optimizers.Pipelines.DianogaAvif
 				{
 					args.Extension = Extension;
 
-					//If avif optimization was executed then abort running other optimizers
-					//because they don't accept avif input file format
+					//If Jpeg-XL optimization was executed then abort running other optimizers
+					//because they don't accept jxl input file format
 					args.AbortPipeline();
 				}
 			}
@@ -25,7 +26,7 @@ namespace Dianoga.Optimizers.Pipelines.DianogaAvif
 
 		protected override string CreateToolArguments(string tempFilePath, string tempOutputPath)
 		{
-			return $"\"{tempFilePath}\" -o \"{tempOutputPath}\" ";
+			return $"\"{tempFilePath}\" \"{tempOutputPath}\" ";
 		}
 	}
 }

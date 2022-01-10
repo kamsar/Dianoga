@@ -3,7 +3,7 @@ using Sitecore.Diagnostics;
 using Sitecore.Pipelines;
 using Sitecore.Resources.Media;
 
-namespace Dianoga.WebP
+namespace Dianoga.NextGenFormats.WebP
 {
 	public class WebPThumbnailGenerator : ThumbnailGenerator
 	{

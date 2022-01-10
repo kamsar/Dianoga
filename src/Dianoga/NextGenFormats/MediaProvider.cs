@@ -3,7 +3,7 @@ using Sitecore.Data.Items;
 using Sitecore.Resources.Media;
 using Sitecore.Web;
 
-namespace Dianoga.WebP
+namespace Dianoga.NextGenFormats
 {
 #pragma warning disable CS0612 // Type or member is obsolete
 	public class MediaProvider : Sitecore.Resources.Media.MediaProvider
@@ -31,26 +31,13 @@ namespace Dianoga.WebP
 
 		protected virtual string GetMediaUrl(MediaItem item, string url)
 		{
+			var helpers = new Helpers();
 			if (item.MimeType.StartsWith("image") && !url.Contains("extension"))
 			{
-				var queryStringExtension = string.Empty;
-				var supportsWebp = HttpContext.Current.BrowserSupportsWebP();
-				var supportsAvif = HttpContext.Current.BrowserSupportsAvif();
-				if (supportsWebp && supportsAvif)
+				var extensions = helpers.GetSupportedFormats(new HttpContextWrapper(HttpContext.Current));
+				if (string.IsNullOrEmpty(extensions))
 				{
-					queryStringExtension = "webp,avif";
-				}
-				else if (supportsWebp)
-				{
-					queryStringExtension = "webp";
-				}
-				else if (supportsAvif)
-				{
-					queryStringExtension = "avif";
-				}
-				if (!string.IsNullOrEmpty(queryStringExtension))
-				{
-					return WebUtil.AddQueryString(url, "extension", queryStringExtension);
+					return WebUtil.AddQueryString(url, "extension", extensions);
 				}
 			}
 			return url;
