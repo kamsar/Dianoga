@@ -4,7 +4,7 @@
 		<TargetFrameworks>net452;net462;net471;net48</TargetFrameworks>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Description>Automatic media library image file optimization for Sitecore</Description>
-		<Version>5.4.1</Version>
+		<Version>6.0.0-beta.1</Version>
 		<Authors>Kam Figy, Mark Gibbons</Authors>
 		<PackageProjectUrl>https://github.com/kamsar/Dianoga</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -82,9 +82,5 @@
 	<ItemGroup>
 		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
 		<Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Remove="Default Config Files\Dianoga.TempFilePath.config.example" />
-		<None Remove="Default Config Files\Dianoga.WebP.CDN.config.disabled" />
 	</ItemGroup>
 </Project>
