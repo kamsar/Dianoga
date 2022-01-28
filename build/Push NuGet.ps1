@@ -1,0 +1,1 @@
+gci *.nupkg -exclude *.symbols.nupkg | % { ..\tools\NuGet.exe push $_ -Source https://api.nuget.org/v3/index.json }

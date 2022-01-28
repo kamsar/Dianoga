@@ -1,0 +1,72 @@
+﻿<!--
+	Configures Dianoga to support SVG
+	
+	If you are enabling the SVGO optimiser, you'll also need the `Dianoga.svgtools` NuGet package
+
+	Props:
+	SVG mime type config courtesy of Richard Seal, https://community.sitecore.net/developers/f/8/t/1670
+	SVG compression courtesy of Anders Laub, https://laubplusco.net/compress-svg-images-sitecore-media-library/
+	SVG error suppression courtesy of Kamruz Jaman, https://jammykam.wordpress.com/2015/11/18/svg-in-media-library-polluting-log-files-with-errors/
+	All code used with permission of the authors.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<!-- Enable serving SVG from the media library. 
+		     Newer versions of Sitecore have this already so check your version and enable as necessary -->
+		<!--<mediaLibrary>
+			<mediaTypes>
+				<mediaType name="SVG image" extensions="svg">
+					<mimeType>image/svg+xml</mimeType>
+					<forceDownload>false</forceDownload>
+					<sharedTemplate>system/media/unversioned/image</sharedTemplate>
+					<versionedTemplate>system/media/versioned/image</versionedTemplate>
+				</mediaType>
+			</mediaTypes>
+		</mediaLibrary>-->
+
+		<!-- INITIALIZE DIANOGA SVG OPTIMIZATION -->
+		<pipelines>
+			<dianogaOptimize>
+				<processor type="Dianoga.Processors.Pipelines.DianogaOptimize.ExtensionBasedOptimizer, Dianoga" desc="svg">
+					<Extensions>svg</Extensions>
+					<Pipeline>dianogaOptimizeSvg</Pipeline>
+				</processor>
+			</dianogaOptimize>
+
+			<!-- 
+				DIANOGA OPTIMIZE SVG
+				Pipeline that defines how SVGs get optimized. Multiple optimizers may run over the same file.
+				Optimizers should derive from OptimizerProcessor or CommandLineToolOptimizer.
+				
+				Optimizers are expected to close the stream they receive under any circumstances!
+			-->
+			<dianogaOptimizeSvg>
+				<!-- Optimize the SVG with SVGO https://github.com/svg/svgo -->
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaSvg.SvgoOptimizer, Dianoga">
+					<ExePath>/App_Data/Dianoga Tools/SVGO/svgop.exe</ExePath>
+					<AdditionalToolArguments></AdditionalToolArguments>
+				</processor>
+			</dianogaOptimizeSvg>
+		</pipelines>
+
+		<!-- SVG COMPRESSION: auto gzip SVGs from media library on serve.
+			 Note that most web servers these days don't need this as they will dynamically compress on the fly. -->
+		<!--<pipelines>
+			<dianogaOptimizeSvg>
+				<processor type="Dianoga.Optimizers.Pipelines.DianogaSvg.GzipSvgData, Dianoga" />
+			</dianogaOptimizeSvg>
+
+			<getMediaStream>
+				--><!-- Prevent Sitecore from attempting to resize SVGs as bitmaps --><!--
+				<processor type="Dianoga.Svg.Pipelines.GetMediaStream.SvgIgnorer, Dianoga" patch:before="processor[1]" />
+			</getMediaStream>
+		</pipelines>
+
+		<events>
+			--><!-- Adds the right HTTP header to tell the browser we're gzipping compressed media items when they are compressed --><!--
+			<event name="media:request">
+				<handler type="Dianoga.Svg.EventHandlers.MediaRequest.CompressedSvgEncodingSetter, Dianoga" method="OnMediaRequest" />
+			</event>
+		</events>-->
+	</sitecore>
+</configuration>

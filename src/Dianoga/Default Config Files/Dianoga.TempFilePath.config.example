@@ -1,0 +1,10 @@
+﻿<!--
+	Example of changing the temporary file path used by various optimizers. Could be useful if your server has low disk space on C: drive but have space on other drives.
+-->
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+	<sitecore>
+		<settings>
+			<setting name="Dianoga.TempFilePath" value="D:\\TEMP" />
+		</settings>
+	</sitecore>
+</configuration>
