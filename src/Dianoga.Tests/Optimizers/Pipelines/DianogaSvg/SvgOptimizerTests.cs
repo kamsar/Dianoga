@@ -21,8 +21,8 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldSquishSmallSvg()
 		{
 			Test(@"TestImages\small.svg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
-				"", out var args, out var startingSize);
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"-", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
 		}
@@ -31,18 +31,38 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldSquishSmallSvgWithArgs()
 		{
 			Test(@"TestImages\small.svg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
-				"--disable=removeViewBox", out var args, out var startingSize);
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"-", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
+		}
+
+		[Fact]
+		public void ShouldFollowConfigurationWithArgs()
+		{
+			//Pass configuration that disable removeViewBox plugin
+			Test(@"TestImages\small.svg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"- --config \"..\\..\\..\\..\\Dianoga\\Dianoga Tools\\SVGO\\svgo.sample.config.js\"", out var args1, out var startingSize1);
+			var file1 = new StreamReader(args1.Stream).ReadToEnd();
+
+			file1.Should().Contain("viewBox");
+
+			//Do not pass any configuration
+			Test(@"TestImages\small.svg",
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"-", out var args2, out var startingSize2);
+			var file2 = new StreamReader(args2.Stream).ReadToEnd();
+
+			file2.Should().NotContain("viewBox");
 		}
 
 		[Fact]
 		public void ShouldSquishLargeSvg()
 		{
 			Test(@"TestImages\large.svg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
-				"", out var args, out var startingSize);
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"-", out var args, out var startingSize);
 			args.Stream.Length.Should().BeLessThan(startingSize).And.BeGreaterThan(0);
 			args.IsOptimized.Should().BeTrue();
 		}
@@ -51,8 +71,8 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		public void ShouldNotSquishCorruptedJpeg()
 		{
 			Test(@"TestImages\corrupted.jpg",
-				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgop.exe",
-				"", out var args, out var startingSize);
+				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
+				"-", out var args, out var startingSize);
 			args.Stream.Length.Should().IsSameOrEqualTo(startingSize);
 			args.IsOptimized.Should().BeFalse();
 		}
@@ -61,9 +81,9 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 		{
 			var inputStream = new MemoryStream();
 
-			using (var testJpeg = File.OpenRead(imagePath))
+			using (var testFile = File.OpenRead(imagePath))
 			{
-				testJpeg.CopyTo(inputStream);
+				testFile.CopyTo(inputStream);
 			}
 
 			var sut = new SvgoOptimizer();
