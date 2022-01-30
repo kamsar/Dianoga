@@ -6,7 +6,7 @@ using System.IO;
 namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 {
 	/// <summary>
-	/// Uses https://github.com/twardoch/svgop
+	/// Uses https://github.com/Antonytm/svgo-executable
 	/// </summary>
 	public class SvgoOptimizer : CommandLineToolOptimizer
 	{

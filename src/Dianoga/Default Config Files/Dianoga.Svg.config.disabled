@@ -43,8 +43,8 @@
 			<dianogaOptimizeSvg>
 				<!-- Optimize the SVG with SVGO https://github.com/svg/svgo -->
 				<processor type="Dianoga.Optimizers.Pipelines.DianogaSvg.SvgoOptimizer, Dianoga">
-					<ExePath>/App_Data/Dianoga Tools/SVGO/svgop.exe</ExePath>
-					<AdditionalToolArguments></AdditionalToolArguments>
+					<ExePath>/App_Data/Dianoga Tools/SVGO/svgo-win.exe</ExePath>
+					<AdditionalToolArguments>-</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeSvg>
 		</pipelines>
