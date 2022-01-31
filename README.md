@@ -65,7 +65,7 @@ To perform a manual installation:
 ### Dianoga.svgtools
 
 If you are enabling the SVGO optimiser, you'll also need the [Dianoga.svgtools](https://www.nuget.org/packages/Dianoga.svgtools) NuGet package.
-This is simply a prepackaged compiled version of SVGO called SVGOP from [here](https://github.com/twardoch/svgop).
+This is simply a prepackaged compiled version of SVGO called from [here](https://github.com/Antonytm/svgo-executable).
 
 ## Next-gen Formats Support
 
