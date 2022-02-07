@@ -25,3 +25,4 @@ src/Dianoga.Tests/Optimizers/Pipelines/DianogaSvg/SVGO
 packages/*
 !packages/repositories.config
 Build/*.nupkg
+/integration-tests/.env

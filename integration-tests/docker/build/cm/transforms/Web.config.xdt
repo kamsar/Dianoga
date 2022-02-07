@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <system.webServer>
+    <httpProtocol>
+      <customHeaders>
+        <add name="Docker-Examples" xdt:Locator="Match(name)" value="Role transform" xdt:Transform="SetAttributes(value)" />
+      </customHeaders>
+    </httpProtocol>
+  </system.webServer>
+</configuration>
