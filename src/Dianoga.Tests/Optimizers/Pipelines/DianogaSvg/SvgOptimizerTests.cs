@@ -43,7 +43,7 @@ namespace Dianoga.Tests.Optimizers.Pipelines.DianogaSvg
 			//Pass configuration that disable removeViewBox plugin
 			Test(@"TestImages\small.svg",
 				@"..\..\..\..\Dianoga\Dianoga Tools\SVGO\svgo-win.exe",
-				"- --config \"..\\..\\..\\..\\Dianoga\\Dianoga Tools\\SVGO\\svgo.sample.config.js\"", out var args1, out var startingSize1);
+				"- --config svgo.sample.config.js", out var args1, out var startingSize1);
 			var file1 = new StreamReader(args1.Stream).ReadToEnd();
 
 			file1.Should().Contain("viewBox");

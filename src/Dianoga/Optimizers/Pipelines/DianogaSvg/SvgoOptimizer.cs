@@ -27,6 +27,9 @@ namespace Dianoga.Optimizers.Pipelines.DianogaSvg
 				toolProcess.StartInfo.RedirectStandardOutput = true;
 				toolProcess.StartInfo.RedirectStandardError = true;
 
+				var directory = new DirectoryInfo(ExePath.Remove(ExePath.LastIndexOf("\\", StringComparison.InvariantCultureIgnoreCase)));
+				toolProcess.StartInfo.WorkingDirectory = directory.FullName;
+
 				var processOutput = new ConcurrentBag<string>();
 				toolProcess.ErrorDataReceived += (sender, eventArgs) => processOutput.Add(eventArgs.Data);
 
