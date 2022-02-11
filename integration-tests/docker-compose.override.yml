@@ -13,6 +13,7 @@ services:
     environment: 
       CDHostname: http://cd
       TestConfigurationName: default
+      Async: "true"
     #entrypoint: powershell -Command "& C:\Tests\test.ps1"
 
   dianoga:
