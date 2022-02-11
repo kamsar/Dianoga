@@ -1,0 +1,14 @@
+# escape=`
+ARG BASE_IMAGE=mcr.microsoft.com/dotnet/framework/sdk:4.8
+FROM ${BASE_IMAGE}
+
+WORKDIR /
+
+COPY src\IntegrationTests\Integration ./Tests
+RUN mkdir Results
+
+WORKDIR c:\Tests
+RUN dotnet build ./Integration.csproj
+
+WORKDIR c:\Tests
+ENTRYPOINT ["powershell.exe", "-File", "test.ps1"]

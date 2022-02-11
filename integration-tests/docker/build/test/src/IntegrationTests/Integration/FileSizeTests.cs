@@ -1,3 +1,8 @@
+using System;
+using System.Drawing;
+using System.Threading;
+using Endjin.Retry.Async;
+using Endjin.Retry.Contracts;
 using FluentAssertions;
 using Xunit;
 
@@ -16,9 +21,7 @@ namespace Integration
 		[InlineData("/-/media/Project/Dianoga/Test/jpeg/jpg07.jpg", 1403617)]
 		public void JpegSizeTest(string url, int size)
 		{
-			var wc = new System.Net.WebClient();
-			var bytes = wc.DownloadData(CDHostname + url);
-			bytes.Length.Should().BeLessThan(size, "Dianoga should squeeze JPEG image");
+			SizeTest(url, size, "Dianoga should squeeze JPEG image");
 		}
 
 		[Theory]
@@ -30,24 +33,42 @@ namespace Integration
 		[InlineData("/-/media/Project/Dianoga/Test/png/png05.png", 56132)]
 		public void PngSizeTest(string url, int size)
 		{
-			var wc = new System.Net.WebClient();
-			var bytes = wc.DownloadData("https://cd.dockerexamples.localhost/" + url);
-			bytes.Length.Should().BeLessThan(size, "Dianoga should squeeze JPEG image");
+			SizeTest(url, size, "Dianoga should squeeze PNG image");
 		}
 
 		[SkippableTheory]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg00.png", 7489)]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg01.png", 26820)]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg02.png", 42147)]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg03.png", 161298)]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg04.png", 94252)]
-		[InlineData("/-/media/Project/Dianoga/Test/svg/svg05.png", 48000)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg00.svg", 7489)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg01.svg", 26820)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg02.svg", 42147)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg03.svg", 161298)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg04.svg", 94252)]
+		[InlineData("/-/media/Project/Dianoga/Test/svg/svg05.svg", 48000)]
 		public void SvgSizeTest(string url, int size)
 		{
 			Skip.IfNot(SvgOptimizationEnabled);
+			SizeTest(url, size, "Dianoga should squeeze SVG image");
+		}
+
+		public void SizeTest(string url, int size, string message)
+		{
+			var sleepService = new SleepService();
 			var wc = new System.Net.WebClient();
-			var bytes = wc.DownloadData("https://cd.dockerexamples.localhost/" + url);
-			bytes.Length.Should().BeLessThan(size, "Dianoga should squeeze JPEG image");
+			if (Sync)
+			{
+				var bytes = wc.DownloadData(CDHostname + url);
+				bytes.Length.Should().BeLessThan(size, message);
+			}
+			else
+			{
+				var bytes1 = wc.DownloadData(CDHostname + url);
+				var initialSize = bytes1.Length;
+				initialSize.Should().Be(size, "Original size doesn't match");
+				//How to find proper value, how much time file conversion will take?
+				sleepService.Sleep(new TimeSpan(0, 0, 5));
+				var bytes2 = wc.DownloadData(CDHostname + url);
+				var squeezeSize = bytes2.Length;
+				squeezeSize.Should().BeLessThan(size, message);
+			}
 		}
 	}
 }

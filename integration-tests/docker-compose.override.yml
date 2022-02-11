@@ -1,6 +1,20 @@
 version: "2.4"
 
 services:
+  test:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-test:${VERSION:-latest}
+    build:
+      context: ./docker/build/test
+    depends_on:
+      traefik:
+        condition: service_healthy
+    volumes:
+      - ./docker/data/tests:C:/results
+    environment: 
+      CDHostname: http://cd
+      TestConfigurationName: default
+    #entrypoint: powershell -Command "& C:\Tests\test.ps1"
+
   dianoga:
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
     build:
