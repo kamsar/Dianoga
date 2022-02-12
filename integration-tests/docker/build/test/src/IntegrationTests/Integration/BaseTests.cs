@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 
 namespace Integration
@@ -7,6 +10,9 @@ namespace Integration
 	{
 		protected string CDHostname;
 		protected bool SvgOptimizationEnabled;
+		protected bool WebpOptimizationEnabled;
+		protected bool AvifOptimizationEnabled;
+		protected bool JxlOptimizationEnabled;
 
 		protected bool Async;
 
@@ -25,6 +31,9 @@ namespace Integration
 
 			CDHostname = GetStringSetting(Constants.Variables.CDHostname);
 			SvgOptimizationEnabled = GetBoolValue(Constants.Variables.SvgOptimizationEnabled);
+			WebpOptimizationEnabled = GetBoolValue(Constants.Variables.WebpOptimizationEnabled);
+			JxlOptimizationEnabled = GetBoolValue(Constants.Variables.JxlOptimizationEnabled);
+			AvifOptimizationEnabled = GetBoolValue(Constants.Variables.AvifOptimizationEnabled);
 			Async = GetBoolValue(Constants.Variables.Async);
 		}
 
@@ -40,6 +49,13 @@ namespace Integration
 			return !string.IsNullOrEmpty(val)
 				? bool.Parse(val)
 				: ConfigurationRoot.GetValue<bool>(name);
+		}
+
+		protected string ResponseToString(WebResponse response)
+		{
+			var receiveStream = response.GetResponseStream();
+			var readStream = new StreamReader(receiveStream, Encoding.UTF8);
+			return readStream.ReadToEnd();
 		}
 	}
 }

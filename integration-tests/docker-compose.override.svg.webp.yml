@@ -12,8 +12,11 @@ services:
       - ./docker/data/tests:C:/results
     environment: 
       CDHostname: http://cd
-      TestConfigurationName: default
+      TestConfigurationName: default-svg-webp
       Async: "true"
+      SvgOptimizationEnabled: "true"
+      WebpOptimizationEnabled: "true"
+
     #entrypoint: powershell -Command "& C:\Tests\test.ps1"
 
   dianoga:
@@ -75,9 +78,9 @@ services:
       Sitecore_Sitecore__IdentityServer__Clients__DefaultClient__AllowedCorsOrigins__AllowedCorsOriginsGroup2: https://${HRZ_HOST}
 
   cd:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd-async:${VERSION:-latest}
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd-async-svg-webp:${VERSION:-latest}
     build:
-      context: ./docker/build/cd
+      context: ./docker/build/cd-async-svg-webp
       args:
         BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cd:${SITECORE_VERSION}
         SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}

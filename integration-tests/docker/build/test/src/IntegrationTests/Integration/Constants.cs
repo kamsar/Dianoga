@@ -12,6 +12,9 @@ namespace Integration
 		{
 			public const string CDHostname = "CDHostname";
 			public const string SvgOptimizationEnabled = "SvgOptimizationEnabled";
+			public const string WebpOptimizationEnabled = "WebpOptimizationEnabled";
+			public const string AvifOptimizationEnabled = "AvifOptimizationEnabled";
+			public const string JxlOptimizationEnabled = "JxlOptimizationEnabled";
 			public const string Async = "Async";
 		}
 	}

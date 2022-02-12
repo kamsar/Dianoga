@@ -12,8 +12,8 @@ services:
       - ./docker/data/tests:C:/results
     environment: 
       CDHostname: http://cd
-      TestConfigurationName: default
-      Async: "true"
+      TestConfigurationName: default-sync
+      Async: "false"
     #entrypoint: powershell -Command "& C:\Tests\test.ps1"
 
   dianoga:
@@ -75,9 +75,9 @@ services:
       Sitecore_Sitecore__IdentityServer__Clients__DefaultClient__AllowedCorsOrigins__AllowedCorsOriginsGroup2: https://${HRZ_HOST}
 
   cd:
-    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd-async:${VERSION:-latest}
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd-sync:${VERSION:-latest}
     build:
-      context: ./docker/build/cd
+      context: ./docker/build/cd-sync
       args:
         BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cd:${SITECORE_VERSION}
         SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}
