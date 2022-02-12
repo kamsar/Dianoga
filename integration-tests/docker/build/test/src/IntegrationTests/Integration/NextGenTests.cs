@@ -81,7 +81,7 @@ namespace Integration
 		//[InlineData("/-/media/Project/Dianoga/Test/png/png05.png", 56132)]
 		public void PngWebpTest(string url, int size)
 		{
-			//Skip.IfNot(WebpOptimizationEnabled);
+			Skip.IfNot(WebpOptimizationEnabled);
 			SizeTest(url, size, "Dianoga should squeeze PNG image", "image/webp", "WEBP");
 		}
 

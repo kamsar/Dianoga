@@ -76,7 +76,7 @@ namespace Integration
 				//How to find proper value, how much time file conversion will take?
 				sleepService.Sleep(new TimeSpan(0, 0, 5));
 
-				request = WebRequest.Create(CDHostname + url);
+				request = WebRequest.Create(CDHostname + url + seed);
 				request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
 				response = request.GetResponse();
 				var string2 = ResponseToString(response);
