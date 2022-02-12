@@ -4,13 +4,11 @@ ARG BASE_IMAGE
 ARG SXA_IMAGE
 ARG SPE_IMAGE
 ARG TOOLING_IMAGE
-ARG HORIZON_RESOURCES_IMAGE
 ARG DIANOGA_IMAGE
 
 FROM ${TOOLING_IMAGE} as tooling
 FROM ${SPE_IMAGE} as spe
 FROM ${SXA_IMAGE} as sxa
-FROM ${HORIZON_RESOURCES_IMAGE} as horizon_resources
 FROM ${DIANOGA_IMAGE} as dianoga
 FROM ${BASE_IMAGE}
 
@@ -38,9 +36,6 @@ COPY --from=sxa \module\cm\content .\
 COPY --from=sxa \module\tools \module\tools
 RUN C:\module\tools\Initialize-Content.ps1 -TargetPath .\; `
     Remove-Item -Path C:\module -Recurse -Force;
-
-# Add horizon module
-COPY --from=horizon_resources \module\cm\content \inetpub\wwwroot
 
 # Disable Media Request Protection for simplicity of testing (no need to worry about hash get parameter)
 RUN Powershell Rename-Item -Path "C:\inetpub\wwwroot\App_Config\Sitecore\CMS.Core\Sitecore.Media.RequestProtection.config" -NewName "Sitecore.Media.RequestProtection.config.disabled"

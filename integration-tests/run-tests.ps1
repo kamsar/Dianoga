@@ -41,9 +41,10 @@ For($i = 0; $i -lt $tests.Length; $i++) {
     $report = Get-ChildItem .\docker\data\tests | sort creationtime -Descending |  Select-Object -first 1
     $result = Get-Content $report.FullName -Tail 1 
 
+    $output += "`n======================================`n"
     $output += "Test results for: $testName`n"
     $output += $result
-    $output += "`n======================================"
+    $output += "`n======================================`n"
 }
 
 Write-Host $output
