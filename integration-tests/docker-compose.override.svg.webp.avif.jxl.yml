@@ -1,7 +1,10 @@
+# Compose file for Dianoga default configuration and enabled SVG & WebP & AVIF & JPEG XL optimization
 version: "2.4"
 
 services:
   test:
+    # Same test image shared for all tests
+    # But not all tests are executed. Execution depends on passed environment variables
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-test:${VERSION:-latest}
     build:
       context: ./docker/build/test
@@ -10,7 +13,7 @@ services:
         condition: service_healthy
     volumes:
       - ./docker/data/tests:C:/results
-    environment: 
+    environment:
       CDHostname: http://cd
       TestConfigurationName: default-svg-webp-avif-jxl
       Async: "true"
@@ -18,8 +21,6 @@ services:
       WebpOptimizationEnabled: "true"
       JxlOptimizationEnabled: "true"
       AvifOptimizationEnabled: "true"
-
-    #entrypoint: powershell -Command "& C:\Tests\test.ps1"
 
   dianoga:
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
@@ -34,10 +35,10 @@ services:
       - ./docker/traefik:C:/etc/traefik
     depends_on:
       cm:
-        condition: service_healthy  
+        condition: service_healthy
       cd:
-        condition: service_healthy  
-  
+        condition: service_healthy
+
   redis:
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-redis:${VERSION:-latest}
     build:
@@ -57,7 +58,7 @@ services:
     mem_limit: 2GB
     volumes:
       - ${LOCAL_DATA_PATH}\mssql:c:\data
-  
+
   # Mount our Solr data folder
   solr:
     volumes:
@@ -97,7 +98,6 @@ services:
     environment:
       SITECORE_DEVELOPMENT_PATCHES: CustomErrorsOff
     entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
-      
     # For some Dianoga optimizers, it is necessary to have write access to the temp folder
     # tmpfs:
     #  - C:\Windows\TEMP\

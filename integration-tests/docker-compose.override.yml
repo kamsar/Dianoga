@@ -1,7 +1,11 @@
+#Compose file for Dianoga default configuration
+
 version: "2.4"
 
 services:
   test:
+    # Same test image shared for all tests
+    # But not all tests are executed. Execution depends on passed environment variables
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-test:${VERSION:-latest}
     build:
       context: ./docker/build/test
@@ -18,7 +22,6 @@ services:
       WebpOptimizationEnabled: "false"
       JxlOptimizationEnabled: "false"
       AvifOptimizationEnabled: "false"
-    #entrypoint: powershell -Command "& C:\Tests\test.ps1"
 
   dianoga:
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
