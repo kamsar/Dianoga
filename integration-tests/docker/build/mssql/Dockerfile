@@ -21,7 +21,7 @@ COPY --from=sxa \module\db\Sitecore.master.dacpac \sxa_data\Sitecore.web.dacpac
 RUN C:\DeployDatabases.ps1 -ResourcesDirectory C:\sxa_data; `
     Remove-Item -Path C:\sxa_data -Recurse -Force;
 
-# Add Test data
+# Add Test data (pages and images to Web and Master databases)
 COPY Sitecore.master.dacpac \test_data\Sitecore.master.dacpac
 COPY Sitecore.master.dacpac \test_data\Sitecore.web.dacpac
 

@@ -24,9 +24,10 @@ RUN Powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.Ser
 RUN choco install vcredist-all -y
 COPY --from=dianoga \module\cd\content .\
 
+# Turn on Sync mode
 RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\Dianoga.Strategy.GetMediaStreamSync.config.disabled -NewName Dianoga.Strategy.GetMediaStreamSync.config
+# Turn off Async mode
 RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\Dianoga.Strategy.MediaCacheAsync.config -NewName Dianoga.Strategy.MediaCacheAsync.config.disabled
-
 
 # Add SXA module
 COPY --from=sxa \module\cd\content .\

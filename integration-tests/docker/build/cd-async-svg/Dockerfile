@@ -24,6 +24,7 @@ RUN Powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.Ser
 RUN choco install vcredist-all -y
 COPY --from=dianoga \module\cd\content .\
 
+# Enable SVG optimization
 RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\Dianoga.Svg.config.disabled -NewName Dianoga.Svg.config
 
 # Add SXA module
