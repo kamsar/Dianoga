@@ -4,8 +4,8 @@ ARG BASE_IMAGE=mcr.microsoft.com/windows/nanoserver:1809
 ARG BUILD_IMAGE=mcr.microsoft.com/dotnet/framework/sdk:4.8
 
 FROM ${BUILD_IMAGE} AS build-env
-ARG BUILD_CONFIGURATION=Release
-ARG DOTNET_VERSION_ARG=net48
+ARG BUILD_CONFIGURATION=
+ARG DOTNET_VERSION_ARG=
 
 WORKDIR /
 # Add Sitecore Nuget source
@@ -20,6 +20,7 @@ RUN dotnet restore
 # Copy everything else and build
 COPY src ./src
 RUN dotnet build -c $env:BUILD_CONFIGURATION
+RUN mkdir ./src/bin
 RUN Copy ./src/Dianoga/bin/$env:BUILD_CONFIGURATION/$env:DOTNET_VERSION_ARG/Dianoga.* ./src/bin/
 RUN Copy ./src/Dianoga/bin/$env:BUILD_CONFIGURATION/$env:DOTNET_VERSION_ARG/System.Threading.Tasks.Dataflow.dll ./src/bin/
 

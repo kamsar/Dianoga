@@ -1,0 +1,29 @@
+name: "Publish to Docker"
+description: "Pushes built artifacts to Docker"
+inputs:
+  build_configuration:
+    description: "Debug/Release"
+    required: true
+  dotnet_version:
+    description: "net45/net46/net471/net48/etc"
+    required: true
+  username:
+    description: "Docker registry username"
+    required: true
+  password:
+    description: "Docker registry password"
+    required: true
+runs:
+  using: "composite"
+  steps:
+  - uses: mr-smithers-excellent/docker-build-push@v5
+    name: Build & push Docker image
+    with:
+      image: antonytm/dianoga-assets
+      tags: 6.0.0-beta.2-${{ inputs.dotnet_version }}-${{ inputs.build_configuration }}-${{ github.run_number }}, latest-${{ inputs.dotnet_version }}-${{ inputs.build_configuration }}
+      registry: docker.io
+      dockerfile: Dockerfile
+      username: ${{ inputs.username }}
+      password: ${{ inputs.password }}
+      buildArgs: |
+        BUILD_CONFIGURATION=${{ inputs.build_configuration }}, DOTNET_VERSION_ARG=${{ inputs.dotnet_version }}
