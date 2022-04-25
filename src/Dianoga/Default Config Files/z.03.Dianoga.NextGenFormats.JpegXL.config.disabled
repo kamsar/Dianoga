@@ -40,22 +40,6 @@
 					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
 				</processor>
 			</dianogaOptimizeJpeg>
-
-			<dianogaOptimizePng>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga"
-				           patch:after="processor[@type='Dianoga.Optimizers.Pipelines.DianogaPng.PngQuantCliOptimizer, Dianoga']">
-					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
-					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
-				</processor>
-			</dianogaOptimizePng>
-
-			<dianogaOptimizeGif>
-				<processor type="Dianoga.Optimizers.Pipelines.DianogaJxl.JxlOptimizer, Dianoga"
-				           patch:before="processor[1]">
-					<ExePath>/App_Data/Dianoga Tools/jxl/cjxl.exe</ExePath>
-					<AdditionalToolArguments>-q 80 --num_threads 1</AdditionalToolArguments>
-				</processor>
-			</dianogaOptimizeGif>
 		</pipelines>
 	</sitecore>
 </configuration>

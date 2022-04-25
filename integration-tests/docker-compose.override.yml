@@ -1,0 +1,125 @@
+#Compose file for Dianoga default configuration
+
+version: "2.4"
+
+services:
+  test:
+    # Same test image shared for all tests
+    # But not all tests are executed. Execution depends on passed environment variables
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-test:${VERSION:-latest}
+    build:
+      context: ./docker/build/test
+    depends_on:
+      traefik:
+        condition: service_healthy
+    volumes:
+      - ./docker/data/tests:C:/results
+    environment: 
+      CDHostname: http://cd
+      TestConfigurationName: default
+      Async: "true"
+      SvgOptimizationEnabled: "false"
+      WebpOptimizationEnabled: "false"
+      JxlOptimizationEnabled: "false"
+      AvifOptimizationEnabled: "false"
+
+  dianoga:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
+    build:
+      context: ../.
+      args:
+        BASE_IMAGE: ${DIANOGA_BASE_IMAGE}
+        BUILD_IMAGE: ${DIANOGA_BUILD_IMAGE}
+
+  traefik:
+    volumes:
+      - ./docker/traefik:C:/etc/traefik
+    depends_on:
+      cd:
+        condition: service_healthy  
+      cm:
+        condition: service_healthy  
+  
+  redis:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-redis:${VERSION:-latest}
+    build:
+      context: ./docker/build/redis
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-redis:${SITECORE_VERSION}
+
+  mssql:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-mssql:${VERSION:-latest}
+    build:
+      context: ./docker/build/mssql
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-mssql:${SITECORE_VERSION}
+        SPE_IMAGE: ${SITECORE_MODULE_REGISTRY}spe-assets:${SPE_VERSION}
+        SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}
+    mem_limit: 2GB
+    volumes:
+      - ${LOCAL_DATA_PATH}\mssql:c:\data
+  
+  # Mount our Solr data folder
+  solr:
+    volumes:
+      - ${LOCAL_DATA_PATH}\solr:c:\data
+
+  # Some modules (like SXA) also require additions to the Solr image.
+  solr-init:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-solr-init:${VERSION:-latest}
+    build:
+      context: ./docker/build/solr-init
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-solr-init:${SITECORE_VERSION}
+        SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}
+
+  id:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-id:${VERSION:-latest}
+    build:
+      context: ./docker/build/id
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-id:${SITECORE_VERSION}
+
+  cd:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cd-async:${VERSION:-latest}
+    build:
+      context: ./docker/build/cd
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cd:${SITECORE_VERSION}
+        SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}
+        TOOLING_IMAGE: ${SITECORE_TOOLS_REGISTRY}sitecore-docker-tools-assets:${TOOLS_VERSION}
+        DIANOGA_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
+    depends_on:
+      - dianoga
+    volumes:
+      - ${LOCAL_DEPLOY_PATH}\website:C:\deploy
+      - ${LOCAL_DATA_PATH}\cd:C:\inetpub\wwwroot\App_Data\logs
+      - ${LOCAL_DATA_PATH}\mediaCache:C:\inetpub\wwwroot\App_Data\mediaCache
+    environment:
+      SITECORE_DEVELOPMENT_PATCHES: CustomErrorsOff
+    entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
+      
+    # For some Dianoga optimizers, it is necessary to have write access to the temp folder
+    # tmpfs:
+    #  - C:\Windows\TEMP\
+
+  cm:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cm:${VERSION:-latest}
+    build:
+      context: ./docker/build/cm
+      args:
+        BASE_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cm:${SITECORE_VERSION}
+        SPE_IMAGE: ${SITECORE_MODULE_REGISTRY}spe-assets:${SPE_VERSION}
+        SXA_IMAGE: ${SITECORE_MODULE_REGISTRY}sxa-xm1-assets:${SXA_VERSION}
+        TOOLING_IMAGE: ${SITECORE_TOOLS_REGISTRY}sitecore-docker-tools-assets:${TOOLS_VERSION}
+        HORIZON_RESOURCES_IMAGE: ${SITECORE_MODULE_REGISTRY}horizon-integration-xm1-assets:${HORIZON_ASSET_VERSION}
+        DIANOGA_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-dianoga-tools:${VERSION:-latest}
+    depends_on:
+      - dianoga
+    volumes:
+      - ${LOCAL_DEPLOY_PATH}\website:C:\deploy
+      - ${LOCAL_DATA_PATH}\cm:C:\inetpub\wwwroot\App_Data\logs
+    environment:
+      SITECORE_DEVELOPMENT_PATCHES: CustomErrorsOff
+    entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
+  

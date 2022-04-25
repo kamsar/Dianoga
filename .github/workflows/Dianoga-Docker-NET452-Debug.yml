@@ -1,0 +1,20 @@
+name: Dianoga Docker CI, .NET 4.5.2, Debug
+on:
+  push:
+    branches: [ feature/docker ]
+env:
+  BUILD_CONFIGURATION: Debug
+  DIANOGA_DOTNET_VERSION: net452
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run custom action
+        uses: ./.github/actions/publish-docker-hub
+        with:
+          build_configuration: ${{ env.BUILD_CONFIGURATION }}
+          dotnet_version: ${{ env.DIANOGA_DOTNET_VERSION }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
