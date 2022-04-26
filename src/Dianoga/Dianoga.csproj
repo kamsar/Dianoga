@@ -4,14 +4,14 @@
 		<TargetFrameworks>net452;net462;net471;net48</TargetFrameworks>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Description>Automatic media library image file optimization for Sitecore</Description>
-		<Version>6.0.0-beta.3</Version>
+		<Version>6.0.0</Version>
 		<Authors>Kam Figy, Mark Gibbons</Authors>
 		<PackageProjectUrl>https://github.com/kamsar/Dianoga</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/kamsar/Dianoga</RepositoryUrl>
 		<PackageIconUrl>https://kamsar.net/nuget/dianoga/logo.png</PackageIconUrl>
 		<PackageTags>sitecore image optimization</PackageTags>
-		<Copyright>Copyright 2021</Copyright>
+		<Copyright>Copyright 2022</Copyright>
 		<Company />
 		<Product />
 		<RepositoryType>git</RepositoryType>
@@ -81,6 +81,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
-		<Content Include="Dianoga Tools\**\*" Exclude="Dianoga Tools\SVGO\**\*" PackagePath="content\App_Data\Dianoga Tools" />
+		<Content Include="Dianoga Tools\**\*" PackagePath="content\App_Data\Dianoga Tools" />
 	</ItemGroup>
 </Project>

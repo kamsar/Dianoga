@@ -53,7 +53,8 @@ Dianoga 3+ allows for ignoring specific paths in the media library. See `Dianoga
 
 ## Installation
 
-Dianoga 5+ has a NuGet package for the main code and configs, and a separate package for the SVGO tools - `Dianoga.svgtools`. This was done as SVGO is an 80MB library.
+Add the [Dianoga NuGet package](https://www.nuget.org/packages/Dianoga) to your solution. 
+If you're using PackageReferences instead of packages.config then also copy the config files and Dianoga Tools to your solution.
 Once Dianoga is installed, __clear your App_Data/MediaCache folder__, and you're done.
 
 To perform a manual installation:
@@ -64,8 +65,8 @@ To perform a manual installation:
 
 ### Dianoga.svgtools
 
-If you are enabling the SVGO optimiser, you'll also need the [Dianoga.svgtools](https://www.nuget.org/packages/Dianoga.svgtools) NuGet package.
-This is simply a prepackaged compiled version of SVGO called from [here](https://github.com/Antonytm/svgo-executable).
+In Dianoga 5, there was a separate package for SVGO. In Dianoga 6, SVGO is in the main NuGet package again.
+The SVGO executable is a compiled version of SVGO called from [here](https://github.com/Antonytm/svgo-executable).
 
 ## Next-gen Formats Support
 
