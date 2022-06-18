@@ -35,7 +35,7 @@ namespace Dianoga.NextGenFormats
 			if (item.MimeType.StartsWith("image") && !url.Contains("extension"))
 			{
 				var extensions = helpers.GetSupportedFormats(new HttpContextWrapper(HttpContext.Current));
-				if (string.IsNullOrEmpty(extensions))
+				if (!string.IsNullOrEmpty(extensions))
 				{
 					return WebUtil.AddQueryString(url, "extension", extensions);
 				}
