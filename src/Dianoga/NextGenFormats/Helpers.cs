@@ -17,13 +17,24 @@ namespace Dianoga.NextGenFormats
 				return PipelineHelpers.RunDianogaGetSupportedFormatsPipeline(acceptTypes);
 			}
 
+			var customAccept = context?.Request?.Headers?["customAccept"];
+			if (!string.IsNullOrEmpty(customAccept))
+				return PipelineHelpers.RunDianogaGetSupportedFormatsPipeline(new string[] { customAccept });
+
 			return string.Empty;
 		}
 
 		public virtual bool CheckSupportedFormat(HttpContextBase context, string extension)
 		{
 			var acceptTypes = context?.Request?.AcceptTypes ?? new string[] { };
-			return acceptTypes.Any() && CheckSupportedFormat(string.Join(",", acceptTypes), extension);
+			if (acceptTypes.Any())
+				return CheckSupportedFormat(string.Join(",", acceptTypes), extension);
+
+			var customAccept = context?.Request?.Headers?["customAccept"];
+			if (!string.IsNullOrEmpty(customAccept))
+				return CheckSupportedFormat(customAccept, extension);
+
+			return false;
 		}
 
 		public virtual bool CheckSupportedFormat(string input, string extension)
