@@ -6,6 +6,7 @@ namespace Dianoga.NextGenFormats
 	public class Helpers
 	{
 		public virtual PipelineHelpers PipelineHelpers { get; set; } = new PipelineHelpers();
+		public virtual string CustomAcceptHeaderName { get; set; } = Sitecore.Configuration.Settings.GetSetting("Dianoga.CDN.CustomAcceptHeaderName");
 
 		public static bool CdnEnabled => Sitecore.Configuration.Settings.GetBoolSetting("Dianoga.CDN.Enabled", false);
 
@@ -17,9 +18,14 @@ namespace Dianoga.NextGenFormats
 				return PipelineHelpers.RunDianogaGetSupportedFormatsPipeline(acceptTypes);
 			}
 
-			var customAccept = context?.Request?.Headers?["customAccept"];
-			if (!string.IsNullOrEmpty(customAccept))
-				return PipelineHelpers.RunDianogaGetSupportedFormatsPipeline(new string[] { customAccept });
+			if (!string.IsNullOrEmpty(CustomAcceptHeaderName))
+			{
+				var customAcceptHeader = context?.Request?.Headers?[CustomAcceptHeaderName];
+				if (!string.IsNullOrEmpty(customAcceptHeader))
+				{
+					return PipelineHelpers.RunDianogaGetSupportedFormatsPipeline(new string[] { customAcceptHeader });
+				}
+			}
 
 			return string.Empty;
 		}
@@ -28,11 +34,18 @@ namespace Dianoga.NextGenFormats
 		{
 			var acceptTypes = context?.Request?.AcceptTypes ?? new string[] { };
 			if (acceptTypes.Any())
+			{
 				return CheckSupportedFormat(string.Join(",", acceptTypes), extension);
+			}
 
-			var customAccept = context?.Request?.Headers?["customAccept"];
-			if (!string.IsNullOrEmpty(customAccept))
-				return CheckSupportedFormat(customAccept, extension);
+			if (!string.IsNullOrEmpty(CustomAcceptHeaderName))
+			{
+				var customAcceptHeader = context?.Request?.Headers?[CustomAcceptHeaderName];
+				if (!string.IsNullOrEmpty(customAcceptHeader))
+				{
+					return CheckSupportedFormat(customAcceptHeader, extension);
+				}
+			}
 
 			return false;
 		}

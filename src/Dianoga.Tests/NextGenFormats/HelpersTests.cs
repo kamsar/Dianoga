@@ -64,6 +64,7 @@ namespace Dianoga.Tests.NextGenFormats
 			var helpers = new Helpers();
 			var pipelineHelpers = new Mock<PipelineHelpers>();
 			helpers.PipelineHelpers = pipelineHelpers.Object;
+			helpers.CustomAcceptHeaderName = "customAccept";
 
 			//Act
 			var result = helpers.GetSupportedFormats(context.Object);
@@ -109,6 +110,7 @@ namespace Dianoga.Tests.NextGenFormats
 			var helpers = new Helpers();
 			var pipelineHelpers = new Mock<PipelineHelpers>();
 			helpers.PipelineHelpers = pipelineHelpers.Object;
+			helpers.CustomAcceptHeaderName = "customAccept";
 
 			//Act
 			var result = helpers.GetCustomOptions(context.Object);
@@ -183,6 +185,7 @@ namespace Dianoga.Tests.NextGenFormats
 			var pipelineHelpers = new Mock<PipelineHelpers>();
 			pipelineHelpers.Setup(h => h.RunDianogaGetSupportedFormatsPipeline(It.IsAny<string[]>())).Returns("webp").Verifiable();
 			helpers.PipelineHelpers = pipelineHelpers.Object;
+			helpers.CustomAcceptHeaderName = "customAccept";
 
 			//Act
 			var result = helpers.GetCustomOptions(context.Object);

@@ -6,6 +6,11 @@
 	<sitecore>
 		<settings>
 			<setting name="Dianoga.CDN.Enabled" value="true"/>
+			<!-- 
+				If you are using Azure CDN / Azure Front Door then you will likely need a rule to forward your Accept header to a custom header, and enable this setting to read it.
+				See readme for more details.
+			-->
+			<!--<setting name="Dianoga.CDN.CustomAcceptHeaderName" value="CustomAccept"/>-->
 		</settings>
 		<mediaLibrary>
 			<!-- Add query string "extension=<list of supported formats>" to media links if the browser supports it for a unique CDN cache key. -->

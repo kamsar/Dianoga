@@ -94,6 +94,8 @@ OR if you have a custom `MediaRequestHandler` then you need to make some changes
 
 2. If you run Sitecore under CDN: review and enable `Dianoga.NextGenFormats.CDN.config.disabled`. It will add `?extension=<list of supported extensions>` query parameter to all images present on your pages.
 
+Azure CDN / Azure Front Door note: due to an issue described [here](https://docs.microsoft.com/en-us/answers/questions/594279/azure-cdn-does-not-forward-accept-header-to-origin.html) and [here](https://www.nehemiahj.com/2022/08/sitecore-dianoga-with-azure-cdn.html) you will need to forward your Accept header on the CDN to a custom header. You can configure and enable this in `Dianoga.NextGenFormats.CDN.config`.
+
 3. Enable any next-gen formats configuration files that you want. e.g.: `z.01.Dianoga.NextGenFormats.WebP.config.disabled`, `z.02.Dianoga.NextGenFormats.Avif.config.disabled`, `z.03.Dianoga.NextGenFormats.Jxl.config.disabled`
 
 4. Review files that you have enabled and adjust any parameters if you require lossless or higher quality than the default
