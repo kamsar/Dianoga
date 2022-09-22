@@ -31,9 +31,9 @@ RUN choco install vcredist-all -y
 COPY --from=dianoga \module\cd\content .\
 
 # Enable SVG optimization
-RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\Dianoga.Svg.config.disabled -NewName Dianoga.Svg.config
+RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Modules\Dianoga\Dianoga.Svg.config.disabled -NewName Dianoga.Svg.config
 # Enable WebP optimization
-RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\z.01.Dianoga.NextGenFormats.WebP.config.disabled -NewName z.01.Dianoga.NextGenFormats.WebP.config
+RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Modules\Dianoga\z.01.Dianoga.NextGenFormats.WebP.config.disabled -NewName z.01.Dianoga.NextGenFormats.WebP.config
 # Change default Media Request Handler to be able to use NextGenFormats
 COPY Web.config.xdt ./Web.config.Dianoga.xdt
 RUN Powershell C:\tools\scripts\Invoke-XdtTransform.ps1 -Path Web.config -XdtPath Web.config.Dianoga.xdt

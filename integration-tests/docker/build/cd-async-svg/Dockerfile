@@ -25,7 +25,7 @@ RUN choco install vcredist-all -y
 COPY --from=dianoga \module\cd\content .\
 
 # Enable SVG optimization
-RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Include\Dianoga\Dianoga.Svg.config.disabled -NewName Dianoga.Svg.config
+RUN Rename-Item -Path C:\inetpub\wwwroot\App_Config\Modules\Dianoga\Dianoga.Svg.config.disabled -NewName Dianoga.Svg.config
 
 # Add SXA module
 COPY --from=sxa \module\cd\content .\

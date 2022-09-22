@@ -80,7 +80,7 @@
 		<Reference Include="System.XML" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Include\Dianoga" />
+		<Content Include="Default Config Files\*" PackagePath="content\App_Config\Modules\Dianoga" />
 		<Content Include="Dianoga Tools\**\*" PackagePath="content\App_Data\Dianoga Tools" />
 	</ItemGroup>
 </Project>

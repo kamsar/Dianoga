@@ -42,9 +42,9 @@ COPY --from=build-env ${src} ${target}
 
 # Copy Configs
 ARG src="/src/Dianoga/Default Config Files"
-ARG target="./module/cm/content/App_Config/Include/Dianoga"
+ARG target="./module/cm/content/App_Config/Modules/Dianoga"
 COPY --from=build-env ${src} ${target}
 
 ARG src="/src/Dianoga/Default Config Files"
-ARG target="./module/cd/content/App_Config/Include/Dianoga"
+ARG target="./module/cd/content/App_Config/Modules/Dianoga"
 COPY --from=build-env ${src} ${target}

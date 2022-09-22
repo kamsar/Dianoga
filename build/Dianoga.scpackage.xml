@@ -41,7 +41,7 @@
       <Name>Assemblies</Name>
     </xfiles>
     <files>
-      <Root>/App_Config/Include/Dianoga</Root>
+      <Root>/App_Config/Modules/Dianoga</Root>
       <Converter>
         <FileToEntryConverter>
           <Root>/</Root>

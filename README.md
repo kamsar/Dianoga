@@ -35,7 +35,7 @@ Note that because the cache is updated after the first image request, the _first
 
 ## Limitations
 
-Dianoga depends on the Dianoga Tools folder that is installed by the NuGet package into the web project it is installed on. You can relocate these tools if you wish by changing the paths in the `App_Config/Include/Dianoga/(Dianoga.Jpeg.config|Dianoga.Png.config|Dianoga.Svg.config)` files.
+Dianoga depends on the Dianoga Tools folder that is installed by the NuGet package into the web project it is installed on. You can relocate these tools if you wish by changing the paths in the `App_Config/Modules/Dianoga/(Dianoga.Jpeg.config|Dianoga.Png.config|Dianoga.Svg.config)` files.
 
 ## Options
 
@@ -60,7 +60,7 @@ Once Dianoga is installed, __clear your App_Data/MediaCache folder__, and you're
 To perform a manual installation:
 
 * Copy the `Dianoga Tools` folder to the `App_Data` folder of your website
-* Copy `Default Config Files/*.config` to `App_Config\Include\Dianoga`
+* Copy `Default Config Files/*.config` to `App_Config\Modules\Dianoga`
 * Reference `Dianoga.dll` or the source project in your web project
 
 ### Dianoga.svgtools
@@ -143,7 +143,7 @@ If you want to enable usage of `JPEG XL` format, please rename `z.03.Dianoga.Nex
 Upgrading from any previous version of Dianoga is fairly simple.
 
 1. Upgrade the NuGet package.
-2. Remove any `App_Config\Include\Dianoga.config` that may exist (config has changed, you must reapply settings if changed in the new scheme)
+2. Remove any `App_Config\Modules\Dianoga.config` that may exist (config has changed, you must reapply settings if changed in the new scheme)
 3. Remove `Dianoga Tools` if it exists (Dianoga 3+ places tools under App_Data\Dianoga Tools instead so that IIS defaults to not serving anything there)
 4. Delete your MediaCache folder (defaults to App_Data/MediaCache) on all servers after deployment of Dianoga (otherwise unoptimized caches will remain present)
 5. Have fun.
