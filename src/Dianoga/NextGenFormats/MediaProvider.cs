@@ -31,8 +31,11 @@ namespace Dianoga.NextGenFormats
 
 		protected virtual string GetMediaUrl(MediaItem item, string url)
 		{
+
 			var helpers = new Helpers();
-			if (item.MimeType.StartsWith("image") && !url.Contains("extension"))
+			if (HttpContext.Current != null 
+			    && item.MimeType.StartsWith("image") 
+			    && !url.Contains("extension"))
 			{
 				var extensions = helpers.GetSupportedFormats(new HttpContextWrapper(HttpContext.Current));
 				if (!string.IsNullOrEmpty(extensions))
