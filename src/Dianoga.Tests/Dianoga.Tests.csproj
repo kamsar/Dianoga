@@ -5,6 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- resolves .NET Framework reference assemblies from NuGet so builds work on machines without the targeting packs installed (e.g. CI runners) -->
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />

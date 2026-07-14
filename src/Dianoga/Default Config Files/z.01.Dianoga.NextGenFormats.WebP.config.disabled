@@ -1,6 +1,14 @@
 ﻿<!--
 	Configures Dianoga to optimize images using webp format
 	By default if browser will sent "image/webp" in accept header then cwebp optimizer will be used.
+
+	UnsupportedUserAgents: clients whose User-Agent matches any rule below are treated as NOT supporting
+	webp, regardless of their Accept header, and receive the original format (jpg/png) instead.
+	Rule attributes:
+		value     - the string to test against the User-Agent header
+		matchType - Contains | ExactMatch | StartsWith (case-insensitive; defaults to Contains)
+	The default rule targets classic desktop Outlook ("ms-office" appears in its User-Agent), whose
+	Word-based rendering engine sends "Accept: */*" but cannot decode webp.
 -->
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
 	<sitecore>
@@ -8,6 +16,13 @@
 			<dianogaGetSupportedFormats>
 				<processor type="Dianoga.NextGenFormats.Pipelines.DianogaGetSupportedFormats.CheckSupport, Dianoga" desc="webp">
 					<Extension>webp</Extension>
+					<UnsupportedUserAgents hint="raw:AddUnsupportedUserAgent">
+						<userAgent value="ms-office" matchType="Contains" />
+						<!-- Additional examples:
+						<userAgent value="Mozilla/4.0 (compatible; MSIE 7.0; ...)" matchType="ExactMatch" />
+						<userAgent value="Microsoft Office" matchType="StartsWith" />
+						-->
+					</UnsupportedUserAgents>
 				</processor>
 			</dianogaGetSupportedFormats>
 
